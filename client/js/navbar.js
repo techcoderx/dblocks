@@ -2,6 +2,10 @@ $(() => {
     $('.dblocks-navbar').load('navbar.html')
 })
 
+function searchSubmit()  {
+    window.location.href = '/@' + $('.dblocks-search').val()
+}
+
 // Commons
 function thousandSeperator(num) {
     var num_parts = num.toString().split(".");

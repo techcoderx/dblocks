@@ -67,7 +67,6 @@ $(() => {
         accountHistoryUrl += '/' + (accountHistoryPage * 50)
 
     axios.get(accountHistoryUrl).then((history) => {
-        console.log(history.data)
         $('#acc-history').html(accountHistoryHtml(history.data))
         historyLoaded = true
         display()
