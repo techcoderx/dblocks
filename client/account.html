@@ -34,42 +34,46 @@
         </div>
         <div id="acc-container">
             <h2 id="acc-name"></h2><br>
-            <div class="col-12 col-md-4">
-                <table class="table table-sm">
-                    <tr><th scope="row">Balance</th><td id="acc-meta-bal"></td></tr>
-                    <tr><th scope="row">Bandwidth</th><td id="acc-meta-bw"></td></tr>
-                    <tr><th scope="row">Voting Power</th><td id="acc-meta-vp"></td></tr>
-                    <tr><th scope="row">Subscribers</th><td id="acc-meta-subs"></td></tr>
-                    <tr><th scope="row">Subscribed To</th><td id="acc-meta-subbed"></td></tr>
-                </table>
-                <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-dtube"><img src="icons/DTube_White.png">View channel on DTube</a>
-                <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-hive"><img src="icons/Hive_White.png">View profile on PeakD</a>
-                <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-steem"><img src="icons/Steem_White.png">View profile on SteemPeak</a>
-                <h4><br>Public Keys</h4>
-                <div class="accordion" id="acc-customkey">
-                    <div class="card">
-                      <div class="card-header" id="acc-masterkey-card">
-                        <h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#acc-masterkey-collapse" aria-expanded="true" aria-controls="acc-masterkey-collapse"><strong>Master</strong></button></h5>
-                      </div>
-                      <div id="acc-masterkey-collapse" class="collapse" aria-labelledby="acc-masterkey-card" data-parent="#acc-customkey">
-                        <div class="card-body" id="acc-masterkey-det"></div>
-                      </div>
+            <!-- Left panel - Account details -->
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <table class="table table-sm">
+                        <tr><th scope="row">Balance</th><td id="acc-meta-bal"></td></tr>
+                        <tr><th scope="row">Bandwidth</th><td id="acc-meta-bw"></td></tr>
+                        <tr><th scope="row">Voting Power</th><td id="acc-meta-vp"></td></tr>
+                        <tr><th scope="row">Subscribers</th><td id="acc-meta-subs"></td></tr>
+                        <tr><th scope="row">Subscribed To</th><td id="acc-meta-subbed"></td></tr>
+                    </table>
+                    <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-dtube"><img src="icons/DTube_White.png">View channel on DTube</a>
+                    <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-hive"><img src="icons/Hive_White.png">View profile on PeakD</a>
+                    <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-steem"><img src="icons/Steem_White.png">View profile on SteemPeak</a>
+                    <h4><br>Public Keys</h4>
+                    <div class="accordion" id="acc-customkey">
+                        <div class="card">
+                        <div class="card-header" id="acc-masterkey-card">
+                            <h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#acc-masterkey-collapse" aria-expanded="true" aria-controls="acc-masterkey-collapse"><strong>Master</strong></button></h5>
+                        </div>
+                        <div id="acc-masterkey-collapse" class="collapse" aria-labelledby="acc-masterkey-card" data-parent="#acc-customkey">
+                            <div class="card-body" id="acc-masterkey-det"></div>
+                        </div>
+                        </div>
                     </div>
+                    <br>
+                    <div id="acc-leader"><h4>Leader Details</h4>
+                        <table class="table table-sm"><tbody>
+                            <tr><th scope="row">Signing Key</th><td id="acc-leader-key"></td></tr>
+                            <tr><th scope="row">Peer</th><td id="acc-leader-ws"></td></tr>
+                            <tr><th scope="row">Approval</th><td id="acc-leader-appr"></td></tr>
+                            <!-- <tr><th scope="row">Total missed</th><td id="acc-leader-miss"></td></tr> -->
+                        </tbody></table>
+                    </div>
+                    <h4><br>Leader Votes</h4>
+                    <table class="table table-sm" id="acc-meta-approves"></table><br>
                 </div>
-                <br>
-                <div id="acc-leader"><h4>Leader Details</h4>
-                    <table class="table table-sm"><tbody>
-                        <tr><th scope="row">Signing Key</th><td id="acc-leader-key"></td></tr>
-                        <tr><th scope="row">Peer</th><td id="acc-leader-ws"></td></tr>
-                        <tr><th scope="row">Approval</th><td id="acc-leader-appr"></td></tr>
-                        <!-- <tr><th scope="row">Total missed</th><td id="acc-leader-miss"></td></tr> -->
-                    </tbody></table>
+                <!-- Right panel - Account history -->
+                <div class="col-12 col-md" id="acc-history">
+                    <div class="card dblocks-card">techcoderx approved leader hightouch</div>
                 </div>
-                <h4><br>Leader Votes</h4>
-                <table class="table table-sm" id="acc-meta-approves"></table><br>
-            </div>
-            <div class="col-12 col-md">
-
             </div>
         </div>
     </div>
