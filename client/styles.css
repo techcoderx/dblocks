@@ -1,0 +1,68 @@
+.container {
+    margin-top: 90px;
+}
+
+/* Show hand when hovered on tab links */
+.nav-link {
+    cursor: pointer;
+}
+
+.dblocks-cards {
+    width: 100%;
+}
+
+/* .table-supply tr td {
+    float: right;
+} */
+
+#dblocks-props-tbl {
+    table-layout: fixed;
+}
+
+#dblocks-props-tbl tr td {
+    word-wrap: break-word;
+}
+
+.form-inline {
+    padding: 0px 15px;
+}
+
+/* Hypothesis tables */
+.tblHypothesis {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Sample data tables */
+.tblData {
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tblData tbody tr td {
+    text-align: right;
+}
+
+.tblData thead {
+    text-align: center;
+}
+
+/* Actual data tables */
+.tblFullData {
+    width: 80%;
+}
+
+/* MOBILE DEVICES */
+@media screen and (max-width: 768px) {
+    .tblData, .tblFullData {
+        width: 100%;
+    }
+
+    tbody tr td {
+        display: table-row;
+        margin-left: auto!important;
+        margin-right: auto!important;
+    }
+}
