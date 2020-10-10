@@ -11,6 +11,11 @@
     width: 100%;
 }
 
+.dblocks-card {
+    padding: 5px 15px;
+    margin: 10px 0px;
+}
+
 /* .table-supply tr td {
     float: right;
 } */
