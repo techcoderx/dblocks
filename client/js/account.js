@@ -138,7 +138,7 @@ function formatPubKeys(key) {
 function leaderVotesHtml(approves) {
     let result = ''
     for (let i = 0; i < approves.length; i++)
-        result += '<tr><td><a href="https://d.tube/#!/c/' + approves[i] + '">' + approves[i] + '</a></td></tr>'
+        result += '<tr><td><a href="/@' + approves[i] + '">' + approves[i] + '</a></td></tr>'
     return result
 }
 
