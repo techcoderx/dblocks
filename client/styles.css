@@ -7,6 +7,10 @@
     cursor: pointer;
 }
 
+.card-header {
+    padding: 0px 10px;
+}
+
 .dblocks-cards {
     width: 100%;
 }
@@ -26,6 +30,35 @@
 
 #dblocks-props-tbl tr td {
     word-wrap: break-word;
+}
+
+#acc-notfound, #acc-error, #acc-container, #acc-profile-hive, #acc-profile-steem, #acc-leader {
+    display: none;
+}
+
+#acc-container [id^=acc-profile] img {
+    float: left;
+    width: 25px;
+    height: 25px;
+}
+
+#acc-profile-dtube {
+    border-color: #223154;
+    background-color: #223154;
+}
+
+#acc-profile-hive {
+    border-color: #E31337;
+    background-color: #E31337;
+}
+
+#acc-profile-steem {
+    border-color: #171FC9;
+    background-color: #171FC9;
+}
+
+#acc-meta-master, #acc-leader-key {
+    word-break: break-word;
 }
 
 .form-inline {

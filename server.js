@@ -11,6 +11,7 @@ App.use(Express.static(__dirname + '/client', { dotfiles: 'deny' }))
 App.use(CORS())
 
 App.get('/',(rq,rp) => loadWebpageFromDisk('client/index.html',rp))
+App.get('/@:account',(rq,rp) => loadWebpageFromDisk('client/account.html',rp))
 App.get('/404',(rq,rp) => loadWebpageFromDisk('client/404.html',rp))
 
 App.use((req,res) => { return res.status(404).redirect('/404') })
