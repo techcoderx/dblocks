@@ -137,6 +137,7 @@ function formatPubKeys(key) {
 
 function leaderVotesHtml(approves) {
     let result = ''
+    if (!approves) return 'Not voting for leaders'
     for (let i = 0; i < approves.length; i++)
         result += '<tr><td><a href="/@' + approves[i] + '">' + approves[i] + '</a></td></tr>'
     return result

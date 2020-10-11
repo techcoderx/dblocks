@@ -2,6 +2,12 @@ $(() => {
     $('.dblocks-navbar').load('navbar.html')
 })
 
+function searchEnter() {
+    let keycode = window.event.keyCode
+    if (keycode == 13)
+        searchSubmit()
+}
+
 function searchSubmit()  {
     window.location.href = '/@' + $('.dblocks-search').val()
 }
