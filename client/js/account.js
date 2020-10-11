@@ -23,6 +23,7 @@ let url = new URL(window.location.href)
 let account = window.location.pathname.substr(2)
 let accountlastupdate = 0
 let accountdata = null
+let accountnotfound = false
 let accountHistoryPage = parseInt(url.searchParams.get('page'))
 let historyLoaded = false
 
@@ -56,18 +57,50 @@ $(() => {
     }).catch((e) => {
         $('#acc-loading').hide()
         $('.spinner-border').hide()
-        if (e == 'Error: Request failed with status code 404')
+        if (e == 'Error: Request failed with status code 404') {
+            accountnotfound = true
             $('#acc-notfound').show()
-        else
+        } else
             $('#acc-error').show()
     })
 
     let accountHistoryUrl = 'https://avalon.oneloved.tube/history/' + account + '/0'
-    if (accountHistoryPage != NaN)
-        accountHistoryUrl += '/' + (accountHistoryPage * 50)
+    if (isNaN(accountHistoryPage))
+        accountHistoryPage = 1
+    accountHistoryUrl += '/' + ((accountHistoryPage - 1) * 50)
 
-    axios.get(accountHistoryUrl).then((history) => {
-        $('#acc-history').html(accountHistoryHtml(history.data))
+    axios.get(accountHistoryUrl).then((history) => {    
+        // Render account history cards
+        $('#acc-history-itms').html(accountHistoryHtml(history.data))
+
+        // Render account history pagination
+        $('.acc-history-page-next a').attr('href',window.location.pathname + '?page=' + (accountHistoryPage+1))
+        if (accountHistoryPage == 1)
+            $('.acc-history-page-prev').addClass('disabled')
+        else
+            $('.acc-history-page-prev a').attr('href',window.location.pathname + '?page=' + (accountHistoryPage-1))
+        if (accountHistoryPage >= 3) {
+            $('.acc-history-page-3').addClass('active')
+            for (let i = 0; i < 5; i++) {
+                $('.acc-history-page-' + (i+1) + ' a').text(accountHistoryPage-2+i)
+                $('.acc-history-page-' + (i+1) + ' a').attr('href',window.location.pathname + '?page=' + (accountHistoryPage-2+i))
+            }
+        } else {
+            $('.acc-history-page-' + accountHistoryPage).addClass('active')
+            for (let i = 0; i < 5; i++)
+                $('.acc-history-page-' + (i+1) + ' a').attr('href',window.location.pathname + '?page=' + (i+1))
+        }
+
+        if (history.data.length < 50) {
+            $('.acc-history-page-next').addClass('disabled')
+            if (accountHistoryPage < 3) for (let i = accountHistoryPage; i < 5; i++) {
+                $('.acc-history-page-' + (i+1)).hide()
+            } else {
+                $('.acc-history-page-4').hide()
+                $('.acc-history-page-5').hide()
+            }
+        }
+
         historyLoaded = true
         display()
     })
@@ -102,7 +135,7 @@ function updateAccount(acc) {
 }
 
 function display() {
-    if (account && historyLoaded) {
+    if (account && historyLoaded && !accountnotfound) {
         $('#acc-loading').hide()
         $('.spinner-border').hide()
         $('#acc-container').show()
