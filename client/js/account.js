@@ -195,7 +195,7 @@ function txToString(tx) {
         case 2:
             return tx.sender + ' disapproved leader ' + tx.data.target
         case 3:
-            result = tx.sender + ' transferred ' + (tx.data.amount / 100) + ' DTC to ' + tx.data.receiver
+            result = tx.sender + ' transferred ' + thousandSeperator(tx.data.amount / 100) + ' DTC to ' + tx.data.receiver
             if (tx.data.memo)
                 result += ', memo: ' + HtmlSanitizer.SanitizeHtml(tx.data.memo)
             return result
