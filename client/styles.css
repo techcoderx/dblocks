@@ -53,8 +53,13 @@
     background-color: #171FC9;
 }
 
-#acc-meta-master, #acc-leader-key {
+#acc-meta-master, #acc-leader-key, #blk-container table tr td {
     word-break: break-word;
+}
+
+/* Block details */
+#blk-notfound, #blk-error, #blk-container {
+    display: none;
 }
 
 .form-inline {

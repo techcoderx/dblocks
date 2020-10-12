@@ -1,5 +1,5 @@
 $(() => {
-    $('.dblocks-navbar').load('navbar.html')
+    $('.dblocks-navbar').load('/navbar.html')
 })
 
 function searchEnter() {
@@ -9,7 +9,15 @@ function searchEnter() {
 }
 
 function searchSubmit()  {
-    window.location.href = '/@' + $('.dblocks-search').val()
+    let searchStr = $('.dblocks-search').val()
+    if (searchStr.length == 64) {
+        // Tx hash lookup
+    } else if (isNaN(parseInt(searchStr))) {
+        // Account lookup
+        window.location.href = '/@' + $('.dblocks-search').val()
+    } else {
+        window.location.href = '/b/' + searchStr
+    }
 }
 
 // Commons

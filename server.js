@@ -11,6 +11,7 @@ App.use(Express.static(__dirname + '/client', { dotfiles: 'deny' }))
 App.use(CORS())
 
 App.get('/',(rq,rp) => loadWebpageFromDisk('client/index.html',rp))
+App.get('/b/:block',(rq,rp) => loadWebpageFromDisk('client/block.html',rp))
 App.get('/@:account',(rq,rp) => loadWebpageFromDisk('client/account.html',rp))
 App.get('/leaders',(rq,rp) => loadWebpageFromDisk('client/wip.html',rp))
 App.get('/accountprice',(rq,rp) => loadWebpageFromDisk('client/wip.html',rp))
