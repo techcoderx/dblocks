@@ -21,6 +21,21 @@ function searchSubmit()  {
 }
 
 // Commons
+function jsonToTableRecursive(json) {
+    let result = '<table class="table table-sm table-bordered">'
+    for (field in json) {
+        let cleanField = HtmlSanitizer.SanitizeHtml(field)
+        let val = json[field]
+        if (typeof val == 'object')
+            val = jsonToTableRecursive(val)
+        val = val.toString()
+        val = HtmlSanitizer.SanitizeHtml(val)
+        result += '<tr><th scope="row">' + cleanField + '</th><td>' + val + '</td></tr>'
+    }
+    result += '</table>'
+    return result
+}
+
 function thousandSeperator(num) {
     var num_parts = num.toString().split(".");
     num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");

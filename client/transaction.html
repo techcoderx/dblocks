@@ -8,7 +8,7 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="/js/navbar.js"></script>
         <script src="/js/transactions.js"></script>
-        <script src="/js/block.js"></script>
+        <script src="/js/transaction.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <link rel="stylesheet" href="/styles.css">
         <title>Avalon Block Explorer</title>
@@ -19,40 +19,31 @@
     <div class="dblocks-navbar"></div>
     <!-- Main body -->
     <div class="container">
-        <div class="d-flex justify-content-center" id="blk-loading">
+        <div class="d-flex justify-content-center" id="txn-loading">
             <div class="spinner-border" role="status">
-                <span class="sr-only">Loading block...</span>
+                <span class="sr-only">Loading transaction...</span>
             </div>
         </div>
-        <div id="blk-notfound">
-            <h2>Block not found</h2><br>
+        <div id="txn-notfound">
+            <h2>Transaction not found</h2><br>
             <a type="button" class="btn btn-primary" href="/">Home</a>
         </div>
-        <div id="blk-error">
-            <h2>Something went wrong when retrieving block</h2><br>
+        <div id="txn-error">
+            <h2>Something went wrong when retrieving transaction</h2><br>
             <a type="button" class="btn btn-primary" href="/">Home</a>
         </div>
-        <div id="blk-container">
-            <div class="row blk-head">
-                <h2 class="col-12 col-sm-9" id="blk-num"></h2>
-                <div class="col-12 col-sm-3"><div class="btn-group blk-btn-prevnext" role="group">
-                    <a type="button" class="btn btn-outline-secondary" id="blk-btn-prev">Previous</a>
-                    <a type="button" class="btn btn-outline-secondary" id="blk-btn-next">Next</a>
-                </div></div>
-            </div><br>
+        <div id="txn-container">
+            <h2 class="text-truncate">Transaction<small class="col-12 col-sm-9 text-muted" id="txn-id"></small></h2><br>
+            <div class="card dblocks-card" id="txn-card"></div><br>
             <table class="table table-sm">
-                <tr><th scope="row">phash</th><td id="blk-det-phash"></td></tr>
-                <tr><th scope="row">timestamp</th><td id="blk-det-ts"></td></tr>
-                <tr><th scope="row">miner</th><td id="blk-det-miner"></td></tr>
-                <tr id="blk-fld-miss"><th scope="row">missedBy</th><td id="blk-det-miss"></td></tr>
-                <tr><th scope="row">dist</th><td id="blk-det-dist"></td></tr>
-                <tr><th scope="row">burn</th><td id="blk-det-burn"></td></tr>
-                <tr><th scope="row">hash</th><td id="blk-det-hash"></td></tr>
-                <tr><th scope="row">signature</th><td id="blk-det-sig"></td></tr>
+                <tr><th scope="row">type</th><td id="txn-det-type"></td></tr>
+                <tr><th scope="row">sender</th><td id="txn-det-sender"></td></tr>
+                <tr><th scope="row">ts</th><td id="txn-det-ts"></td></tr>
+                <tr><th scope="row">hash</th><td id="txn-det-hash"></td></tr>
+                <tr><th scope="row">signature</th><td id="txn-det-sig"></td></tr>
             </table><br>
-            <div id="blk-txs">
-                <h5 id="blk-txs-heading">0 transactions in this block</h5>
-            </div>
+            <h5>Transaction data</h5>
+            <div id="txn-det-data"></div>
         </div>
     </div>
 </html>

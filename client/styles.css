@@ -53,7 +53,10 @@
     background-color: #171FC9;
 }
 
-#acc-meta-master, #acc-leader-key, #blk-container table tr td {
+#acc-meta-master,
+#acc-leader-key,
+#blk-container table tr td,
+#txn-container table tr td {
     word-break: break-word;
 }
 
@@ -68,6 +71,11 @@
 
 .blk-btn-prevnext {
     float: right;
+}
+
+/* Txn details */
+#txn-notfound, #txn-error, #txn-container {
+    display: none;
 }
 
 .form-inline {
