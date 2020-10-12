@@ -23,7 +23,10 @@ function txCardsHtml(blocks) {
     let result = ''
     for (let i = 0; i < blocks.length; i++)
         for (let j = 0; j < blocks[i].txs.length; j++) {
-            result += '<div class="card dblocks-card">' + txToString(blocks[i].txs[j]) + '</div>'
+            result += '<div class="card dblocks-card"><p class="dblocks-card-content">' + txToString(blocks[i].txs[j])
+            result += ' <a href="/tx/' + blocks[i].txs[j].hash + '" class="badge badge-pill badge-secondary">'
+            result += blocks[i].txs[j].hash.substr(0,6)
+            result += '</a></p></div>'
         }
     return result
 }

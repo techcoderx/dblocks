@@ -16,7 +16,7 @@ function searchSubmit()  {
     } else if (isNaN(parseInt(searchStr))) {
         // Account lookup
         window.location.href = '/@' + searchStr
-    } else if (searchStr < 64) {
+    } else if (searchStr.length < 64) {
         // Block lookup
         window.location.href = '/b/' + searchStr
     } else {

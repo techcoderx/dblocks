@@ -16,6 +16,10 @@
     margin: 10px 0px;
 }
 
+.dblocks-card-content {
+    margin: 0;
+}
+
 /* .table-supply tr td {
     float: right;
 } */
@@ -32,13 +36,15 @@
     display: none;
 }
 
-#acc-container [id^=acc-profile] img {
+#acc-container [id^=acc-profile] img, 
+.dblocks-accprice-createaccbtn img {
     float: left;
     width: 25px;
     height: 25px;
 }
 
-#acc-profile-dtube {
+#acc-profile-dtube,
+.dblocks-accprice-createaccbtn {
     border-color: #223154;
     background-color: #223154;
 }
@@ -78,15 +84,15 @@
     display: none;
 }
 
+/* Account Pricing */
+.dblocks-accprice { max-width: 350px; }
+.dblocks-accprice thead,
+.dblocks-accprice tbody tr th { text-align: center; }
+.dblocks-accprice tbody tr td { text-align: right; }
+
 .form-inline {
     padding: 0px 15px;
 }
 
 /* MOBILE DEVICES */
-@media screen and (max-width: 768px) {
-    tbody tr td {
-        display: table-row;
-        margin-left: auto!important;
-        margin-right: auto!important;
-    }
-}
+/* @media screen and (max-width: 768px) {} */
