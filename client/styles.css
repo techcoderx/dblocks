@@ -62,43 +62,20 @@
     display: none;
 }
 
+.blk-head {
+    width: 100%;
+}
+
+.blk-btn-prevnext {
+    float: right;
+}
+
 .form-inline {
     padding: 0px 15px;
 }
 
-/* Hypothesis tables */
-.tblHypothesis {
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Sample data tables */
-.tblData {
-    width: 40%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.tblData tbody tr td {
-    text-align: right;
-}
-
-.tblData thead {
-    text-align: center;
-}
-
-/* Actual data tables */
-.tblFullData {
-    width: 80%;
-}
-
 /* MOBILE DEVICES */
 @media screen and (max-width: 768px) {
-    .tblData, .tblFullData {
-        width: 100%;
-    }
-
     tbody tr td {
         display: table-row;
         margin-left: auto!important;

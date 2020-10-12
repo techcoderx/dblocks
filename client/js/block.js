@@ -25,8 +25,27 @@ $(() => {
         $('#blk-det-hash').text(blk.data.hash)
         $('#blk-det-sig').text(blk.data.signature)
 
-        if (blockNum == 0)
+        // Prepare previous and next buttons
+        $('#blk-btn-prev').attr('href','/b/' + (blockNum-1))
+        $('#blk-btn-next').attr('href','/b/' + (blockNum+1))
+
+        // Genesis and hardfork badge
+        if (blockNum == 0) {
+            $('#blk-btn-prev').hide()
+            $('#blk-btn-next').css('border-top-left-radius','0.25rem')
+            $('#blk-btn-next').css('border-bottom-left-radius','0.25rem')
             $('#blk-num').append(' <span class="badge badge-secondary">Genesis</span>')
+        }
+
+        // List transactions
+        if (blk.data.txs.length > 0) {
+            if (isPuralArr(blk.data.txs))
+                $('#blk-txs-heading').text(blk.data.txs.length + ' transactions in this block')
+            else
+                $('#blk-txs-heading').text('1 transaction in this block')
+            $('#blk-txs').append(txCardsHtml([blk.data]))
+        }
+
         $('#blk-loading').hide()
         $('.spinner-border').hide()
         $('#blk-container').show()
