@@ -12,11 +12,16 @@ function searchSubmit()  {
     let searchStr = $('.dblocks-search').val()
     if (searchStr.length == 64) {
         // Tx hash lookup
+        window.location.href = '/tx/' + searchStr
     } else if (isNaN(parseInt(searchStr))) {
         // Account lookup
-        window.location.href = '/@' + $('.dblocks-search').val()
-    } else {
+        window.location.href = '/@' + searchStr
+    } else if (searchStr < 64) {
+        // Block lookup
         window.location.href = '/b/' + searchStr
+    } else {
+        // What are you looking for???
+        window.location.href = '/404'
     }
 }
 
