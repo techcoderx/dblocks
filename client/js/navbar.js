@@ -33,7 +33,10 @@ function jsonToTableRecursive(json) {
         let val = json[field]
         if (typeof val == 'object')
             val = jsonToTableRecursive(val)
-        val = val.toString()
+        else if (typeof val != 'string')
+            val = val.toString()
+        else
+            val = JSON.stringify(val)
         val = HtmlSanitizer.SanitizeHtml(val)
         result += '<tr><th scope="row">' + cleanField + '</th><td>' + val + '</td></tr>'
     }

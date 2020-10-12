@@ -11,6 +11,7 @@ $(() => {
 
     axios.get('https://avalon.oneloved.tube/tx/' + txhash).then((txn) => {
         $('#txn-id').text(txn.data.hash)
+        $('#includedInBlock').text('Included in block #' + thousandSeperator(txn.data.includedInBlock))
         $('#txn-card').html(txToString(txn.data))
         $('#txn-det-type').text(txn.data.type)
         $('#txn-det-type').append(' <span class="badge badge-pill badge-info">' + TransactionTypes[txn.data.type] + '</span>')
