@@ -66,6 +66,10 @@
     word-break: break-word;
 }
 
+table tr th {
+    word-break: normal;
+}
+
 /* Block details */
 #blk-notfound, #blk-error, #blk-container {
     display: none;
