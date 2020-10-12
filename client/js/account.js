@@ -30,6 +30,21 @@ $(() => {
             $('#acc-profile-steem').attr('href','https://steempeak.com/@' + acc.data.json.profile.steem)
         }
 
+        let accCreatedStr = 'Created by '
+        if (acc.data.created) {
+            accCreatedStr += acc.data.created.by
+            accCreatedStr += ' on '
+            accCreatedStr += new Date(acc.data.created.ts).toLocaleString()
+        } else {
+            accCreatedStr += 'dtube on ' + new Date(1593350655283).toLocaleString() // timestamp of block #1 on testnet v2
+        }
+        $('#acc-meta-created').text(accCreatedStr)
+
+        if (acc.data.json)
+            $('#acc-profile-json').html(jsonToTableRecursive(acc.data.json))
+        else
+            $('#acc-profile-metadata').hide()
+
         updateAccount(acc.data)
         display()
         setInterval(()=>reloadAccount((newacc)=>updateAccount(newacc)),10000)

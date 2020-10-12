@@ -12,7 +12,7 @@ $(() => {
         $('#blk-num').text('Block #'+thousandSeperator(blockNum))
         $('#blk-det-phash').text(blk.data.phash)
         $('#blk-det-ts').text(blk.data.timestamp)
-        $('#blk-det-ts').append(' <span class="badge badge-pill badge-info">' + new Date(blk.data.timestamp).toISOString() + '</span>')
+        $('#blk-det-ts').append(' <span class="badge badge-pill badge-info">' + new Date(blk.data.timestamp).toLocaleString() + '</span>')
         $('#blk-det-miner').text(blk.data.miner)
 
         if (blk.data.missedBy)

@@ -37,7 +37,7 @@
             <h2 id="acc-name"></h2><br>
             <!-- Left panel - Account details -->
             <div class="row">
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-lg-4">
                     <table class="table table-sm">
                         <tr><th scope="row">Balance</th><td id="acc-meta-bal"></td></tr>
                         <tr><th scope="row">Bandwidth</th><td id="acc-meta-bw"></td></tr>
@@ -48,7 +48,12 @@
                     <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-dtube"><img src="icons/DTube_White.png">View channel on DTube</a>
                     <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-hive"><img src="icons/Hive_White.png">View profile on PeakD</a>
                     <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-steem"><img src="icons/Steem_White.png">View profile on SteemPeak</a>
-                    <h4><br>Public Keys</h4>
+                    <h6><br></h6>
+                    <div id="acc-profile-metadata">
+                        <h4>Metadata</h4>
+                        <div id="acc-profile-json"></div>
+                    </div>
+                    <h4>Public Keys</h4>
                     <div class="accordion" id="acc-customkey">
                         <div class="card">
                         <div class="card-header" id="acc-masterkey-card">
@@ -69,10 +74,11 @@
                         </tbody></table>
                     </div>
                     <h4>Leader Votes</h4>
-                    <table class="table table-sm" id="acc-meta-approves"></table><br>
+                    <table class="table table-sm" id="acc-meta-approves"></table>
+                    <p id="acc-meta-created"></p>
                 </div>
                 <!-- Right panel - Account history -->
-                <div class="col-12 col-md" id="acc-history">
+                <div class="col-12 col-lg" id="acc-history">
                     <div id="acc-history-itms"></div>
                     <nav><ul class="pagination">
                         <li class="page-item acc-history-page-prev"><a class="page-link" tabindex="-1">Previous</a></li>

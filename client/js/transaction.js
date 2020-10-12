@@ -16,6 +16,7 @@ $(() => {
         $('#txn-det-type').append(' <span class="badge badge-pill badge-info">' + TransactionTypes[txn.data.type] + '</span>')
         $('#txn-det-sender').text(txn.data.sender)
         $('#txn-det-ts').text(txn.data.ts)
+        $('#txn-det-ts').append(' <span class="badge badge-pill badge-info">' + new Date(txn.data.ts).toLocaleString() + '</span>')
         $('#txn-det-hash').text(txn.data.hash)
         $('#txn-det-sig').text(txn.data.signature)
 

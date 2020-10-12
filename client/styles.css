@@ -59,8 +59,12 @@
     background-color: #171FC9;
 }
 
+#acc-profile-json { width: 100%; }
+#acc-profile-json table { font-size: 12px;}
+
 #acc-meta-master,
 #acc-leader-key,
+#acc-profile-json table tr td,
 #blk-container table tr td,
 #txn-container table tr td {
     word-break: break-word;
