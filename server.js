@@ -13,6 +13,7 @@ App.get('/tx/:txhash',(rq,rp) => loadWebpageFromDisk('client/transaction.html',r
 App.get('/@:account',(rq,rp) => loadWebpageFromDisk('client/account.html',rp))
 App.get('/leaders',(rq,rp) => loadWebpageFromDisk('client/wip.html',rp))
 App.get('/accountprice',(rq,rp) => loadWebpageFromDisk('client/accountprice.html',rp))
+App.get('/richlist',(rq,rp) => loadWebpageFromDisk('client/richlist.html',rp))
 App.get('/livesubcount',(rq,rp) => loadWebpageFromDisk('client/wip.html',rp))
 App.get('/wip',(rq,rp) => loadWebpageFromDisk('client/wip.html',rp))
 App.get('/404',(rq,rp) => loadWebpageFromDisk('client/404.html',rp))

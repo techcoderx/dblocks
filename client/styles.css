@@ -98,6 +98,9 @@ table tr th {
 .dblocks-accprice tbody tr th { text-align: center; }
 .dblocks-accprice tbody tr td { text-align: right; }
 
+/* Richlist */
+#richlist-error, #richlist-container { display: none; }
+
 .form-inline {
     padding: 0px 15px;
 }
