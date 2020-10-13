@@ -13,6 +13,9 @@ function searchSubmit()  {
     if (searchStr.length == 64) {
         // Tx hash lookup
         window.location.href = '/tx/' + searchStr
+    } else if (searchStr.split('/').length > 1) {
+        // Content lookup
+        window.location.href = '/content/' + searchStr
     } else if (isNaN(parseInt(searchStr))) {
         // Account lookup
         window.location.href = '/@' + searchStr

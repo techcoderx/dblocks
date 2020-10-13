@@ -37,14 +37,16 @@
 }
 
 #acc-container [id^=acc-profile] img, 
-.dblocks-accprice-createaccbtn img {
+.dblocks-accprice-createaccbtn img,
+#content-dtube img {
     float: left;
     width: 25px;
     height: 25px;
 }
 
 #acc-profile-dtube,
-.dblocks-accprice-createaccbtn {
+.dblocks-accprice-createaccbtn,
+#content-dtube {
     border-color: #223154;
     background-color: #223154;
 }
@@ -61,7 +63,6 @@
 
 #acc-profile-json { width: 100%; }
 #acc-profile-json table { font-size: 12px;}
-
 #acc-meta-master,
 #acc-leader-key,
 #acc-profile-json table tr td,
@@ -75,22 +76,23 @@ table tr th {
 }
 
 /* Block details */
-#blk-notfound, #blk-error, #blk-container {
-    display: none;
-}
-
-.blk-head {
-    width: 100%;
-}
-
-.blk-btn-prevnext {
-    float: right;
-}
+#blk-notfound, #blk-error, #blk-container { display: none; }
+.blk-head { width: 100%; }
+.blk-btn-prevnext { float: right; }
 
 /* Txn details */
-#txn-notfound, #txn-error, #txn-container {
-    display: none;
-}
+#txn-notfound, #txn-error, #txn-container { display: none; }
+
+/* Contents */
+#content-error, #content-notfound, #content-container,
+.content-parent, #content-comments { display: none; }
+#content-comments table,
+#content-votes thead,
+#content-votes tbody tr td:nth-child(2),
+#content-votes tbody tr td:nth-child(5),
+#content-votes tbody tr td:nth-child(6) { text-align: center; }
+#content-votes tbody tr td:nth-child(3),
+#content-votes tbody tr td:nth-child(4) { text-align: right; }
 
 /* Leaders */
 #leader-error, #leader-container { display: none; }

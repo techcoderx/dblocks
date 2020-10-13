@@ -1,7 +1,9 @@
+let url = new URL(window.location.href)
 let counter = 0
-let username = 'techcoderx'
+let username = url.searchParams.get('username') || 'techcoderx'
 
 $(() => {
+    $('#dblocks-live-username').val(username)
     axios.get('https://avalon.oneloved.tube/account/' + username).then((acc) => {
         counter = acc.data.followers.length
         $('#odometer').text(counter)

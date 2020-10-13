@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jitbit/HtmlSanitizer@master/HtmlSanitizer.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="/js/navbar.js"></script>
+        <script src="/js/content.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="/styles.css">
+        <title>Avalon Block Explorer</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+    <!-- Top navigation bar -->
+    <div class="dblocks-navbar"></div>
+    <!-- Main body -->
+    <div class="container">
+        <div class="d-flex justify-content-center" id="content-loading">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading content...</span>
+            </div>
+        </div>
+        <div id="content-notfound">
+            <h2>Content not found</h2><br>
+            <a type="button" class="btn btn-primary" href="/">Home</a>
+        </div>
+        <div id="content-error">
+            <h2>Something went wrong when retrieving content</h2><br>
+            <a type="button" class="btn btn-primary" href="/">Home</a>
+        </div>
+        <div id="content-container">
+            <h2 class="text-truncate content-heading"><small class="col-12 col-sm-9 text-muted" id="content-id"></small></h2><br>
+            <a type="button" class="btn btn-outline-secondary d-inline" id="content-parent-btn">View parent content</a>
+            <a type="button" target="_blank" class="btn btn-primary d-inline" id="content-dtube"><img src="/icons/DTube_White.png"></a><br><br>
+            <table class="table table-sm" id="content-fields">
+                <tr><th scope="row">author</th><td id="content-author"></td></tr>
+                <tr><th scope="row">link</th><td id="content-link"></td></tr>
+                <tr><th scope="row">ts</th><td id="content-ts"></td></tr>
+                <tr><th scope="row">dist</th><td id="content-dist"></td></tr>
+                <tr class="content-parent"><th scope="row">pa</th><td id="content-pa"></td></tr>
+                <tr class="content-parent"><th scope="row">pp</th><td id="content-pp"></td></tr>
+                <tr><th scope="row">tags</th><td id="content-tags"></td></tr>
+            </table><br>
+            <h5>Content data</h5>
+            <div id="content-json"></div><br>
+            <h5>Votes</h5>
+            <table class="table table-sm table-striped table-bordered" id="content-votes">
+                <thead><tr>
+                    <th scope="col">Voter</th>
+                    <th scope="col">Vote Time</th>
+                    <th scope="col">VP</th>
+                    <th scope="col">Payout</th>
+                    <th scope="col">Tag</th>
+                </tr></thead>
+                <tbody></tbody>
+            </table><br>
+            <div id="content-comments">
+                <h5>Comments</h5>
+                <table class="table table-sm table-striped table-bordered">
+                    <thead><tr>
+                        <th scope="col">Author</th>
+                        <th scope="col">Link</th>
+                        <th scope="col">View Comment</th>
+                    </tr></thead><tbody></tbody>
+                </table><br>
+            </div>
+        </div>
+    </div>
+</html>
