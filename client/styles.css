@@ -92,6 +92,12 @@ table tr th {
     display: none;
 }
 
+/* Leaders */
+#leader-error, #leader-container { display: none; }
+#leader-table thead { text-align: center; }
+#leader-table tbody tr th { text-align: center; }
+#leader-table tbody tr td:nth-child(n+3) { text-align: right; }
+
 /* Account Pricing */
 .dblocks-accprice { max-width: 350px; }
 .dblocks-accprice thead,
