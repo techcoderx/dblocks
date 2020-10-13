@@ -1,27 +1,16 @@
-const Config = require('./config.json')
 const Express = require('express')
-const CORS = require('cors')
 const App = Express()
 const http = require('http').Server(App)
-
+const port = process.env.DBLOCKS_DEVSERVER || 3009
 App.use(Express.static(__dirname + '/client', { dotfiles: 'deny' }))
-App.use(CORS())
-
-App.get('/',(rq,rp) => loadWebpageFromDisk('client/index.html',rp))
-App.get('/b/:block',(rq,rp) => loadWebpageFromDisk('client/block.html',rp))
-App.get('/tx/:txhash',(rq,rp) => loadWebpageFromDisk('client/transaction.html',rp))
-App.get('/@:account',(rq,rp) => loadWebpageFromDisk('client/account.html',rp))
-App.get('/leaders',(rq,rp) => loadWebpageFromDisk('client/leaders.html',rp))
-App.get('/accountprice',(rq,rp) => loadWebpageFromDisk('client/accountprice.html',rp))
-App.get('/richlist',(rq,rp) => loadWebpageFromDisk('client/richlist.html',rp))
-App.get('/livesubcount',(rq,rp) => loadWebpageFromDisk('client/wip.html',rp))
-App.get('/wip',(rq,rp) => loadWebpageFromDisk('client/wip.html',rp))
-App.get('/404',(rq,rp) => loadWebpageFromDisk('client/404.html',rp))
-
-App.use((req,res) => { return res.status(404).redirect('/404') })
-
-function loadWebpageFromDisk(file,response) {
-    response.sendFile(__dirname + '/' + file)
-}
-
-http.listen(Config.HTTP_PORT)
+App.get('/',(rq,rp) => rp.sendFile(__dirname + '/client/index.html'))
+App.get('/b/:block',(rq,rp) => rp.sendFile(__dirname + '/client/block.html'))
+App.get('/tx/:txhash',(rq,rp) => rp.sendFile(__dirname + '/client/transaction.html'))
+App.get('/@:account',(rq,rp) => rp.sendFile(__dirname + '/client/account.html'))
+App.get('/leaders',(rq,rp) => rp.sendFile(__dirname + '/client/leaders.html'))
+App.get('/accountprice',(rq,rp) => rp.sendFile(__dirname + '/client/accountprice.html'))
+App.get('/richlist',(rq,rp) => rp.sendFile(__dirname + '/client/richlist.html'))
+App.get('/livesubcount',(rq,rp) => rp.sendFile(__dirname + '/client/livesubcount.html'))
+App.get('/404',(rq,rp) => rp.sendFile(__dirname + '/client/404.html'))
+App.use((rq,rp) => rp.status(404).redirect('/404'))
+http.listen(port, ()=>console.log('Dev server listening on port '+port))

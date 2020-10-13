@@ -107,9 +107,31 @@ table tr th {
 /* Richlist */
 #richlist-error, #richlist-container { display: none; }
 
+/* Live sub count */
+.alert { display: none; }
+.dblocks-counter { 
+    width: 100%;
+    text-align: center;
+}
+.odometer.odometer-auto-theme, .odometer.odometer-theme-car { zoom: 7; }
+
 .form-inline {
     padding: 0px 15px;
 }
 
 /* MOBILE DEVICES */
-/* @media screen and (max-width: 768px) {} */
+@media screen and (max-width: 768px) {
+    .odometer.odometer-auto-theme, .odometer.odometer-theme-car { zoom: 6; }
+}
+
+@media screen and (max-width: 500px) {
+    .odometer.odometer-auto-theme, .odometer.odometer-theme-car { zoom: 5; }
+}
+
+@media screen and (max-width: 420px) {
+    .odometer.odometer-auto-theme, .odometer.odometer-theme-car { zoom: 4; }
+}
+
+@media screen and (max-width: 350px) {
+    .odometer.odometer-auto-theme, .odometer.odometer-theme-car { zoom: 3; }
+}
