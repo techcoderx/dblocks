@@ -4,6 +4,7 @@ let accountlastupdate = 0
 let accountdata = null
 let accountnotfound = false
 let accountHistoryPage = parseInt(url.searchParams.get('page'))
+let leaderLastUpdate = 0
 let historyLoaded = false
 
 $(() => {
@@ -57,6 +58,16 @@ $(() => {
         } else
             $('#acc-error').show()
     })
+
+    axios.get('https://avalon.oneloved.tube/rewards/pending/' + account).then((pending) =>
+        $('#acc-meta-pending').text(thousandSeperator(Math.floor(pending.data.total) / 100) + ' DTC'))
+    .catch(()=>
+        $('#acc-meta-pending').text('Error'))
+
+    axios.get('https://avalon.oneloved.tube/rewards/claimed/' + account).then((claimed) =>
+        $('#acc-meta-claimed').text(thousandSeperator(Math.floor(claimed.data.total) / 100) + ' DTC'))
+    .catch(()=>
+        $('#acc-meta-claimed').text('Error'))
 
     let accountHistoryUrl = 'https://avalon.oneloved.tube/history/' + account + '/0'
     if (isNaN(accountHistoryPage))
@@ -117,6 +128,7 @@ function updateAccount(acc) {
     $('#acc-meta-approves').html(leaderVotesHtml(acc.approves))
 
     if (acc.pub_leader) {
+        updateLeaderStats()
         $('#acc-leader').show()
         $('#acc-leader-key').text(acc.pub_leader)
         $('#acc-leader-appr').text(thousandSeperator(acc.node_appr / 100) + ' DTC')
@@ -168,4 +180,14 @@ function leaderVotesHtml(approves) {
     for (let i = 0; i < approves.length; i++)
         result += '<tr><td><a href="/@' + approves[i] + '">' + approves[i] + '</a></td></tr>'
     return result
+}
+
+function updateLeaderStats() {
+    if (new Date().getTime() - leaderLastUpdate < 120000) return
+    axios.get('https://avalon.oneloved.tube/leader/' + account).then((leader) => {
+        leaderLastUpdate = new Date().getTime()
+        $('#acc-leader-voters').text(thousandSeperator(leader.data.voters))
+        $('#acc-leader-produced').text(thousandSeperator(leader.data.produced))
+        $('#acc-leader-miss').text(thousandSeperator(leader.data.missed))
+    }).catch(()=>{})
 }
