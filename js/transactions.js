@@ -50,7 +50,7 @@ function txToString(tx) {
             if (tx.data.pa && tx.data.pp)
                 result += ' commented on @' + tx.data.pa + '/' + tx.data.pp
             else
-                result += ' posted a new video @' + tx.sender + '/' + tx.data.link
+                result += ' posted a new video @' + tx.sender + '/' + HtmlSanitizer.SanitizeHtml(tx.data.link)
             return result
         case 5:
             result = tx.sender
@@ -58,7 +58,7 @@ function txToString(tx) {
                 result += ' upvoted '
             else
                 result += ' downvoted '
-            result += '@' + tx.data.author + '/' + tx.data.link + ' with ' + thousandSeperator(tx.data.vt) + ' VP'
+            result += '@' + tx.data.author + '/' + HtmlSanitizer.SanitizeHtml(tx.data.link) + ' with ' + thousandSeperator(tx.data.vt) + ' VP'
             if (tx.data.tag)
                 result += ' and tagged it with ' + HtmlSanitizer.SanitizeHtml(tx.data.tag)
             return result
@@ -79,7 +79,7 @@ function txToString(tx) {
             if (tx.data.pa && tx.data.pp)
                 result += ' commented on @' + tx.data.pa + '/' + tx.data.pp
             else
-                result += ' posted a new video @' + tx.sender + '/' + tx.data.link
+                result += ' posted a new video @' + tx.sender + '/' + HtmlSanitizer.SanitizeHtml(tx.data.link)
             result += ' and burnt ' + (tx.data.burn / 100) + ' DTC '
             return result
         case 14:
@@ -89,7 +89,7 @@ function txToString(tx) {
         case 16:
             return tx.sender + ' set a limit on account voting power to ' + tx.data.amount + ' VP'
         case 17:
-            return tx.sender + ' claimed curation rewards on @' + tx.data.author + '/' + tx.data.link
+            return tx.sender + ' claimed curation rewards on @' + tx.data.author + '/' + HtmlSanitizer.SanitizeHtml(tx.data.link)
         case 18:
             return tx.sender + ' updated leader key for block production'
         default:

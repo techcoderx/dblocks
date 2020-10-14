@@ -65,7 +65,7 @@ export default class extends view {
         axios.get('https://avalon.oneloved.tube/content/' + this.contentId).then((content) => {
             $('#content-id').text(content.data._id)
             $('#content-author').text(content.data.author)
-            $('#content-link').text(content.data.link)
+            $('#content-link').text(HtmlSanitizer.SanitizeHtml(content.data.link))
             $('#content-ts').text(content.data.ts)
             $('#content-ts').append(' <span class="badge badge-pill badge-info">' + new Date(content.data.ts).toLocaleString() + '</span>')
             $('#content-dist').text(thousandSeperator(Math.floor(content.data.dist) / 100) + ' DTC')

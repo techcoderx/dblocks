@@ -21,11 +21,13 @@ window.router = () => {
         { path: '/b/:block', view: block, params: 1 },
         { path: '/tx/:txhash', view: transaction, params: 1 },
         { path: '/@:account', view: account, params: 1 },
+        { path: '/@:account/:page', view: account, params: 2 },
         { path: '/content/:author/:link', view: content, params: 2 },
         { path: '/leaders', view: leaders },
         { path: '/accountprice', view: accountprice },
         { path: '/richlist', view: richlist },
         { path: '/livesubcount', view: livesubcount },
+        { path: '/livesubcount/:account', view: livesubcount, params: 1 },
         { path: '/404', view: notfound }
     ]
 

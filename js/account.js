@@ -4,11 +4,11 @@ export default class extends view {
     constructor() {
         super()
         this.url = new URL(window.location.href)
-        this.account = window.location.hash.substr(3)
+        this.account = window.location.hash.split('/')[1].substr(1)
         this.accountlastupdate = 0
         this.accountdata = null
         this.accountnotfound = false
-        this.accountHistoryPage = parseInt(this.url.searchParams.get('page'))
+        this.accountHistoryPage = parseInt(window.location.hash.split('/')[2]) || 1
         this.leaderLastUpdate = 0
         this.historyLoaded = false
         this.setTitle('@' + this.account)
@@ -168,21 +168,21 @@ export default class extends view {
             $('#acc-history-itms').html(txCardsHtml(history.data))
 
             // Render account history pagination
-            $('.acc-history-page-next a').attr('href',window.location.hash + '?page=' + (this.accountHistoryPage+1))
+            $('.acc-history-page-next a').attr('href','#/@' + this.account + '/' + (this.accountHistoryPage+1))
             if (this.accountHistoryPage == 1)
                 $('.acc-history-page-prev').addClass('disabled')
             else
-                $('.acc-history-page-prev a').attr('href',window.location.hash + '?page=' + (this.accountHistoryPage-1))
+                $('.acc-history-page-prev a').attr('href','#/@' + this.account + '/' + (this.accountHistoryPage-1))
             if (this.accountHistoryPage >= 3) {
                 $('.acc-history-page-3').addClass('active')
                 for (let i = 0; i < 5; i++) {
                     $('.acc-history-page-' + (i+1) + ' a').text(this.accountHistoryPage-2+i)
-                    $('.acc-history-page-' + (i+1) + ' a').attr('href',window.location.hash + '?page=' + (this.accountHistoryPage-2+i))
+                    $('.acc-history-page-' + (i+1) + ' a').attr('href','#/@' + this.account + '/' + (this.accountHistoryPage-2+i))
                 }
             } else {
                 $('.acc-history-page-' + this.accountHistoryPage).addClass('active')
                 for (let i = 0; i < 5; i++)
-                    $('.acc-history-page-' + (i+1) + ' a').attr('href',window.location.hash + '?page=' + (i+1))
+                    $('.acc-history-page-' + (i+1) + ' a').attr('href','#/@' + this.account + '/' + (i+1))
             }
 
             if (history.data.length < 50) {

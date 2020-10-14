@@ -4,9 +4,8 @@ export default class extends view {
     constructor() {
         super()
         this.setTitle('Live Subscriber Count')
-        this.url = new URL(window.location.href)
         this.counter = 0
-        this.username = this.url.searchParams.get('username') || 'techcoderx'
+        this.username = window.location.hash.split('/')[2] || 'techcoderx'
     }
 
     getHtml() {
@@ -35,6 +34,7 @@ export default class extends view {
         })
         $('#dblocks-live-username').val(this.username)
         axios.get('https://avalon.oneloved.tube/account/' + this.username).then((acc) => {
+            $('.alert').hide()
             this.counter = acc.data.followers.length
             $('#odometer').text(this.counter)
             streamBlocks((newBlock) => {
@@ -44,7 +44,7 @@ export default class extends view {
                     else if (newBlock.txs[i].type == 8 && newBlock.txs[i].data.target == this.username)
                         this.counter--
             })
-        })
+        }).catch((e) => this.handleAccError(e))
         intervals.push(setInterval(()=>$('#odometer').text(this.counter),6000))
 
         $('#dblocks-live-submit').on('click',() => this.changeUsername())
@@ -61,14 +61,15 @@ export default class extends view {
             this.username = acc.data.name
             this.counter = acc.data.followers.length
             $('#odometer').text(this.counter)
-        }).catch((e) => {
-            if (e == 'Error: Request failed with status code 404') {
-                $('.alert').text('Account not found')
-                $('.alert').show()
-            } else {
-                $('.alert').text('Something went wrong when fetching account')
-                $('.alert').show()
-            }
-        })
+            window.history.pushState(null,null,'#/livesubcount/' + this.username)
+        }).catch((e) => this.handleAccError(e))
+    }
+
+    handleAccError(e) {
+        if (e == 'Error: Request failed with status code 404')
+            $('.alert').text('Account not found')
+        else
+            $('.alert').text('Something went wrong when fetching account')
+        $('.alert').show()
     }
 }
