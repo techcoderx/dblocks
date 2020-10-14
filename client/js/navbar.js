@@ -1,7 +1,3 @@
-$(() => {
-    $('.dblocks-navbar').load('/navbar.html')
-})
-
 function searchEnter() {
     let keycode = window.event.keyCode
     if (keycode == 13)
@@ -12,19 +8,19 @@ function searchSubmit()  {
     let searchStr = $('.dblocks-search').val()
     if (searchStr.length == 64) {
         // Tx hash lookup
-        window.location.href = '/tx/' + searchStr
+        navigateTo('#/tx/' + searchStr)
     } else if (searchStr.split('/').length > 1) {
         // Content lookup
-        window.location.href = '/content/' + searchStr
+        navigateTo('#/content/' + searchStr)
     } else if (isNaN(parseInt(searchStr))) {
         // Account lookup
-        window.location.href = '/@' + searchStr
+        navigateTo('#/@' + searchStr)
     } else if (searchStr.length < 64) {
         // Block lookup
-        window.location.href = '/b/' + searchStr
+        navigateTo('#/b/' + searchStr)
     } else {
         // What are you looking for???
-        window.location.href = '/404'
+        navigateTo('#/404')
     }
 }
 

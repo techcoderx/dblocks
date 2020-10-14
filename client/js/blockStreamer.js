@@ -2,9 +2,9 @@ let headBlock = 0
 let unparsedBlocks = 0
 let fetchingBlock = false
 
-function streamBlocks(cb) {
+const streamBlocks = (cb) => {
     // Stream blocks
-    setInterval(() => {
+    let blockCountInterval = setInterval(() => {
         axios.get('https://avalon.oneloved.tube/count').then((bHeight) => {
             if (bHeight.data.count > headBlock)
                 if (headBlock == 0) 
@@ -14,7 +14,7 @@ function streamBlocks(cb) {
         })
     },3000)
 
-    setInterval(() => {
+    let blockInterval = setInterval(() => {
         if (unparsedBlocks > 0 && !fetchingBlock) {
             fetchingBlock = true
             axios.get('https://avalon.oneloved.tube/block/' + (headBlock+1)).then((newBlock) => {
@@ -28,4 +28,6 @@ function streamBlocks(cb) {
             })
         }
     },500)
+
+    window.intervals.push(blockCountInterval,blockInterval)
 }
