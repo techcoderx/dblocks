@@ -12,7 +12,7 @@ import notfound from './404.js'
 // Live update intervals (e.g. block streams)
 window.intervals = []
 
-// Store current route to prevent double loading bug
+// Store current route to prevent double loading and streaming bug
 window.currentRoute = ''
 
 window.router = () => {
@@ -50,15 +50,13 @@ window.router = () => {
     if (!matchingRoute)
         matchingRoute = routes[routes.length - 1]
 
-    console.log(matchingRoute)
-
-    // Clear any intervals (e.g. block streams)
-    for (let i in window.intervals)
-        clearInterval(window.intervals[i])
-    intervals = []
-
-    let currentView = new matchingRoute.view()
     if (requested !== currentRoute) {
+        // Clear any intervals (e.g. block streams)
+        for (let i in window.intervals)
+            clearInterval(window.intervals[i])
+        intervals = []
+
+        let currentView = new matchingRoute.view()
         currentRoute = requested
         $('.container').html(currentView.getHtml())
         currentView.init()
