@@ -11,7 +11,7 @@ export default class extends view {
             <h2>Account pricing</h2>
             <p>Here you can find the burn fee required to create a new account on Avalon. Longer names cost less to create. You will need an existing Avalon account to create a new account. Newly created accounts will start with nothing and will need some DTC to start transacting.</p>
             <p>Usernames must be between 1 and 50 characters long, and only contain alphanumeric lowercase characters. It may also contain hyphens (-) or full-stops (.) in between. Usernames may not be changed once created.</p>
-            <p>The DTube team offers a free signup service whereby the new accounts are created from the <a href="/@dtube">@dtube</a> account which contains special privileges that allows creating accounts without paying the burn fee. This service requires verification and has other limitations such as requiring at least 9 characters and 2 numbers. You can create these accounts on <a href="https://signup.d.tube">signup.d.tube</a>.</p>
+            <p>The DTube team offers a free signup service whereby the new accounts are created from the <a href="/@dtube">@dtube</a> account which contains special privileges that allows creating accounts without paying the burn fee. This service requires verification and has other limitations such as requiring at least 9 characters and 2 numbers. You can create these accounts on <a href="https://signup.d.tube" target="__blank">signup.d.tube</a>.</p>
             <p>The button below will open a form to create new accounts from an existing account with a burn fee as listed below.</p>
             <a href="https://d.tube/#!/newaccount" type="button" target="_blank" class="btn btn-primary dblocks-accprice-createaccbtn"><img src="icons/DTube_White.png">Create a new account on DTube</a><br><br>
             <table class="table table-sm table-striped dblocks-accprice">
@@ -73,5 +73,9 @@ export default class extends view {
                 </tbody>
             </table>
         `
+    }
+
+    init() {
+        addAnchorClickListener()
     }
 }

@@ -96,7 +96,6 @@ export default class extends view {
     }
 
     init() {
-        console.log('init called')
         axios.get('https://avalon.oneloved.tube/account/' + this.account).then((acc) => {
             this.accountdata = acc.data
             this.accountlastupdate = new Date().getTime()
@@ -228,6 +227,7 @@ export default class extends view {
             else
                 $('#acc-leader-ws').text('N/A')
         }
+        addAnchorClickListener()
     }
 
     display() {
