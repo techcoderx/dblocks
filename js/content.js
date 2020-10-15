@@ -25,7 +25,7 @@ export default class extends view {
             <div id="content-container">
                 <h2 class="text-truncate content-heading"><small class="col-12 col-sm-9 text-muted" id="content-id"></small></h2><br>
                 <a type="button" class="btn btn-outline-secondary d-inline" id="content-parent-btn">View parent content</a>
-                <a type="button" target="_blank" class="btn btn-primary d-inline" id="content-dtube"><img src="/icons/DTube_White.png"></a><br><br>
+                <a type="button" target="_blank" class="btn btn-primary d-inline" id="content-dtube"><img src="icons/DTube_White.png"></a><br><br>
                 <table class="table table-sm" id="content-fields">
                     <tr><th scope="row">author</th><td id="content-author"></td></tr>
                     <tr><th scope="row">link</th><td id="content-link"></td></tr>
