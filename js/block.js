@@ -93,6 +93,7 @@ export default class extends view {
                 $('#blk-txs').append(txCardsHtml([blk.data]))
             }
     
+            addAnchorClickListener()
             $('#blk-loading').hide()
             $('.spinner-border').hide()
             $('#blk-container').show()

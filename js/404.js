@@ -12,4 +12,8 @@ export default class extends view {
             <a type="button" class="btn btn-primary" href="/">Home</a>
         `
     }
+
+    init() {
+        addAnchorClickListener()
+    }
 }
