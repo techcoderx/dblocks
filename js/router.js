@@ -97,7 +97,7 @@ window.isValidSkynetPath = (skypath) => {
     // base64
     var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
     for (let i = 1; i < 47; i++)
-        if (alphabet.indexOf(skylink[i]) == -1)
+        if (alphabet.indexOf(skypath[i]) == -1)
             return false
     return true
 }
