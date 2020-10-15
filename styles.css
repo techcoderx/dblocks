@@ -108,6 +108,9 @@ table tr th {
 
 /* Richlist */
 #richlist-error, #richlist-container { display: none; }
+#richlist-table thead,
+#richlist-table tbody tr th { text-align: center; }
+#richlist-table tbody tr td:nth-child(n+3) { text-align: right; }
 
 /* Live sub count */
 .alert { display: none; }

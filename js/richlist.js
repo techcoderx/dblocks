@@ -25,6 +25,8 @@ export default class extends view {
                         <th scope="col">Position</th>
                         <th scope="col">Account</th>
                         <th scope="col">Balance</th>
+                        <th scope="col">Subscribers</th>
+                        <th scope="col">Subscribed</th>
                     </tr></thead><tbody></tbody>
                 </table>
             </div>
@@ -37,7 +39,9 @@ export default class extends view {
             for (let i = 0; i < richlist.data.length; i++) {
                 htmlresult += '<tr><th scope="row">' + (i+1) + '</th>'
                 htmlresult += '<td>' + richlist.data[i].name + '</td>'
-                htmlresult += '<td>' + thousandSeperator((richlist.data[i].balance / 100).toFixed(2)) + ' DTC</td></tr>'
+                htmlresult += '<td>' + thousandSeperator((richlist.data[i].balance / 100).toFixed(2)) + ' DTC</td>'
+                htmlresult += '<td>' + richlist.data[i].subs + '</td>'
+                htmlresult += '<td>' + richlist.data[i].subbed + '</td></tr>'
             }
             $('#richlist-table tbody').append(htmlresult)
             $('#richlist-loading').hide()
