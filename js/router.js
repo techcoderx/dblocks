@@ -32,7 +32,9 @@ window.router = () => {
     ]
 
     let requested = window.location.hash
-    if (!requested)
+    if (!requested && (IsIpfs.path(window.location.pathname) || window.isValidSkynetPath(window.location.pathname)))
+        window.location.hash = '#/'
+    else if (!requested)
         window.location.hash = '#' + window.location.pathname
 
     // Match route with pathname
@@ -66,8 +68,10 @@ window.router = () => {
 }
 
 window.navigateTo = (url) => {
-    window.history.pushState(null,null,url)
-    router()
+    if (url !== location.hash) {
+        window.history.pushState(null,null,url)
+        router()
+    }
 }
 
 window.addEventListener('popstate',router)
@@ -82,6 +86,20 @@ window.addAnchorClickListener = () => {
             navigateTo(toPath)
         }
     })
+}
+
+window.isValidSkynetPath = (skypath) => {
+    // ex1: /_ATcIAto1BT1_lmSwQQINqkRDu6_gp5dUFpMr-5DFHr7Ow
+    // 46 chars
+    if (skypath.length === 48 && skypath.endsWith('/'))
+        skypath = skypath.substr(0,skypath.length - 1)
+    if (skypath.length !== 47 || !skypath.startsWith('/')) return false
+    // base64
+    var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
+    for (let i = 1; i < 47; i++)
+        if (alphabet.indexOf(skylink[i]) == -1)
+            return false
+    return true
 }
 
 $(() => {
