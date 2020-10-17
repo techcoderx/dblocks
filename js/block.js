@@ -54,7 +54,7 @@ export default class extends view {
             $('#blk-notfound').show()
             return
         }
-        axios.get('https://avalon.oneloved.tube/block/' + this.blockNum).then((blk) => {
+        axios.get(node_address + '/block/' + this.blockNum).then((blk) => {
             console.log(blk.data)
             $('#blk-num').text('Block #'+thousandSeperator(this.blockNum))
             $('#blk-det-phash').text(blk.data.phash)

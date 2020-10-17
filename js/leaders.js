@@ -40,7 +40,7 @@ export default class extends view {
     }
 
     init() {
-        axios.get('https://avalon.oneloved.tube/rank/leaders').then((leaders) => {
+        axios.get(node_address + '/rank/leaders').then((leaders) => {
             let htmlresult = ''
             for (let i = 0; i < leaders.data.length; i++) {
                 htmlresult += '<tr><th scope="row">' + (i+1) + '</th>'
