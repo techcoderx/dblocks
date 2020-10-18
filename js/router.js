@@ -36,6 +36,7 @@ window.router = () => {
         window.location.hash = '#/'
     else if (!requested)
         window.location.hash = '#' + window.location.pathname
+    if (!requested) return
 
     // Match route with pathname
     let matchingRoute
