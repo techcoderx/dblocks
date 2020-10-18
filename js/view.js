@@ -1,6 +1,7 @@
+
 export default class {
     constructor() {}
-    setTitle(title) { 
+    setTitle(title) {
         if (title)
             title += ' - Avalon Block Explorer'
         else

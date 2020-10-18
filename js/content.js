@@ -62,7 +62,7 @@ export default class extends view {
     }
 
     init() {
-        axios.get('https://avalon.oneloved.tube/content/' + this.contentId).then((content) => {
+        axios.get(config.api + '/content/' + this.contentId).then((content) => {
             $('#content-id').text(content.data._id)
             $('#content-author').text(content.data.author)
             $('#content-link').text(HtmlSanitizer.SanitizeHtml(content.data.link))

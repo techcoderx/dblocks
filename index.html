@@ -8,6 +8,7 @@
         <script src="lib/axios.min.js"></script>
         <script src="lib/odometer.min.js"></script>
         <script src="lib/is-ipfs.min.js"></script>
+        <script src="js/config.js"></script>
         <script src="js/router.js" type="module"></script>
         <script src="js/navbar.js"></script>
         <script src="js/transactions.js"></script>
@@ -22,17 +23,17 @@
     </head>
     <!-- Top navigation bar -->
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top">
-        <a href="/" class="navbar-brand mb-0 h1">Avalon Block Explorer</a>
+        <a href="#/" class="navbar-brand mb-0 h1">Avalon Block Explorer</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarNav" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <nav class="navbar-nav mr-auto">
                 <!-- Navigation buttons-->
-                <li class="nav-item"><a class="nav-link" href="/leaders">Leaders</a></li>
-                <li class="nav-item"><a class="nav-link" href="/accountprice">Account Pricing</a></li>
-                <li class="nav-item"><a class="nav-link" href="/richlist">Richlist</a></li>
-                <li class="nav-item"><a class="nav-link" href="/livesubcount">Live Subcriber Count</a></li>
+                <li class="nav-item"><a class="nav-link" href="#/leaders">Leaders</a></li>
+                <li class="nav-item"><a class="nav-link" href="#/accountprice">Account Pricing</a></li>
+                <li class="nav-item"><a class="nav-link" href="#/richlist">Richlist</a></li>
+                <li class="nav-item"><a class="nav-link" href="#/livesubcount">Live Subcriber Count</a></li>
             </nav>
             <div class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2 dblocks-search" onkeypress="searchEnter()" type="search" placeholder="Block / Account / Tx" aria-label="Search">

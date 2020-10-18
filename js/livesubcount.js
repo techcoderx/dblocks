@@ -33,7 +33,7 @@ export default class extends view {
             theme: 'car'
         })
         $('#dblocks-live-username').val(this.username)
-        axios.get('https://avalon.oneloved.tube/account/' + this.username).then((acc) => {
+        axios.get(config.api + '/account/' + this.username).then((acc) => {
             $('.alert').hide()
             this.counter = acc.data.followers.length
             $('#odometer').text(this.counter)
@@ -56,7 +56,7 @@ export default class extends view {
     }
 
     changeUsername() {
-        axios.get('https://avalon.oneloved.tube/account/' + $('#dblocks-live-username').val()).then((acc) => {
+        axios.get(config.api + '/account/' + $('#dblocks-live-username').val()).then((acc) => {
             $('.alert').hide()
             this.username = acc.data.name
             this.counter = acc.data.followers.length

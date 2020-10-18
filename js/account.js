@@ -96,7 +96,7 @@ export default class extends view {
     }
 
     init() {
-        axios.get('https://avalon.oneloved.tube/account/' + this.account).then((acc) => {
+        axios.get(config.api + '/account/' + this.account).then((acc) => {
             this.accountdata = acc.data
             this.accountlastupdate = new Date().getTime()
 
@@ -134,12 +134,12 @@ export default class extends view {
             else
                 $('#acc-profile-metadata').hide()
 
-            axios.get('https://avalon.oneloved.tube/rewards/pending/' + this.account).then((pending) =>
+            axios.get(config.api+'/rewards/pending/' + this.account).then((pending) =>
                 $('#acc-meta-pending').text(thousandSeperator(Math.floor(pending.data.total) / 100) + ' DTC'))
             .catch(()=>
                 $('#acc-meta-pending').text('Error'))
     
-            axios.get('https://avalon.oneloved.tube/rewards/claimed/' + this.account).then((claimed) =>
+            axios.get(config.api + '/rewards/claimed/' + this.account).then((claimed) =>
                 $('#acc-meta-claimed').text(thousandSeperator(Math.floor(claimed.data.total) / 100) + ' DTC'))
             .catch(()=>
                 $('#acc-meta-claimed').text('Error'))
@@ -158,7 +158,7 @@ export default class extends view {
                 $('#acc-error').show()
         })
 
-        let accountHistoryUrl = 'https://avalon.oneloved.tube/history/' + this.account + '/0'
+        let accountHistoryUrl = config.api + '/history/' + this.account + '/0'
         if (isNaN(this.accountHistoryPage))
             this.accountHistoryPage = 1
         accountHistoryUrl += '/' + ((this.accountHistoryPage - 1) * 50)
@@ -202,7 +202,7 @@ export default class extends view {
 
     reloadAccount(cb) {
         if (new Date().getTime() - this.accountlastupdate < 60000) return cb(this.accountdata)
-        axios.get('https://avalon.oneloved.tube/account/' + this.account).then((acc) => {
+        axios.get(config.api + '/account/' + this.account).then((acc) => {
             this.accountdata = acc.data
             cb(acc.data)
         }).catch(() => cb(this.accountdata))
@@ -275,7 +275,7 @@ export default class extends view {
 
     updateLeaderStats() {
         if (new Date().getTime() - this.leaderLastUpdate < 120000) return
-        axios.get('https://avalon.oneloved.tube/leader/' + this.account).then((leader) => {
+        axios.get(config.api + '/leader/' + this.account).then((leader) => {
             this.leaderLastUpdate = new Date().getTime()
             $('#acc-leader-voters').text(thousandSeperator(leader.data.voters))
             $('#acc-leader-produced').text(thousandSeperator(leader.data.produced))
