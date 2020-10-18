@@ -1,1 +1,3 @@
-var node_address = 'https://avalon.oneloved.tube';
+window.config = {
+    api: 'https://avalon.oneloved.tube'
+}

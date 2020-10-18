@@ -57,13 +57,13 @@ export default class extends view {
     }
 
     updateChainInfo() {
-        axios.get(node_address + '/supply').then((supplyRes) => {
+        axios.get(config.api + '/supply').then((supplyRes) => {
             $('#supply-circulating').text(thousandSeperator(supplyRes.data.circulating / 100) + ' DTC')
             $('#supply-unclaimed').text(thousandSeperator(Math.ceil(supplyRes.data.unclaimed) / 100) + ' DTC')
             $('#supply-total').text(thousandSeperator(Math.ceil(supplyRes.data.total) / 100) + ' DTC')
         })
     
-        axios.get(node_address + '/rewardPool').then((rpRes) => {
+        axios.get(config.api + '/rewardPool').then((rpRes) => {
             $('#rp-theo').text(thousandSeperator(rpRes.data.theo / 100) + ' DTC')
             $('#rp-dist').text(thousandSeperator(Math.ceil(rpRes.data.dist) / 100) + ' DTC')
             $('#rp-avail').text(thousandSeperator(Math.ceil(rpRes.data.avail) / 100) + ' DTC')

@@ -34,7 +34,7 @@ export default class extends view {
     }
 
     init() {
-        axios.get(node_address + '/rank/balance').then((richlist) => {
+        axios.get(config.api + '/rank/balance').then((richlist) => {
             let htmlresult = ''
             for (let i = 0; i < richlist.data.length; i++) {
                 htmlresult += '<tr><th scope="row">' + (i+1) + '</th>'
