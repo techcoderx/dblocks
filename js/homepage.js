@@ -74,10 +74,10 @@ export default class extends view {
 
     newBlockCardHtml(block) {
         let blockCardHtml = '<div class="card dblocks-card" style="flex-direction:initial">'
-        blockCardHtml += '<a href="#/b/'+block._id+'">#'+block._id+'</a>&nbsp;'
-        blockCardHtml += ' by '
-        blockCardHtml += block.miner
-        blockCardHtml += ' - '
+        blockCardHtml += '<a href="#/b/'+block._id+'">#'+block._id+'</a>'
+        blockCardHtml += '&nbsp;by&nbsp;'
+        blockCardHtml += '<a href="#/@'+block.miner+'">'+block.miner+'</a>'
+        blockCardHtml += '&nbsp;-&nbsp;'
         blockCardHtml += block.txs.length
     
         if (isPuralArr(block.txs))
