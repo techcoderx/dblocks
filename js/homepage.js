@@ -1,4 +1,5 @@
 import view from './view.js'
+import BlockStreamer from './blockStreamer.js'
 
 export default class extends view {
     constructor() {
@@ -52,7 +53,8 @@ export default class extends view {
     init() {
         // Load supply and reward pool, and update every 10 seconds
         this.updateChainInfo()
-        streamBlocks((newBlock) => $('#newblockslst').prepend(this.newBlockCardHtml(newBlock)))
+        let blkStreamer = new BlockStreamer()
+        blkStreamer.streamBlocks((newBlock) => $('#newblockslst').prepend(this.newBlockCardHtml(newBlock)))
         intervals.push(setInterval(this.updateChainInfo,10000))
     }
 
