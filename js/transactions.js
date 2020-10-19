@@ -98,8 +98,8 @@ function txToString(tx) {
 }
 
 function txToHtml(tx) {
-    var text = txToString(tx)
-    var words = text.split(' ')
+    let text = txToString(tx)
+    let words = text.split(' ')
     for (let i = 0; i < words.length; i++) {
         if (words[i].length > 0) {
             if (words[i][0] == '@' && words[i].indexOf('/') === -1) {

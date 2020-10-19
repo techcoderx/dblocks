@@ -51,7 +51,7 @@ export default class extends view {
         axios.get(config.api + '/tx/' + this.txhash).then((txn) => {
             $('#txn-id').text(txn.data.hash)
             $('#includedInBlock').text('Included in block #' + thousandSeperator(txn.data.includedInBlock))
-            $('#txn-card').html('<p class="dblocks-card-content">'+txToHtml(txn.data)+'<p>')
+            $('#txn-card').html('<p class="dblocks-card-content">'+txToHtml(txn.data)+'</p>')
             $('#txn-det-type').text(txn.data.type)
             $('#txn-det-type').append(' <span class="badge badge-pill badge-info">' + TransactionTypes[txn.data.type] + '</span>')
             $('#txn-det-sender').text(txn.data.sender)
