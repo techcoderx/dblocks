@@ -132,7 +132,7 @@ export default class extends view {
                 $('#content-comments').show()
                 let commentsHtml = ''
                 for (let i = 0; i < content.data.child.length; i++) {
-                    commentsHtml += '<tr><td>' + content.data.child[i][0] + '</td><td>' + content.data.child[i][1] + '</td>'
+                    commentsHtml += '<tr><td>' + content.data.child[i][0] + '</td><td>' + DOMPurify.sanitize(content.data.child[i][1]) + '</td>'
                     commentsHtml += '<td><a href="/content/' + content.data.child[i][0] + '/' + content.data.child[i][1] + '">View Comment</a></td></tr>'
                 }
                 $('#content-comments table tbody').append(commentsHtml)
