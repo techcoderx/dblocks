@@ -28,7 +28,7 @@ function searchSubmit()  {
 function jsonToTableRecursive(json) {
     let result = '<table class="table table-sm table-bordered">'
     for (field in json) {
-        let cleanField = HtmlSanitizer.SanitizeHtml(field)
+        let cleanField = DOMPurify.sanitize(field)
         let val = json[field]
         if (typeof val == 'object')
             val = jsonToTableRecursive(val)
@@ -36,7 +36,7 @@ function jsonToTableRecursive(json) {
             val = val.toString()
         else
             val = JSON.stringify(val)
-        val = HtmlSanitizer.SanitizeHtml(val)
+        val = DOMPurify.sanitize(val)
         result += '<tr><th scope="row">' + cleanField + '</th><td>' + val + '</td></tr>'
     }
     result += '</table>'

@@ -23,7 +23,7 @@ function txCardsHtml(blocks) {
     let result = ''
     for (let i = 0; i < blocks.length; i++)
         for (let j = 0; j < blocks[i].txs.length; j++) {
-            result += '<div class="card dblocks-card"><p class="dblocks-card-content">' + txToHtml(blocks[i].txs[j])
+            result += '<div class="card dblocks-card"><p class="dblocks-card-content">' + DOMPurify.sanitize(txToHtml(blocks[i].txs[j]))
             result += ' <a href="/tx/' + blocks[i].txs[j].hash + '" class="badge badge-pill badge-secondary">'
             result += blocks[i].txs[j].hash.substr(0,6)
             result += '</a></p></div>'
@@ -31,86 +31,73 @@ function txCardsHtml(blocks) {
     return result
 }
 
-function txToString(tx) {
-    let result = ''
+function txToHtml(tx) {
+    let result = aUser(tx.sender)
     switch (tx.type) {
         case 0:
-            return '@' + tx.sender + ' created new account ' + '@' + tx.data.name
+            return result + ' created new account ' + aUser(tx.data.name)
         case 1:
-            return '@' + tx.sender + ' approved leader ' + '@' + tx.data.target
+            return result + ' approved leader ' + aUser(tx.data.target)
         case 2:
-            return '@' + tx.sender + ' disapproved leader ' + '@' + tx.data.target
+            return result + ' disapproved leader ' + aUser(tx.data.target)
         case 3:
-            result = '@' + tx.sender + ' transferred ' + thousandSeperator(tx.data.amount / 100) + ' DTC to ' + '@' + tx.data.receiver
+            result = result + ' transferred ' + thousandSeperator(tx.data.amount / 100) + ' DTC to ' + aUser(tx.data.receiver)
             if (tx.data.memo)
-                result += ', memo: ' + HtmlSanitizer.SanitizeHtml(tx.data.memo)
+                result += ', memo: ' + tx.data.memo
             return result
         case 4:
-            result = '@' + tx.sender
             if (tx.data.pa && tx.data.pp)
-                result += ' commented on @' + tx.data.pa + '/' + tx.data.pp
+                result += ' commented on ' + aContent(tx.data.pa + '/' + tx.data.pp)
             else
-                result += ' posted a new video @' + tx.sender + '/' + HtmlSanitizer.SanitizeHtml(tx.data.link)
+                result += ' posted a new video ' + aContent(tx.sender + '/' + tx.data.link)
             return result
         case 5:
-            result = '@' + tx.sender
             if (tx.data.vt > 0)
                 result += ' upvoted '
             else
                 result += ' downvoted '
-            result += '@' + tx.data.author + '/' + HtmlSanitizer.SanitizeHtml(tx.data.link) + ' with ' + thousandSeperator(tx.data.vt) + ' VP'
+            result += aContent(tx.data.author + '/' + tx.data.link) + ' with ' + thousandSeperator(tx.data.vt) + ' VP'
             if (tx.data.tag)
-                result += ' and tagged it with ' + HtmlSanitizer.SanitizeHtml(tx.data.tag)
+                result += ' and tagged it with ' + tx.data.tag
             return result
         case 6:
-            return '@' + tx.sender + ' update profile'
+            return result + ' update profile'
         case 7:
-            return '@' + tx.sender + ' subscribed to ' + '@' + tx.data.target
+            return result + ' subscribed to ' + aUser(tx.data.target)
         case 8:
-            return '@' + tx.sender + ' unsubscribed to ' + '@' + tx.data.target
+            return result + ' unsubscribed to ' + aUser(tx.data.target)
         case 10:
-            return '@' + tx.sender + ' created a custom key with id ' + HtmlSanitizer.SanitizeHtml(tx.data.id)
+            return result + ' created a custom key with id ' + tx.data.id
         case 11:
-            return '@' + tx.sender + ' removed a custom key with id ' + HtmlSanitizer.SanitizeHtml(tx.data.id)
+            return result + ' removed a custom key with id ' + tx.data.id
         case 12:
-            return '@' + tx.sender + ' changed the master key'
+            return result + ' changed the master key'
         case 13:
-            result = '@' + tx.sender
             if (tx.data.pa && tx.data.pp)
-                result += ' commented on @' + tx.data.pa + '/' + tx.data.pp
+                result += ' commented on ' + aContent(tx.data.pa + '/' + tx.data.pp)
             else
-                result += ' posted a new video @' + tx.sender + '/' + HtmlSanitizer.SanitizeHtml(tx.data.link)
+                result += ' posted a new video ' + aContent(tx.sender + '/' + tx.data.link)
             result += ' and burnt ' + (tx.data.burn / 100) + ' DTC '
             return result
         case 14:
-            return '@' + tx.sender + ' transferred ' + thousandSeperator(tx.data.amount) + ' VP to ' + '@' + tx.data.receiver
+            return result + ' transferred ' + thousandSeperator(tx.data.amount) + ' VP to ' + aUser(tx.data.receiver)
         case 15:
-            return '@' + tx.sender + ' transferred ' + thousandSeperator(tx.data.amount) + ' bytes to ' + '@' + tx.data.receiver
+            return result + ' transferred ' + thousandSeperator(tx.data.amount) + ' bytes to ' + aUser(tx.data.receiver)
         case 16:
-            return '@' + tx.sender + ' set a limit on account voting power to ' + tx.data.amount + ' VP'
+            return result + ' set a limit on account voting power to ' + tx.data.amount + ' VP'
         case 17:
-            return '@' + tx.sender + ' claimed curation rewards on @' + tx.data.author + '/' + HtmlSanitizer.SanitizeHtml(tx.data.link)
+            return result + ' claimed curation rewards on ' + aContent(tx.data.author + '/' + tx.data.link)
         case 18:
-            return '@' + tx.sender + ' updated leader key for block production'
+            return result + ' updated leader key for block production'
         default:
             return 'Unknown transaction type ' + tx.type
     }
 }
 
-function txToHtml(tx) {
-    let text = txToString(tx)
-    let words = text.split(' ')
-    for (let i = 0; i < words.length; i++) {
-        if (words[i].length > 0) {
-            if (words[i][0] == '@' && words[i].indexOf('/') === -1) {
-                // username link
-                words[i] = '<a href="#/'+words[i]+'">'+words[i].replace('@','')+'</a>'
-            }
-            if (words[i][0] == '@' && words[i].indexOf('/') > -1) {
-                // video link
-                words[i] = '<a href="#/content/'+words[i].replace('@','')+'">'+words[i].replace('@','')+'</a>'
-            }
-        }
-    }
-    return HtmlSanitizer.SanitizeHtml(words.join(' '))
+function aUser(user) {
+    return '<a href="#/@'+user+'">'+user+'</a>'
+}
+
+function aContent(content) {
+    return '<a href="#/content/'+content+'">@'+content+'</a>'
 }
