@@ -16,11 +16,11 @@ export default class extends view {
             </div>
             <div id="blk-notfound">
                 <h2>Block not found</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="blk-error">
                 <h2>Something went wrong when retrieving block</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="blk-container">
                 <div class="row blk-head">
@@ -55,7 +55,6 @@ export default class extends view {
             return
         }
         axios.get(config.api + '/block/' + this.blockNum).then((blk) => {
-            console.log(blk.data)
             $('#blk-num').text('Block #'+thousandSeperator(this.blockNum))
             $('#blk-det-phash').text(blk.data.phash)
             $('#blk-det-ts').text(blk.data.timestamp)
@@ -98,7 +97,6 @@ export default class extends view {
             $('.spinner-border').hide()
             $('#blk-container').show()
         }).catch((e) => {
-            console.log(e)
             $('#blk-loading').hide()
             $('.spinner-border').hide()
             if (e == 'Error: Request failed with status code 404') {

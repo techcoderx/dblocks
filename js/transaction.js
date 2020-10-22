@@ -17,11 +17,11 @@ export default class extends view {
             </div>
             <div id="txn-notfound">
                 <h2>Transaction not found</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="txn-error">
                 <h2>Something went wrong when retrieving transaction</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="txn-container">
                 <h2 class="text-truncate">Transaction<small class="col-12 col-sm-9 text-muted" id="txn-id"></small></h2>
@@ -66,7 +66,6 @@ export default class extends view {
             $('.spinner-border').hide()
             $('#txn-container').show()
         }).catch((e) => {
-            console.log(e)
             $('#txn-loading').hide()
             $('.spinner-border').hide()
             if (e == 'Error: Request failed with status code 404')

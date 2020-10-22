@@ -16,11 +16,11 @@ export default class extends view {
             </div>
             <div id="content-notfound">
                 <h2>Content not found</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="content-error">
                 <h2>Something went wrong when retrieving content</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="content-container">
                 <h2 class="text-truncate content-heading"><small class="col-12 col-sm-9 text-muted" id="content-id"></small></h2><br>
@@ -133,7 +133,7 @@ export default class extends view {
                 let commentsHtml = ''
                 for (let i = 0; i < content.data.child.length; i++) {
                     commentsHtml += '<tr><td>' + content.data.child[i][0] + '</td><td>' + DOMPurify.sanitize(content.data.child[i][1]) + '</td>'
-                    commentsHtml += '<td><a href="/content/' + content.data.child[i][0] + '/' + content.data.child[i][1] + '">View Comment</a></td></tr>'
+                    commentsHtml += '<td><a href="#/content/' + content.data.child[i][0] + '/' + content.data.child[i][1] + '">View Comment</a></td></tr>'
                 }
                 $('#content-comments table tbody').append(commentsHtml)
             }
@@ -146,7 +146,6 @@ export default class extends view {
             $('#content-container').show()
             addAnchorClickListener()
         }).catch((e) => {
-            console.log(e)
             $('#content-loading').hide()
             $('.spinner-border').hide()
             if (e == 'Error: Request failed with status code 404')

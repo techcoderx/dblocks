@@ -25,10 +25,7 @@ export default class {
                     this.unparsedBlocks--
                     setTimeout(() => this.fetchingBlock = false,500)
                     cb(newBlock.data)
-                }).catch((e) => {
-                    console.log('Error fetching block',e)
-                    this.fetchingBlock = false
-                })
+                }).catch(() => this.fetchingBlock = false)
             }
         },500)
     

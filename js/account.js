@@ -23,11 +23,11 @@ export default class extends view {
             </div>
             <div id="acc-notfound">
                 <h2>Account not found</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="acc-error">
                 <h2>Something went wrong when retrieving account</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="acc-container">
                 <h2 id="acc-name"></h2><br>
@@ -148,7 +148,6 @@ export default class extends view {
             this.display()
             intervals.push(setInterval(()=>this.reloadAccount((newacc)=>this.updateAccount(newacc)),10000))
         }).catch((e) => {
-            console.log(e)
             $('#acc-loading').hide()
             $('.spinner-border').hide()
             if (e == 'Error: Request failed with status code 404') {
@@ -269,7 +268,7 @@ export default class extends view {
         let result = ''
         if (!approves) return 'Not voting for leaders'
         for (let i = 0; i < approves.length; i++)
-            result += '<tr><td><a href="/@' + approves[i] + '">' + approves[i] + '</a></td></tr>'
+            result += '<tr><td><a href="#/@' + approves[i] + '">' + approves[i] + '</a></td></tr>'
         return result
     }
 

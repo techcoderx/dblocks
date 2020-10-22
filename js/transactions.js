@@ -24,7 +24,7 @@ function txCardsHtml(blocks) {
     for (let i = 0; i < blocks.length; i++)
         for (let j = 0; j < blocks[i].txs.length; j++) {
             result += '<div class="card dblocks-card"><p class="dblocks-card-content">' + DOMPurify.sanitize(txToHtml(blocks[i].txs[j]))
-            result += ' <a href="/tx/' + blocks[i].txs[j].hash + '" class="badge badge-pill badge-secondary">'
+            result += ' <a href="#/tx/' + blocks[i].txs[j].hash + '" class="badge badge-pill badge-secondary">'
             result += blocks[i].txs[j].hash.substr(0,6)
             result += '</a></p></div>'
         }

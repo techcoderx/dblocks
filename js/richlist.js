@@ -15,7 +15,7 @@ export default class extends view {
             </div>
             <div id="richlist-error">
                 <h2>Something went wrong when retrieving richlist</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="richlist-container">
                 <h2>Richlist</h2>

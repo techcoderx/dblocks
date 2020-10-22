@@ -9,7 +9,7 @@ export default class extends view {
     getHtml() {
         return `
             <h1>You got hit by a 404 error</h1><br>
-            <a type="button" class="btn btn-primary" href="/">Home</a>
+            <a type="button" class="btn btn-primary" href="#">Home</a>
         `
     }
 

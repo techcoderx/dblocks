@@ -15,7 +15,7 @@ export default class extends view {
             </div>
             <div id="leader-error">
                 <h2>Something went wrong when retrieving leaders</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="leader-container">
                 <h2>Leaders</h2>
