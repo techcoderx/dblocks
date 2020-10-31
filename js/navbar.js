@@ -25,13 +25,15 @@ function searchSubmit()  {
 }
 
 // Commons
-function jsonToTableRecursive(json) {
-    let result = '<table class="table table-sm table-bordered">'
+function jsonToTableRecursive(json,isInner) {
+    let result = '<table class="table table-sm table-bordered'
+    if (isInner) result += ' dblocks-table-inner'
+    result += '">'
     for (field in json) {
         let cleanField = DOMPurify.sanitize(field)
         let val = json[field]
         if (typeof val == 'object')
-            val = jsonToTableRecursive(val)
+            val = jsonToTableRecursive(val,true)
         else if (typeof val != 'string')
             val = val.toString()
         else
