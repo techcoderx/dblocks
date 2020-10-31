@@ -31,12 +31,12 @@ export default class extends view {
                         <tr><th scope="row">Chain ID</th><td>da5fe18d0844f1f97bf5a94e7780dec18b4ab015e32383ede77158e059bacbb2</td></tr>
                         <tr><th scope="row">Block Time</th><td>3 seconds</td></tr>
                         <tr><th scope="row">VP Growth</th><td>1 VP/DTC/hour</td></tr>
-                        <tr><th scope="row">VP per burn</th><td>600 VP/DTC</td></tr>
+                        <tr><th scope="row">VP per burn</th><td>4,400 VP/DTC</td></tr>
                         <tr><th scope="row">BW Growth</th><td>10 bytes/DTC/hour</td></tr>
                         <tr><th scope="row">BW Max</th><td>64,000 bytes</td></tr>
-                        <tr><th scope="row">Leaders</th><td>10</td></tr>
+                        <tr><th scope="row">Leaders</th><td>13</td></tr>
                         <tr><th scope="row">Block Reward</th><td>0.01 DTC</td></tr>
-                        <tr><th scope="row">Block Reward VP</th><td>500 VP</td></tr>
+                        <tr><th scope="row">Block Reward VP</th><td>100 VP</td></tr>
                         <tr><th scope="row">Master account</th><td>dtube</td></tr>
                         <tr><th scope="row">Master fee</th><td>10%</td></tr>
                         <tr><th scope="row">Max Subscribes</th><td>2,000</td></tr>
