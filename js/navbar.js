@@ -1,6 +1,6 @@
 function searchEnter() {
     let keycode = window.event.keyCode
-    if (keycode == 13)
+    if (keycode == 13 || keycode == 10)
         searchSubmit()
 }
 
