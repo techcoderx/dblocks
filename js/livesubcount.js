@@ -1,4 +1,5 @@
 import view from './view.js'
+import BlockStreamer from './blockStreamer.js'
 
 export default class extends view {
     constructor() {
@@ -37,7 +38,8 @@ export default class extends view {
             $('.alert').hide()
             this.counter = acc.data.followers.length
             $('#odometer').text(this.counter)
-            streamBlocks((newBlock) => {
+            let blkStreamer = new BlockStreamer()
+            blkStreamer.streamBlocks((newBlock) => {
                 for (let i = 0; i < newBlock.txs.length; i++)
                     if (newBlock.txs[i].type == 7 && newBlock.txs[i].data.target == this.username)
                         this.counter++

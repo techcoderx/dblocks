@@ -23,11 +23,11 @@ export default class extends view {
             </div>
             <div id="acc-notfound">
                 <h2>Account not found</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="acc-error">
                 <h2>Something went wrong when retrieving account</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="acc-container">
                 <h2 id="acc-name"></h2><br>
@@ -41,6 +41,7 @@ export default class extends view {
                             <tr><th scope="row">Subscribers</th><td id="acc-meta-subs"></td></tr>
                             <tr><th scope="row">Subscribed To</th><td id="acc-meta-subbed"></td></tr>
                             <tr><th scope="row">Pending Rewards</th><td id="acc-meta-pending"></td></tr>
+                            <tr><th scope="row">Claimable Rewards</th><td id="acc-meta-claimable"></td></tr>
                             <tr><th scope="row">Claimed Rewards</th><td id="acc-meta-claimed"></td></tr>
                         </table>
                         <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-dtube"><img src="icons/DTube_White.png">View channel on DTube</a>
@@ -81,13 +82,13 @@ export default class extends view {
                     <div class="col-12 col-lg" id="acc-history">
                         <div id="acc-history-itms"></div>
                         <nav><ul class="pagination">
-                            <li class="page-item acc-history-page-prev"><a class="page-link" tabindex="-1">Previous</a></li>
-                            <li class="page-item acc-history-page-1"><a class="page-link">1</a></li>
-                            <li class="page-item acc-history-page-2"><a class="page-link">2</a></li>
-                            <li class="page-item acc-history-page-3"><a class="page-link">3</a></li>
-                            <li class="page-item acc-history-page-4"><a class="page-link">4</a></li>
-                            <li class="page-item acc-history-page-5"><a class="page-link">5</a></li>
-                            <li class="page-item acc-history-page-next"><a class="page-link">Next</a></li>
+                            <li class="page-item" id="acc-history-page-prev"><a class="page-link" tabindex="-1">Previous</a></li>
+                            <li class="page-item" id="acc-history-page-1"><a class="page-link">1</a></li>
+                            <li class="page-item" id="acc-history-page-2"><a class="page-link">2</a></li>
+                            <li class="page-item" id="acc-history-page-3"><a class="page-link">3</a></li>
+                            <li class="page-item" id="acc-history-page-4"><a class="page-link">4</a></li>
+                            <li class="page-item" id="acc-history-page-5"><a class="page-link">5</a></li>
+                            <li class="page-item" id="acc-history-page-next"><a class="page-link">Next</a></li>
                         </ul></nav>
                     </div>
                 </div>
@@ -138,6 +139,11 @@ export default class extends view {
                 $('#acc-meta-pending').text(thousandSeperator(Math.floor(pending.data.total) / 100) + ' DTC'))
             .catch(()=>
                 $('#acc-meta-pending').text('Error'))
+
+            axios.get(config.api+'/rewards/claimable/' + this.account).then((claimable) =>
+                $('#acc-meta-claimable').text(thousandSeperator(Math.floor(claimable.data.total) / 100) + ' DTC'))
+            .catch(()=>
+                $('#acc-meta-claimable').text('Error'))
     
             axios.get(config.api + '/rewards/claimed/' + this.account).then((claimed) =>
                 $('#acc-meta-claimed').text(thousandSeperator(Math.floor(claimed.data.total) / 100) + ' DTC'))
@@ -148,7 +154,6 @@ export default class extends view {
             this.display()
             intervals.push(setInterval(()=>this.reloadAccount((newacc)=>this.updateAccount(newacc)),10000))
         }).catch((e) => {
-            console.log(e)
             $('#acc-loading').hide()
             $('.spinner-border').hide()
             if (e == 'Error: Request failed with status code 404') {
@@ -163,35 +168,35 @@ export default class extends view {
             this.accountHistoryPage = 1
         accountHistoryUrl += '/' + ((this.accountHistoryPage - 1) * 50)
 
-        axios.get(accountHistoryUrl).then((history) => {    
+        axios.get(accountHistoryUrl).then((history) => {
             // Render account history cards
             $('#acc-history-itms').html(txCardsHtml(history.data))
 
             // Render account history pagination
-            $('.acc-history-page-next a').attr('href','#/@' + this.account + '/' + (this.accountHistoryPage+1))
+            $('#acc-history-page-next a').attr('href','#/@' + this.account + '/' + (this.accountHistoryPage+1))
             if (this.accountHistoryPage == 1)
-                $('.acc-history-page-prev').addClass('disabled')
+                $('#acc-history-page-prev').addClass('disabled')
             else
-                $('.acc-history-page-prev a').attr('href','#/@' + this.account + '/' + (this.accountHistoryPage-1))
+                $('#acc-history-page-prev a').attr('href','#/@' + this.account + '/' + (this.accountHistoryPage-1))
             if (this.accountHistoryPage >= 3) {
-                $('.acc-history-page-3').addClass('active')
+                $('#acc-history-page-3').addClass('active')
                 for (let i = 0; i < 5; i++) {
-                    $('.acc-history-page-' + (i+1) + ' a').text(this.accountHistoryPage-2+i)
-                    $('.acc-history-page-' + (i+1) + ' a').attr('href','#/@' + this.account + '/' + (this.accountHistoryPage-2+i))
+                    $('#acc-history-page-' + (i+1) + ' a').text(this.accountHistoryPage-2+i)
+                    $('#acc-history-page-' + (i+1) + ' a').attr('href','#/@' + this.account + '/' + (this.accountHistoryPage-2+i))
                 }
             } else {
-                $('.acc-history-page-' + this.accountHistoryPage).addClass('active')
+                $('#acc-history-page-' + this.accountHistoryPage).addClass('active')
                 for (let i = 0; i < 5; i++)
-                    $('.acc-history-page-' + (i+1) + ' a').attr('href','#/@' + this.account + '/' + (i+1))
+                    $('#acc-history-page-' + (i+1) + ' a').attr('href','#/@' + this.account + '/' + (i+1))
             }
 
             if (history.data.length < 50) {
-                $('.acc-history-page-next').addClass('disabled')
+                $('#acc-history-page-next').addClass('disabled')
                 if (this.accountHistoryPage < 3) for (let i = this.accountHistoryPage; i < 5; i++) {
-                    $('.acc-history-page-' + (i+1)).hide()
+                    $('#acc-history-page-' + (i+1)).hide()
                 } else {
-                    $('.acc-history-page-4').hide()
-                    $('.acc-history-page-5').hide()
+                    $('#acc-history-page-4').hide()
+                    $('#acc-history-page-5').hide()
                 }
             }
 
@@ -223,7 +228,7 @@ export default class extends view {
             $('#acc-leader-appr').text(thousandSeperator(acc.node_appr / 100) + ' DTC')
     
             if (acc.json && acc.json.node && acc.json.node.ws)
-                $('#acc-leader-ws').text(HtmlSanitizer.SanitizeHtml(acc.json.node.ws))
+                $('#acc-leader-ws').text(DOMPurify.sanitize(acc.json.node.ws))
             else
                 $('#acc-leader-ws').text('N/A')
         }
@@ -242,7 +247,7 @@ export default class extends view {
     customKeyHtml(keys) {
         let result = ''
         for (let i = 0; i < keys.length; i++) {
-            let sanitizedId = HtmlSanitizer.SanitizeHtml(keys[i].id)
+            let sanitizedId = DOMPurify.sanitize(keys[i].id)
             result += '<div class="card"><div class="card-header" id="acc-customkey-card-' + i + '">'
             result += '<h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#acc-customkey-collapse-' + i + '" aria-expanded="true" aria-controls="acc-customkey-collapse-' + i + '">' + sanitizedId + '</button></h5></div>'
             result += '<div id="acc-customkey-collapse-' + i + '" class="collapse" aria-labelledby="acc-customkey-card-' + i + '" data-parent="#acc-customkey">'
@@ -269,7 +274,7 @@ export default class extends view {
         let result = ''
         if (!approves) return 'Not voting for leaders'
         for (let i = 0; i < approves.length; i++)
-            result += '<tr><td><a href="/@' + approves[i] + '">' + approves[i] + '</a></td></tr>'
+            result += '<tr><td><a href="#/@' + approves[i] + '">' + approves[i] + '</a></td></tr>'
         return result
     }
 

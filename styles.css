@@ -7,6 +7,10 @@
     cursor: pointer;
 }
 
+.dblocks-table-inner {
+    margin-bottom: 0;
+}
+
 .card-header {
     padding: 0px 10px;
 }

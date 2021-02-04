@@ -17,11 +17,11 @@ class GrowInt {
             t: time
         }
 
-        var tmpValue = this.v
+        let tmpValue = this.v
         tmpValue += (time-this.t)*this.config.growth
         
-        var newValue = 0
-        var newTime = 0
+        let newValue = 0
+        let newTime = 0
         if (this.config.growth > 0) {
             newValue = Math.floor(tmpValue)
             newTime = Math.ceil(this.t + ((newValue-this.v)/this.config.growth))

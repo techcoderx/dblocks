@@ -1,4 +1,5 @@
 import view from './view.js'
+import BlockStreamer from './blockStreamer.js'
 
 export default class extends view {
     constructor() {
@@ -30,12 +31,12 @@ export default class extends view {
                         <tr><th scope="row">Chain ID</th><td>da5fe18d0844f1f97bf5a94e7780dec18b4ab015e32383ede77158e059bacbb2</td></tr>
                         <tr><th scope="row">Block Time</th><td>3 seconds</td></tr>
                         <tr><th scope="row">VP Growth</th><td>1 VP/DTC/hour</td></tr>
-                        <tr><th scope="row">VP per burn</th><td>600 VP/DTC</td></tr>
+                        <tr><th scope="row">VP per burn</th><td>4,400 VP/DTC</td></tr>
                         <tr><th scope="row">BW Growth</th><td>10 bytes/DTC/hour</td></tr>
                         <tr><th scope="row">BW Max</th><td>64,000 bytes</td></tr>
-                        <tr><th scope="row">Leaders</th><td>10</td></tr>
+                        <tr><th scope="row">Leaders</th><td>13</td></tr>
                         <tr><th scope="row">Block Reward</th><td>0.01 DTC</td></tr>
-                        <tr><th scope="row">Block Reward VP</th><td>500 VP</td></tr>
+                        <tr><th scope="row">Block Reward VP</th><td>100 VP</td></tr>
                         <tr><th scope="row">Master account</th><td>dtube</td></tr>
                         <tr><th scope="row">Master fee</th><td>10%</td></tr>
                         <tr><th scope="row">Max Subscribes</th><td>2,000</td></tr>
@@ -52,7 +53,8 @@ export default class extends view {
     init() {
         // Load supply and reward pool, and update every 10 seconds
         this.updateChainInfo()
-        streamBlocks((newBlock) => $('#newblockslst').prepend(this.newBlockCardHtml(newBlock)))
+        let blkStreamer = new BlockStreamer()
+        blkStreamer.streamBlocks((newBlock) => $('#newblockslst').prepend(this.newBlockCardHtml(newBlock)))
         intervals.push(setInterval(this.updateChainInfo,10000))
     }
 
@@ -73,11 +75,11 @@ export default class extends view {
     }
 
     newBlockCardHtml(block) {
-        let blockCardHtml = '<div class="card dblocks-card">#'
-        blockCardHtml += block._id
-        blockCardHtml += ' by '
-        blockCardHtml += block.miner
-        blockCardHtml += ' - '
+        let blockCardHtml = '<div class="card dblocks-card" style="flex-direction:initial">'
+        blockCardHtml += '<a href="#/b/'+block._id+'">#'+block._id+'</a>'
+        blockCardHtml += '&nbsp;by&nbsp;'
+        blockCardHtml += '<a href="#/@'+block.miner+'">'+block.miner+'</a>'
+        blockCardHtml += '&nbsp;-&nbsp;'
         blockCardHtml += block.txs.length
     
         if (isPuralArr(block.txs))

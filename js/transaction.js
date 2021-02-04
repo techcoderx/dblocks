@@ -17,11 +17,11 @@ export default class extends view {
             </div>
             <div id="txn-notfound">
                 <h2>Transaction not found</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="txn-error">
                 <h2>Something went wrong when retrieving transaction</h2><br>
-                <a type="button" class="btn btn-primary" href="/">Home</a>
+                <a type="button" class="btn btn-primary" href="#">Home</a>
             </div>
             <div id="txn-container">
                 <h2 class="text-truncate">Transaction<small class="col-12 col-sm-9 text-muted" id="txn-id"></small></h2>
@@ -51,7 +51,7 @@ export default class extends view {
         axios.get(config.api + '/tx/' + this.txhash).then((txn) => {
             $('#txn-id').text(txn.data.hash)
             $('#includedInBlock').text('Included in block #' + thousandSeperator(txn.data.includedInBlock))
-            $('#txn-card').html(txToString(txn.data))
+            $('#txn-card').html('<p class="dblocks-card-content">'+txToHtml(txn.data)+'</p>')
             $('#txn-det-type').text(txn.data.type)
             $('#txn-det-type').append(' <span class="badge badge-pill badge-info">' + TransactionTypes[txn.data.type] + '</span>')
             $('#txn-det-sender').text(txn.data.sender)
@@ -66,7 +66,6 @@ export default class extends view {
             $('.spinner-border').hide()
             $('#txn-container').show()
         }).catch((e) => {
-            console.log(e)
             $('#txn-loading').hide()
             $('.spinner-border').hide()
             if (e == 'Error: Request failed with status code 404')

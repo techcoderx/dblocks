@@ -25,18 +25,20 @@ function searchSubmit()  {
 }
 
 // Commons
-function jsonToTableRecursive(json) {
-    let result = '<table class="table table-sm table-bordered">'
+function jsonToTableRecursive(json,isInner) {
+    let result = '<table class="table table-sm table-bordered'
+    if (isInner) result += ' dblocks-table-inner'
+    result += '">'
     for (field in json) {
-        let cleanField = HtmlSanitizer.SanitizeHtml(field)
+        let cleanField = DOMPurify.sanitize(field)
         let val = json[field]
         if (typeof val == 'object')
-            val = jsonToTableRecursive(val)
+            val = jsonToTableRecursive(val,true)
         else if (typeof val != 'string')
             val = val.toString()
         else
             val = JSON.stringify(val)
-        val = HtmlSanitizer.SanitizeHtml(val)
+        val = DOMPurify.sanitize(val)
         result += '<tr><th scope="row">' + cleanField + '</th><td>' + val + '</td></tr>'
     }
     result += '</table>'
@@ -44,7 +46,7 @@ function jsonToTableRecursive(json) {
 }
 
 function thousandSeperator(num) {
-    var num_parts = num.toString().split(".");
+    let num_parts = num.toString().split(".");
     num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return num_parts.join(".");
 }

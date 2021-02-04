@@ -36,6 +36,7 @@ window.router = () => {
         window.location.hash = '#/'
     else if (!requested)
         window.location.hash = '#' + window.location.pathname
+    if (!requested) return
 
     // Match route with pathname
     let matchingRoute
@@ -95,7 +96,7 @@ window.isValidSkynetPath = (skypath) => {
         skypath = skypath.substr(0,skypath.length - 1)
     if (skypath.length !== 47 || !skypath.startsWith('/')) return false
     // base64
-    var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
+    let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
     for (let i = 1; i < 47; i++)
         if (alphabet.indexOf(skypath[i]) == -1)
             return false
