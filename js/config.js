@@ -1,3 +1,3 @@
 window.config = {
-    api: 'https://avalon.oneloved.tube'
+    api: 'https://testnet-api.oneloved.tube'
 }
