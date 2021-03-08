@@ -98,9 +98,17 @@ export default class extends view {
             
             // Votes
             let hasClaims = false
+            let hasAuthorTips = false
             let contentBurn = 0
             let votesHtml = ''
-            // Check for any claims
+            // Check for any author tips
+            for (let i = 0; i < content.data.votes.length; i++)
+                if (content.data.votes[i].tip) {
+                    $('#content-votes thead tr').append('<th scope="col">Author Tip</th>')
+                    hasAuthorTips = true
+                    break
+                }
+            // and any claims
             for (let i = 0; i < content.data.votes.length; i++)
                 if (content.data.votes[i].claimed) {
                     $('#content-votes thead tr').append('<th scope="col">Claimed</th>')
@@ -118,6 +126,10 @@ export default class extends view {
                 if (content.data.votes[i].tag)
                     votesHtml += '<td>' + DOMPurify.sanitize(content.data.votes[i].tag) + '</td>'
                 else
+                    votesHtml += '<td></td>'
+                if (content.data.votes[i].tip)
+                    votesHtml += '<td>' + (content.data.votes[i].tip * 100) + '%</td>'
+                else if (hasAuthorTips)
                     votesHtml += '<td></td>'
                 if (content.data.votes[i].claimed)
                     votesHtml += '<td>' + new Date(content.data.votes[i].claimed).toLocaleString() + '</td>'

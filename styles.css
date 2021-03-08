@@ -95,7 +95,8 @@ table tr th {
 #content-votes thead,
 #content-votes tbody tr td:nth-child(2),
 #content-votes tbody tr td:nth-child(5),
-#content-votes tbody tr td:nth-child(6) { text-align: center; }
+#content-votes tbody tr td:nth-child(6),
+#content-votes tbody tr td:nth-child(7) { text-align: center; }
 #content-votes tbody tr td:nth-child(3),
 #content-votes tbody tr td:nth-child(4) { text-align: right; }
 

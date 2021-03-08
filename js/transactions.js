@@ -16,7 +16,8 @@ const TransactionTypes = {
     15: 'TRANSFER_BW',
     16: 'LIMIT_VT',
     17: 'CLAIM_REWARD',
-    18: 'ENABLE_NODE'
+    18: 'ENABLE_NODE',
+    19: 'TIPPED_VOTE'
 }
 
 function txCardsHtml(blocks) {
@@ -89,6 +90,16 @@ function txToHtml(tx) {
             return result + ' claimed curation rewards on ' + aContent(tx.data.author + '/' + tx.data.link)
         case 18:
             return result + ' updated leader key for block production'
+        case 19:
+            if (tx.data.vt > 0)
+                result += ' upvoted '
+            else
+                result += ' downvoted '
+            result += aContent(tx.data.author + '/' + tx.data.link) + ' with ' + thousandSeperator(tx.data.vt) + ' VP'
+            if (tx.data.tag)
+                result += ' and tagged it with ' + tx.data.tag
+            result += ' (' + tx.data.tip + '% author tip)'
+            return result
         default:
             return 'Unknown transaction type ' + tx.type
     }
