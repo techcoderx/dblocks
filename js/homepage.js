@@ -28,7 +28,7 @@ export default class extends view {
                     </table><br>
                     <h3>Chain Properties</h3>
                     <table class="table table-sm" id="dblocks-props-tbl"><tbody>
-                        <tr><th scope="row">Chain ID</th><td>da5fe18d0844f1f97bf5a94e7780dec18b4ab015e32383ede77158e059bacbb2</td></tr>
+                        <tr><th scope="row">Chain ID</th><td>e3f4549ff484029419161a89ff634cc2c5b37e95f0163c27766f0c64b41decfb</td></tr>
                         <tr><th scope="row">Block Time</th><td>3 seconds</td></tr>
                         <tr><th scope="row">VP Growth</th><td>1 VP/DTC/hour</td></tr>
                         <tr><th scope="row">VP per burn</th><td>4,400 VP/DTC</td></tr>

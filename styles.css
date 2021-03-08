@@ -29,6 +29,8 @@
     float: right;
 } */
 
+#testnet-heading-badge { display: none; }
+
 #dblocks-props-tbl {
     table-layout: fixed;
 }

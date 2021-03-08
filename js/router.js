@@ -105,5 +105,6 @@ window.isValidSkynetPath = (skypath) => {
 
 $(() => {
     addAnchorClickListener()
+    testnetBadge()
     router()
 })

@@ -54,3 +54,8 @@ function thousandSeperator(num) {
 function isPuralArr(arr) {
     return arr.length > 1
 }
+
+function testnetBadge() {
+    if (window.config.isTestnet)
+        $('#testnet-heading-badge').show()
+}
