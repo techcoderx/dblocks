@@ -49,5 +49,5 @@ function votingPower(account) {
 }
 
 function bandwidth(account) {
-    return new GrowInt(account.bw, {growth:account.balance/36000000, max:64000}).grow(new Date().getTime()).v
+    return new GrowInt(account.bw, {growth:Math.max(account.baseBwGrowth || 0,account.balance)/36000000, max:64000}).grow(new Date().getTime()).v
 }

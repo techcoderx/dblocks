@@ -105,7 +105,8 @@ export default class extends view {
             $('#acc-name').text('@' + acc.data.name)
             $('#acc-masterkey-det').html(this.formatPubKeys({
                 pub: acc.data.pub,
-                types: []
+                types: [],
+                weight: acc.data.pub_weight
             }))
             $('#acc-customkey').append(this.customKeyHtml(acc.data.keys))
             $('#acc-profile-dtube').attr('href','https://d.tube/#!/c/' + acc.data.name)
@@ -257,7 +258,7 @@ export default class extends view {
     }
 
     formatPubKeys(key) {
-        let result = '<strong>Public Key: </strong>' + key.pub + '<br><br><strong>Permissions: </strong>'
+        let result = '<strong>Public Key: </strong>' + key.pub + '<br><br><strong>Weight: </strong>' + (key.weight || 1) + '<br><br><strong>Permissions: </strong>'
         if (key.types.length == 0)
             result += 'ALL'
         else {

@@ -58,7 +58,10 @@ export default class extends view {
             $('#txn-det-ts').text(txn.data.ts)
             $('#txn-det-ts').append(' <span class="badge badge-pill badge-info">' + new Date(txn.data.ts).toLocaleString() + '</span>')
             $('#txn-det-hash').text(txn.data.hash)
-            $('#txn-det-sig').text(txn.data.signature)
+            if (typeof txn.data.signature === 'string')
+                $('#txn-det-sig').text(txn.data.signature)
+            else
+                $('#txn-det-sig').html(jsonToTableRecursive(this.parseMultisig(txn.data.signature)))
     
             $('#txn-det-data').append(jsonToTableRecursive(txn.data.data))
     
@@ -73,5 +76,15 @@ export default class extends view {
             else
                 $('#txn-error').show()
         })
+    }
+
+    parseMultisig(signatures) {
+        let parsed = []
+        for (let s in signatures)
+            parsed.push({
+                sign: signatures[s][0],
+                recid: signatures[s][1]
+            })
+        return parsed
     }
 }
