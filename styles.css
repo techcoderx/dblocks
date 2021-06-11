@@ -7,6 +7,10 @@
     cursor: pointer;
 }
 
+.dblocks-nightmode-toggle-icon {
+    transform: translate(0px, -1.5px);
+}
+
 .dblocks-table-inner {
     margin-bottom: 0;
 }
@@ -129,7 +133,7 @@ table tr th {
 .odometer.odometer-auto-theme, .odometer.odometer-theme-car { zoom: 7; }
 
 .form-inline {
-    padding: 0px 15px;
+    padding-right: 15px;
 }
 
 /* MOBILE DEVICES */

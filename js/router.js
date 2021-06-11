@@ -89,6 +89,19 @@ window.addAnchorClickListener = () => {
     })
 }
 
+window.themeConfig = new ThemeConfig()
+
+window.loadDisplayMode = () => {
+    themeConfig.initTheme()
+    if (themeConfig.getTheme() === 'dark') {
+        $('#toggle-lightmode').addClass('d-none')
+        $('#toggle-darkmode').removeClass('d-none')
+    } else {
+        $('#toggle-lightmode').removeClass('d-none')
+        $('#toggle-darkmode').addClass('d-none')
+    }
+}
+
 window.isValidSkynetPath = (skypath) => {
     // ex1: /_ATcIAto1BT1_lmSwQQINqkRDu6_gp5dUFpMr-5DFHr7Ow
     // 46 chars
@@ -107,4 +120,5 @@ $(() => {
     addAnchorClickListener()
     testnetBadge()
     router()
+    loadDisplayMode()
 })
