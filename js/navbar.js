@@ -12,10 +12,10 @@ function searchSubmit()  {
     } else if (searchStr.split('/').length > 1) {
         // Content lookup
         navigateTo('#/content/' + searchStr)
-    } else if (isNaN(parseInt(searchStr))) {
+    } else if (!/^\d+$/.test(searchStr)) {
         // Account lookup
         navigateTo('#/@' + searchStr)
-    } else if (searchStr.length < 64) {
+    } else if (/^\d+$/.test(searchStr)) {
         // Block lookup
         navigateTo('#/b/' + searchStr)
     } else {
