@@ -68,6 +68,7 @@ export default class extends view {
                             <table class="table table-sm"><tbody>
                                 <tr><th scope="row">Signing Key</th><td id="acc-leader-key"></td></tr>
                                 <tr><th scope="row">Peer</th><td id="acc-leader-ws"></td></tr>
+                                <tr><th scope="row">Last Block</th><td id="acc-leader-lastblock"></td></tr>
                                 <tr><th scope="row">Approval</th><td id="acc-leader-appr"></td></tr>
                                 <tr><th scope="row">Voters</th><td id="acc-leader-voters"></td></tr>
                                 <tr><th scope="row">Produced</th><td id="acc-leader-produced"></td></tr>
@@ -282,6 +283,7 @@ export default class extends view {
         if (new Date().getTime() - this.leaderLastUpdate < 120000) return
         axios.get(config.api + '/leader/' + this.account).then((leader) => {
             this.leaderLastUpdate = new Date().getTime()
+            $('#acc-leader-lastblock').text(thousandSeperator(leader.data.last))
             $('#acc-leader-voters').text(thousandSeperator(leader.data.voters))
             $('#acc-leader-produced').text(thousandSeperator(leader.data.produced))
             $('#acc-leader-miss').text(thousandSeperator(leader.data.missed))
