@@ -64,9 +64,9 @@ export default class extends view {
                         </div>
                         <br>
                         <h4>Signature Thresholds</h4>
-                        <table class="table table-sm"><tbody id="acc-thresholds"></tbody></table><br>
+                        <table class="table table-sm dblocks-acc-det-table"><tbody id="acc-thresholds"></tbody></table>
                         <div id="acc-leader"><h4>Leader Details</h4>
-                            <table class="table table-sm"><tbody>
+                            <table class="table table-sm dblocks-acc-det-table"><tbody>
                                 <tr><th scope="row">Signing Key</th><td id="acc-leader-key"></td></tr>
                                 <tr><th scope="row">Peer</th><td id="acc-leader-ws"></td></tr>
                                 <tr><th scope="row">Last Block</th><td id="acc-leader-lastblock"></td></tr>
@@ -74,7 +74,7 @@ export default class extends view {
                                 <tr><th scope="row">Voters</th><td id="acc-leader-voters"></td></tr>
                                 <tr><th scope="row">Produced</th><td id="acc-leader-produced"></td></tr>
                                 <tr><th scope="row">Missed</th><td id="acc-leader-miss"></td></tr>
-                            </tbody></table><br>
+                            </tbody></table>
                         </div>
                         <h4>Leader Votes</h4>
                         <table class="table table-sm" id="acc-meta-approves"></table>
