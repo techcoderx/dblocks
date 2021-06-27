@@ -63,6 +63,8 @@ export default class extends view {
                             </div>
                         </div>
                         <br>
+                        <h4>Signature Thresholds</h4>
+                        <table class="table table-sm"><tbody id="acc-thresholds"></tbody></table><br>
                         <div id="acc-leader"><h4>Leader Details</h4>
                             <table class="table table-sm"><tbody>
                                 <tr><th scope="row">Signing Key</th><td id="acc-leader-key"></td></tr>
@@ -72,7 +74,7 @@ export default class extends view {
                                 <tr><th scope="row">Voters</th><td id="acc-leader-voters"></td></tr>
                                 <tr><th scope="row">Produced</th><td id="acc-leader-produced"></td></tr>
                                 <tr><th scope="row">Missed</th><td id="acc-leader-miss"></td></tr>
-                            </tbody></table>
+                            </tbody></table><br>
                         </div>
                         <h4>Leader Votes</h4>
                         <table class="table table-sm" id="acc-meta-approves"></table>
@@ -216,6 +218,7 @@ export default class extends view {
         $('#acc-meta-subs').text(thousandSeperator(acc.followers.length))
         $('#acc-meta-subbed').text(thousandSeperator(acc.follows.length))
         $('#acc-meta-approves').html(this.leaderVotesHtml(acc.approves))
+        $('#acc-thresholds').html(this.sigThresholdsTableHtml(acc.thresholds))
     
         if (acc.pub_leader) {
             this.updateLeaderStats()
@@ -265,7 +268,22 @@ export default class extends view {
         }
         return result
     }
-    
+
+    sigThresholdsTableHtml(thresholds) {
+        if (!thresholds)
+            return '<tr><th scope="row">Default</th><td>1</td></tr>'
+
+        let result = ''
+        if (thresholds.default)
+            result += '<tr><th scope="row">Default</th><td>' + thresholds.default + '</td></tr>'
+        else
+            result += '<tr><th scope="row">Default</th><td>1</td></tr>'
+        
+        for (let t in thresholds) if (t !== 'default')
+            result += '<tr><th scope="row"><span class="badge badge-pill badge-info">' + TransactionTypes[t] + '</span></th><td>' + thresholds[t] + '</td></tr>'
+        return result
+    }
+
     leaderVotesHtml(approves) {
         let result = ''
         if (!approves) return 'Not voting for leaders'
