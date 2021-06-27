@@ -120,6 +120,8 @@ table tr th {
 #richlist-table thead,
 #richlist-table tbody tr th { text-align: center; }
 #richlist-table tbody tr td:nth-child(n+3) { text-align: right; }
+#distribution-table thead { text-align: center; }
+#distribution-table tbody tr td:nth-child(n+2) { text-align: right; }
 
 /* Live sub count */
 .alert { display: none; }

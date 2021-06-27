@@ -54,3 +54,7 @@ function thousandSeperator(num) {
 function isPuralArr(arr) {
     return arr.length > 1
 }
+
+function roundDec(value = 0, decimals = 0) {
+    return Math.round(value*Math.pow(10,decimals))/Math.pow(10,decimals)
+}
