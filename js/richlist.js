@@ -8,15 +8,8 @@ export default class extends view {
 
     getHtml() {
         return `
-            <div class="d-flex justify-content-center" id="richlist-loading">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading richlist...</span>
-                </div>
-            </div>
-            <div id="richlist-error">
-                <h2>Something went wrong when retrieving richlist</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
+            ${this.loadingHtml('richlist','richlist')}
+            ${this.errorHtml('richlist','richlist')}
             <div id="richlist-container">
                 <h2>Richlist</h2>
                 <p>Top 100 accounts sorted by balance</p>

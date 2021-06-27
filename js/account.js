@@ -16,19 +16,9 @@ export default class extends view {
 
     getHtml() {
         return `
-            <div class="d-flex justify-content-center" id="acc-loading">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading account...</span>
-                </div>
-            </div>
-            <div id="acc-notfound">
-                <h2>Account not found</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
-            <div id="acc-error">
-                <h2>Something went wrong when retrieving account</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
+            ${this.loadingHtml('acc','account')}
+            ${this.errorHtml('acc','account')}
+            ${this.notFoundHtml('acc','Account')}
             <div id="acc-container">
                 <h2 id="acc-name"></h2><br>
                 <!-- Left panel - Account details -->

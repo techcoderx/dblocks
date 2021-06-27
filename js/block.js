@@ -9,19 +9,9 @@ export default class extends view {
 
     getHtml() {
         return `
-            <div class="d-flex justify-content-center" id="blk-loading">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading block...</span>
-                </div>
-            </div>
-            <div id="blk-notfound">
-                <h2>Block not found</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
-            <div id="blk-error">
-                <h2>Something went wrong when retrieving block</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
+            ${this.loadingHtml('blk','block')}
+            ${this.errorHtml('blk','block')}
+            ${this.notFoundHtml('blk','Block')}
             <div id="blk-container">
                 <div class="row blk-head">
                     <h2 class="col-12 col-sm-9" id="blk-num"></h2>

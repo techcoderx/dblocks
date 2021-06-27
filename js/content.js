@@ -9,19 +9,9 @@ export default class extends view {
 
     getHtml() {
         return `
-            <div class="d-flex justify-content-center" id="content-loading">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading content...</span>
-                </div>
-            </div>
-            <div id="content-notfound">
-                <h2>Content not found</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
-            <div id="content-error">
-                <h2>Something went wrong when retrieving content</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
+            ${this.loadingHtml('content','content')}
+            ${this.errorHtml('content','content')}
+            ${this.notFoundHtml('content','Content')}
             <div id="content-container">
                 <h2 class="text-truncate content-heading"><small class="col-12 col-sm-9 text-muted" id="content-id"></small></h2><br>
                 <a type="button" class="btn btn-outline-secondary d-inline" id="content-parent-btn">View parent content</a>
