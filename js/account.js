@@ -45,8 +45,7 @@ export default class extends view {
                             <tr><th scope="row">Claimed Rewards</th><td id="acc-meta-claimed"></td></tr>
                         </table>
                         <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-dtube"><img src="icons/DTube_White.png">View channel on DTube</a>
-                        <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-hive"><img src="icons/Hive_White.png">View profile on PeakD</a>
-                        <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-steem"><img src="icons/Steem_White.png">View profile on SteemPeak</a>
+                        <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-hive"><img src="icons/Hive_White.png">View blog on Hive</a>
                         <h6><br></h6>
                         <div id="acc-profile-metadata">
                             <h4>Metadata</h4>
@@ -114,11 +113,6 @@ export default class extends view {
             if (acc.data.json && acc.data.json.profile && acc.data.json.profile.hive) {
                 $('#acc-profile-hive').show()
                 $('#acc-profile-hive').attr('href','https://peakd.com/@' + acc.data.json.profile.hive)
-            }
-
-            if (acc.data.json && acc.data.json.profile && acc.data.json.profile.steem) {
-                $('#acc-profile-steem').show()
-                $('#acc-profile-steem').attr('href','https://steempeak.com/@' + acc.data.json.profile.steem)
             }
 
             let accCreatedStr = 'Created by '

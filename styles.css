@@ -41,7 +41,7 @@
     word-wrap: break-word;
 }
 
-#acc-notfound, #acc-error, #acc-container, #acc-profile-hive, #acc-profile-steem, #acc-leader {
+#acc-notfound, #acc-error, #acc-container, #acc-profile-hive, #acc-leader {
     display: none;
 }
 
@@ -63,11 +63,6 @@
 #acc-profile-hive {
     border-color: #E31337;
     background-color: #E31337;
-}
-
-#acc-profile-steem {
-    border-color: #171FC9;
-    background-color: #171FC9;
 }
 
 #acc-profile-json { width: 100%; }
