@@ -42,7 +42,7 @@ function txToHtml(tx) {
         case 2:
             return result + ' disapproved leader ' + aUser(tx.data.target)
         case 3:
-            result = result + ' transferred ' + thousandSeperator(tx.data.amount / 100) + ' DTC to ' + aUser(tx.data.receiver)
+            result = result + ' transferred ' + thousandSeperator(tx.data.amount / 100) + ' DTUBE to ' + aUser(tx.data.receiver)
             if (tx.data.memo)
                 result += ', memo: ' + tx.data.memo
             return result
@@ -78,7 +78,7 @@ function txToHtml(tx) {
                 result += ' commented on ' + aContent(tx.data.pa + '/' + tx.data.pp)
             else
                 result += ' posted a new video ' + aContent(tx.sender + '/' + tx.data.link)
-            result += ' and burnt ' + (tx.data.burn / 100) + ' DTC '
+            result += ' and burnt ' + (tx.data.burn / 100) + ' DTUBE '
             return result
         case 14:
             return result + ' transferred ' + thousandSeperator(tx.data.amount) + ' VP to ' + aUser(tx.data.receiver)
