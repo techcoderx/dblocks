@@ -24,8 +24,8 @@ export default class extends view {
                     <thead><tr>
                         <th scope="col">Rank</th>
                         <th scope="col">Account</th>
-                        <th scope="col">Balance</th>
                         <th scope="col">Approval</th>
+                        <th scope="col">Last Block</th>
                         <th scope="col">Voters</th>
                         <th scope="col">Produced</th>
                         <th scope="col">Missed</th>
@@ -44,8 +44,8 @@ export default class extends view {
             for (let i = 0; i < leaders.data.length; i++) {
                 htmlresult += '<tr><th scope="row">' + (i+1) + '</th>'
                 htmlresult += '<td>' + leaders.data[i].name + '</td>'
-                htmlresult += '<td>' + thousandSeperator((leaders.data[i].balance / 100).toFixed(2)) + ' DTC</td>'
-                htmlresult += '<td>' + thousandSeperator((leaders.data[i].node_appr / 100).toFixed(2)) + ' DTC</td>'
+                htmlresult += '<td>' + thousandSeperator((leaders.data[i].node_appr / 100).toFixed(2)) + ' DTUBE</td>'
+                htmlresult += '<td>' + thousandSeperator((leaders.data[i].last)) + '</td>'
                 htmlresult += '<td>' + thousandSeperator(leaders.data[i].voters) + '</td>'
                 htmlresult += '<td>' + thousandSeperator(leaders.data[i].produced) + '</td>'
                 htmlresult += '<td>' + thousandSeperator(leaders.data[i].missed) + '</td>'

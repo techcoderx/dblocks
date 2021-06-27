@@ -68,6 +68,7 @@ export default class extends view {
                             <table class="table table-sm"><tbody>
                                 <tr><th scope="row">Signing Key</th><td id="acc-leader-key"></td></tr>
                                 <tr><th scope="row">Peer</th><td id="acc-leader-ws"></td></tr>
+                                <tr><th scope="row">Last Block</th><td id="acc-leader-lastblock"></td></tr>
                                 <tr><th scope="row">Approval</th><td id="acc-leader-appr"></td></tr>
                                 <tr><th scope="row">Voters</th><td id="acc-leader-voters"></td></tr>
                                 <tr><th scope="row">Produced</th><td id="acc-leader-produced"></td></tr>
@@ -137,17 +138,17 @@ export default class extends view {
                 $('#acc-profile-metadata').hide()
 
             axios.get(config.api+'/rewards/pending/' + this.account).then((pending) =>
-                $('#acc-meta-pending').text(thousandSeperator(Math.floor(pending.data.total) / 100) + ' DTC'))
+                $('#acc-meta-pending').text(thousandSeperator(Math.floor(pending.data.total) / 100) + ' DTUBE'))
             .catch(()=>
                 $('#acc-meta-pending').text('Error'))
 
             axios.get(config.api+'/rewards/claimable/' + this.account).then((claimable) =>
-                $('#acc-meta-claimable').text(thousandSeperator(Math.floor(claimable.data.total) / 100) + ' DTC'))
+                $('#acc-meta-claimable').text(thousandSeperator(Math.floor(claimable.data.total) / 100) + ' DTUBE'))
             .catch(()=>
                 $('#acc-meta-claimable').text('Error'))
     
             axios.get(config.api + '/rewards/claimed/' + this.account).then((claimed) =>
-                $('#acc-meta-claimed').text(thousandSeperator(Math.floor(claimed.data.total) / 100) + ' DTC'))
+                $('#acc-meta-claimed').text(thousandSeperator(Math.floor(claimed.data.total) / 100) + ' DTUBE'))
             .catch(()=>
                 $('#acc-meta-claimed').text('Error'))
 
@@ -215,7 +216,7 @@ export default class extends view {
     }
 
     updateAccount(acc) {
-        $('#acc-meta-bal').text(thousandSeperator(acc.balance / 100) + ' DTC')
+        $('#acc-meta-bal').text(thousandSeperator(acc.balance / 100) + ' DTUBE')
         $('#acc-meta-bw').text(thousandSeperator(bandwidth(acc)) + ' bytes')
         $('#acc-meta-vp').text(thousandSeperator(votingPower(acc)) + ' VP')
         $('#acc-meta-subs').text(thousandSeperator(acc.followers.length))
@@ -226,7 +227,7 @@ export default class extends view {
             this.updateLeaderStats()
             $('#acc-leader').show()
             $('#acc-leader-key').text(acc.pub_leader)
-            $('#acc-leader-appr').text(thousandSeperator(acc.node_appr / 100) + ' DTC')
+            $('#acc-leader-appr').text(thousandSeperator(acc.node_appr / 100) + ' DTUBE')
     
             if (acc.json && acc.json.node && acc.json.node.ws)
                 $('#acc-leader-ws').text(DOMPurify.sanitize(acc.json.node.ws))
@@ -283,6 +284,7 @@ export default class extends view {
         if (new Date().getTime() - this.leaderLastUpdate < 120000) return
         axios.get(config.api + '/leader/' + this.account).then((leader) => {
             this.leaderLastUpdate = new Date().getTime()
+            $('#acc-leader-lastblock').text(thousandSeperator(leader.data.last))
             $('#acc-leader-voters').text(thousandSeperator(leader.data.voters))
             $('#acc-leader-produced').text(thousandSeperator(leader.data.produced))
             $('#acc-leader-miss').text(thousandSeperator(leader.data.missed))

@@ -30,12 +30,12 @@ export default class extends view {
                     <table class="table table-sm" id="dblocks-props-tbl"><tbody>
                         <tr><th scope="row">Chain ID</th><td>e3f4549ff484029419161a89ff634cc2c5b37e95f0163c27766f0c64b41decfb</td></tr>
                         <tr><th scope="row">Block Time</th><td>3 seconds</td></tr>
-                        <tr><th scope="row">VP Growth</th><td>1 VP/DTC/hour</td></tr>
-                        <tr><th scope="row">VP per burn</th><td>4,400 VP/DTC</td></tr>
-                        <tr><th scope="row">BW Growth</th><td>10 bytes/DTC/hour</td></tr>
+                        <tr><th scope="row">VP Growth</th><td>1 VP/DTUBE/hour</td></tr>
+                        <tr><th scope="row">VP per burn</th><td>4,400 VP/DTUBE</td></tr>
+                        <tr><th scope="row">BW Growth</th><td>10 bytes/DTUBE/hour</td></tr>
                         <tr><th scope="row">BW Max</th><td>64,000 bytes</td></tr>
                         <tr><th scope="row">Leaders</th><td>13</td></tr>
-                        <tr><th scope="row">Block Reward</th><td>0.01 DTC</td></tr>
+                        <tr><th scope="row">Block Reward</th><td>0.01 DTUBE</td></tr>
                         <tr><th scope="row">Block Reward VP</th><td>100 VP</td></tr>
                         <tr><th scope="row">Master account</th><td>dtube</td></tr>
                         <tr><th scope="row">Master fee</th><td>10%</td></tr>
@@ -60,16 +60,16 @@ export default class extends view {
 
     updateChainInfo() {
         axios.get(config.api + '/supply').then((supplyRes) => {
-            $('#supply-circulating').text(thousandSeperator(supplyRes.data.circulating / 100) + ' DTC')
-            $('#supply-unclaimed').text(thousandSeperator(Math.ceil(supplyRes.data.unclaimed) / 100) + ' DTC')
-            $('#supply-total').text(thousandSeperator(Math.ceil(supplyRes.data.total) / 100) + ' DTC')
+            $('#supply-circulating').text(thousandSeperator(supplyRes.data.circulating / 100) + ' DTUBE')
+            $('#supply-unclaimed').text(thousandSeperator(Math.ceil(supplyRes.data.unclaimed) / 100) + ' DTUBE')
+            $('#supply-total').text(thousandSeperator(Math.ceil(supplyRes.data.total) / 100) + ' DTUBE')
         })
     
         axios.get(config.api + '/rewardPool').then((rpRes) => {
-            $('#rp-theo').text(thousandSeperator(rpRes.data.theo / 100) + ' DTC')
-            $('#rp-dist').text(thousandSeperator(Math.ceil(rpRes.data.dist) / 100) + ' DTC')
-            $('#rp-avail').text(thousandSeperator(Math.ceil(rpRes.data.avail) / 100) + ' DTC')
-            $('#rp-burn').text(thousandSeperator(Math.ceil(rpRes.data.burn) / 100) + ' DTC')
+            $('#rp-theo').text(thousandSeperator(rpRes.data.theo / 100) + ' DTUBE')
+            $('#rp-dist').text(thousandSeperator(Math.ceil(rpRes.data.dist) / 100) + ' DTUBE')
+            $('#rp-avail').text(thousandSeperator(Math.ceil(rpRes.data.avail) / 100) + ' DTUBE')
+            $('#rp-burn').text(thousandSeperator(Math.ceil(rpRes.data.burn) / 100) + ' DTUBE')
             $('#rp-votes').text(thousandSeperator(Math.ceil(rpRes.data.votes)) + ' VP')
         })
     }
@@ -88,12 +88,12 @@ export default class extends view {
             blockCardHtml += ' tx, dist: '
         
         blockCardHtml += (Math.ceil(block.dist) / 100)
-        blockCardHtml += ' DTC'
+        blockCardHtml += ' DTUBE'
     
         if (block.burn) {
             blockCardHtml += ', burned: '
             blockCardHtml += (Math.ceil(block.burn) / 100)
-            blockCardHtml += ' DTC'
+            blockCardHtml += ' DTUBE'
         }
         blockCardHtml += '</div>'
         return blockCardHtml

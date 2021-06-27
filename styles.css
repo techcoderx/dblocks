@@ -82,6 +82,10 @@
     word-break: break-word;
 }
 
+#acc-leader table tr th {
+    min-width: 100px;
+}
+
 table tr th {
     word-break: normal;
 }

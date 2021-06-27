@@ -39,7 +39,7 @@ export default class extends view {
             for (let i = 0; i < richlist.data.length; i++) {
                 htmlresult += '<tr><th scope="row">' + (i+1) + '</th>'
                 htmlresult += '<td>' + richlist.data[i].name + '</td>'
-                htmlresult += '<td>' + thousandSeperator((richlist.data[i].balance / 100).toFixed(2)) + ' DTC</td>'
+                htmlresult += '<td>' + thousandSeperator((richlist.data[i].balance / 100).toFixed(2)) + ' DTUBE</td>'
                 htmlresult += '<td>' + richlist.data[i].subs + '</td>'
                 htmlresult += '<td>' + richlist.data[i].subbed + '</td></tr>'
             }

@@ -68,7 +68,7 @@ export default class extends view {
             $('#content-link').text(DOMPurify.sanitize(content.data.link))
             $('#content-ts').text(content.data.ts)
             $('#content-ts').append(' <span class="badge badge-pill badge-info">' + new Date(content.data.ts).toLocaleString() + '</span>')
-            $('#content-dist').text(thousandSeperator(Math.floor(content.data.dist) / 100) + ' DTC')
+            $('#content-dist').text(thousandSeperator(Math.floor(content.data.dist) / 100) + ' DTUBE')
 
             let tagsHtml = ''
             for (let tag in content.data.tags) {
@@ -122,7 +122,7 @@ export default class extends view {
                 votesHtml += '<td>' + thousandSeperator(content.data.votes[i].vt) + '</td>'
                 if (content.data.votes[i].burn)
                     contentBurn += content.data.votes[i].burn
-                votesHtml += '<td>' + thousandSeperator(Math.floor(content.data.votes[i].claimable)/100) + ' DTC</td>'
+                votesHtml += '<td>' + thousandSeperator(Math.floor(content.data.votes[i].claimable)/100) + ' DTUBE</td>'
                 if (content.data.votes[i].tag)
                     votesHtml += '<td>' + DOMPurify.sanitize(content.data.votes[i].tag) + '</td>'
                 else
@@ -151,7 +151,7 @@ export default class extends view {
             }
 
             if (contentBurn > 0)
-                $('#content-fields').append('<tr><th scope="row">burn</th><td>' + thousandSeperator(contentBurn/100) + ' DTC</td></tr>')
+                $('#content-fields').append('<tr><th scope="row">burn</th><td>' + thousandSeperator(contentBurn/100) + ' DTUBE</td></tr>')
 
             $('#content-loading').hide()
             $('.spinner-border').hide()
