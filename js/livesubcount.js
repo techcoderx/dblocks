@@ -11,7 +11,7 @@ export default class extends view {
 
     getHtml() {
         return `
-            <div class="alert alert-danger" role="alert"></div>
+            <div class="alert alert-danger dblocks-live-alert" role="alert"></div>
             <h2>DTube Live Subscriber Count</h2>
             <p>Updates every 6 seconds</p>
             <div class="input-group mb-3">

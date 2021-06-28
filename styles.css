@@ -7,6 +7,14 @@
     cursor: pointer;
 }
 
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    background-color: #28a745;
+}
+
+a.nav-link {
+    color: #28a745;
+}
+
 .dblocks-navbar-icon {
     transform: translate(0px, -1.5px);
 }
@@ -130,7 +138,7 @@ table tr th {
 #distribution-table tbody tr td:nth-child(n+2) { text-align: right; }
 
 /* Live sub count */
-.alert { display: none; }
+.dblocks-live-alert { display: none; }
 .dblocks-counter { 
     width: 100%;
     text-align: center;
@@ -140,6 +148,11 @@ table tr th {
 .form-inline {
     padding-right: 15px;
 }
+
+/* Key Utils */
+.dblocks-authority-names { max-width: 350px; }
+.dblocks-authority-names thead,
+.dblocks-authority-names tbody tr th { text-align: center; }
 
 /* MOBILE DEVICES */
 @media screen and (max-width: 768px) {

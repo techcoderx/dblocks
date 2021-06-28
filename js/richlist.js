@@ -15,7 +15,7 @@ export default class extends view {
             ${this.errorHtml('richlist','richlist')}
             <div id="richlist-container">
                 <h2>Richlist</h2>
-                <p>Wealth distribution</p>
+                <p>Wealth distribution of accounts with non-zero balance</p>
                 <table class="table table-sm table-striped" id="distribution-table">
                     <thead><tr>
                         <th scope="col">Range (DTUBE)</th>
@@ -34,6 +34,7 @@ export default class extends view {
                         <tr id="distribution-6"><th scope="row">[10,000 - 100,000)</th></tr>
                         <tr id="distribution-7"><th scope="row">[100,000 - 1,000,000)</th></tr>
                         <tr id="distribution-8"><th scope="row">[1,000,000 - ∞)</th></tr>
+                        <tr id="distribution-total"><th scope="row">Total</th></tr>
                     </tbody>
                 </table><br>
                 <p>Top 100 accounts sorted by balance</p>
@@ -81,6 +82,7 @@ export default class extends view {
             // second loop to display them
             for (let i = 0; i < dist.data.length; i++)
                 $('#distribution-'+i).append('<td>'+thousandSeperator(dist.data[i].count)+'</td><td>'+roundDec(dist.data[i].count/totalAccounts*100,2)+'%</td><td>'+thousandSeperator(dist.data[i].sum/100)+' DTUBE</td><td>'+roundDec(dist.data[i].sum/totalBalance*100,2)+'%</td>')
+            $('#distribution-total').append('<td><strong>'+thousandSeperator(totalAccounts)+'</strong></td><td><strong>100%</strong></td><td><strong>'+thousandSeperator(totalBalance/100)+' DTUBE</strong></td><td><strong>100%</strong></td>')
 
             this.distLoaded = true
             this.display()

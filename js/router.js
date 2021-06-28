@@ -7,6 +7,8 @@ import leaders from './leaders.js'
 import accountprice from './accountprice.js'
 import richlist from './richlist.js'
 import livesubcount from './livesubcount.js'
+import keys from './keys.js'
+import signer from './signer.js'
 import notfound from './404.js'
 
 // Live update intervals (e.g. block streams)
@@ -28,6 +30,8 @@ window.router = () => {
         { path: '/richlist', view: richlist },
         { path: '/livesubcount', view: livesubcount },
         { path: '/livesubcount/:account', view: livesubcount, params: 1 },
+        { path: '/keys', view: keys },
+        { path: '/signer', view: signer },
         { path: '/404', view: notfound }
     ]
 
