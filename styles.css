@@ -7,12 +7,16 @@
     cursor: pointer;
 }
 
-.dblocks-nightmode-toggle-icon {
+.dblocks-navbar-icon {
     transform: translate(0px, -1.5px);
 }
 
 .dblocks-table-inner {
     margin-bottom: 0;
+}
+
+.dblocks-acc-det-table {
+    margin-bottom: 1.5rem;
 }
 
 .card-header {
@@ -32,6 +36,8 @@
 /* .table-supply tr td {
     float: right;
 } */
+
+#testnet-heading-badge { display: none; }
 
 #dblocks-props-tbl {
     table-layout: fixed;

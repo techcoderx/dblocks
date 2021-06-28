@@ -8,15 +8,8 @@ export default class extends view {
 
     getHtml() {
         return `
-            <div class="d-flex justify-content-center" id="leader-loading">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading leaders...</span>
-                </div>
-            </div>
-            <div id="leader-error">
-                <h2>Something went wrong when retrieving leaders</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
+            ${this.loadingHtml('leader','leaders')}
+            ${this.errorHtml('leader','leaders')}
             <div id="leader-container">
                 <h2>Leaders</h2>
                 <p>DTube is a self-governed platform, where a limited number of leaders (currently 13) are elected and are in charge of producing new blocks and securing the infrastructure. Here you may find the statistics of the top 100 leaders. Only leaders with their signing key activated are listed here.</p>

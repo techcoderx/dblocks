@@ -10,19 +10,9 @@ export default class extends view {
 
     getHtml() {
         return `
-            <div class="d-flex justify-content-center" id="txn-loading">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading transaction...</span>
-                </div>
-            </div>
-            <div id="txn-notfound">
-                <h2>Transaction not found</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
-            <div id="txn-error">
-                <h2>Something went wrong when retrieving transaction</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
+            ${this.loadingHtml('txn','transaction')}
+            ${this.errorHtml('txn','transaction')}
+            ${this.notFoundHtml('txn','Transaction')}
             <div id="txn-container">
                 <h2 class="text-truncate">Transaction<small class="col-12 col-sm-9 text-muted" id="txn-id"></small></h2>
                 <p class="lead" id="includedInBlock"></p>
@@ -58,7 +48,10 @@ export default class extends view {
             $('#txn-det-ts').text(txn.data.ts)
             $('#txn-det-ts').append(' <span class="badge badge-pill badge-info">' + new Date(txn.data.ts).toLocaleString() + '</span>')
             $('#txn-det-hash').text(txn.data.hash)
-            $('#txn-det-sig').text(txn.data.signature)
+            if (typeof txn.data.signature === 'string')
+                $('#txn-det-sig').text(txn.data.signature)
+            else
+                $('#txn-det-sig').html(jsonToTableRecursive(this.parseMultisig(txn.data.signature)))
     
             $('#txn-det-data').append(jsonToTableRecursive(txn.data.data))
     
@@ -73,5 +66,15 @@ export default class extends view {
             else
                 $('#txn-error').show()
         })
+    }
+
+    parseMultisig(signatures) {
+        let parsed = []
+        for (let s in signatures)
+            parsed.push({
+                sign: signatures[s][0],
+                recid: signatures[s][1]
+            })
+        return parsed
     }
 }

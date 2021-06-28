@@ -58,3 +58,8 @@ function isPuralArr(arr) {
 function roundDec(value = 0, decimals = 0) {
     return Math.round(value*Math.pow(10,decimals))/Math.pow(10,decimals)
 }
+
+function testnetBadge() {
+    if (window.config.isTestnet)
+        $('#testnet-heading-badge').show()
+}

@@ -17,7 +17,10 @@ const TransactionTypes = {
     16: 'LIMIT_VT',
     17: 'CLAIM_REWARD',
     18: 'ENABLE_NODE',
-    19: 'TIPPED_VOTE'
+    19: 'TIPPED_VOTE',
+    20: 'NEW_WEIGHTED_KEY',
+    21: 'SET_SIG_THRESHOLD',
+    22: 'SET_PASSWORD_WEIGHT'
 }
 
 function txCardsHtml(blocks) {
@@ -100,6 +103,12 @@ function txToHtml(tx) {
                 result += ' and tagged it with ' + tx.data.tag
             result += ' (' + tx.data.tip + '% author tip)'
             return result
+        case 20:
+            return result + ' created a custom key with id ' + tx.data.id + ' and weight ' + tx.data.weight
+        case 21:
+            return result + ' set signature thresholds'
+        case 22:
+            return result + ' set master key weight to ' + tx.data.weight
         default:
             return 'Unknown transaction type ' + tx.type
     }

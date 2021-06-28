@@ -16,19 +16,9 @@ export default class extends view {
 
     getHtml() {
         return `
-            <div class="d-flex justify-content-center" id="acc-loading">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading account...</span>
-                </div>
-            </div>
-            <div id="acc-notfound">
-                <h2>Account not found</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
-            <div id="acc-error">
-                <h2>Something went wrong when retrieving account</h2><br>
-                <a type="button" class="btn btn-primary" href="#">Home</a>
-            </div>
+            ${this.loadingHtml('acc','account')}
+            ${this.errorHtml('acc','account')}
+            ${this.notFoundHtml('acc','Account')}
             <div id="acc-container">
                 <h2 id="acc-name"></h2><br>
                 <!-- Left panel - Account details -->
@@ -63,8 +53,10 @@ export default class extends view {
                             </div>
                         </div>
                         <br>
+                        <h4>Signature Thresholds</h4>
+                        <table class="table table-sm dblocks-acc-det-table"><tbody id="acc-thresholds"></tbody></table>
                         <div id="acc-leader"><h4>Leader Details</h4>
-                            <table class="table table-sm"><tbody>
+                            <table class="table table-sm dblocks-acc-det-table"><tbody>
                                 <tr><th scope="row">Signing Key</th><td id="acc-leader-key"></td></tr>
                                 <tr><th scope="row">Peer</th><td id="acc-leader-ws"></td></tr>
                                 <tr><th scope="row">Last Block</th><td id="acc-leader-lastblock"></td></tr>
@@ -105,7 +97,8 @@ export default class extends view {
             $('#acc-name').text('@' + acc.data.name)
             $('#acc-masterkey-det').html(this.formatPubKeys({
                 pub: acc.data.pub,
-                types: []
+                types: [],
+                weight: acc.data.pub_weight
             }))
             $('#acc-customkey').append(this.customKeyHtml(acc.data.keys))
             $('#acc-profile-dtube').attr('href','https://d.tube/#!/c/' + acc.data.name)
@@ -215,6 +208,7 @@ export default class extends view {
         $('#acc-meta-subs').text(thousandSeperator(acc.followers.length))
         $('#acc-meta-subbed').text(thousandSeperator(acc.follows.length))
         $('#acc-meta-approves').html(this.leaderVotesHtml(acc.approves))
+        $('#acc-thresholds').html(this.sigThresholdsTableHtml(acc.thresholds))
     
         if (acc.pub_leader) {
             this.updateLeaderStats()
@@ -252,7 +246,7 @@ export default class extends view {
     }
 
     formatPubKeys(key) {
-        let result = '<strong>Public Key: </strong>' + key.pub + '<br><br><strong>Permissions: </strong>'
+        let result = '<strong>Public Key: </strong>' + key.pub + '<br><br><strong>Weight: </strong>' + (key.weight || 1) + '<br><br><strong>Permissions: </strong>'
         if (key.types.length == 0)
             result += 'ALL'
         else {
@@ -264,7 +258,22 @@ export default class extends view {
         }
         return result
     }
-    
+
+    sigThresholdsTableHtml(thresholds) {
+        if (!thresholds)
+            return '<tr><th scope="row">Default</th><td>1</td></tr>'
+
+        let result = ''
+        if (thresholds.default)
+            result += '<tr><th scope="row">Default</th><td>' + thresholds.default + '</td></tr>'
+        else
+            result += '<tr><th scope="row">Default</th><td>1</td></tr>'
+        
+        for (let t in thresholds) if (t !== 'default')
+            result += '<tr><th scope="row"><span class="badge badge-pill badge-info">' + TransactionTypes[t] + '</span></th><td>' + thresholds[t] + '</td></tr>'
+        return result
+    }
+
     leaderVotesHtml(approves) {
         let result = ''
         if (!approves) return 'Not voting for leaders'
