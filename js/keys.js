@@ -49,10 +49,10 @@ export default class extends view {
                                 <label for="key-bip39-passphrase">Passphrase (optional)</label>
                                 <input class="form-control" id="key-bip39-passphrase" type="password">
                             </div>
-                            <!-- <div class="form-group">
+                            <div class="form-group">
                                 <label for="key-bip39-path">Derivation Path (optional)</label>
                                 <input class="form-control" id="key-bip39-path">
-                            </div> -->
+                            </div>
                             <button class="btn btn-success" id="key-bip39-generatebtn">Generate Keypair</button>
                             <button class="btn btn-success" id="key-bip39-savebtn" style="display: none;">Save Keypair</button>
                             <br><br><p id="key-bip39-result" style="display: none;">Public:<br>Private:</p>
@@ -130,7 +130,10 @@ export default class extends view {
             let pub = ''
             let priv = ''
             try {
-                let pk = new cg.BIP32($('#key-bip39-mnemonic').val(),$('#key-bip39-passphrase').val()).toPrivate()
+                let bip32Obj = new cg.BIP32($('#key-bip39-mnemonic').val(),$('#key-bip39-passphrase').val())
+                if ($('#key-bip39-path').val())
+                    bip32Obj.derive($('#key-bip39-path').val())
+                let pk = bip32Obj.toPrivate()
                 switch ($('#key-bip39-network').val()) {
                     case 'Avalon':
                         pub = pk.createPublic().toAvalonString()
