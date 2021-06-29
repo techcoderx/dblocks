@@ -40,20 +40,22 @@ export default class extends view {
                             </div>
                             <p style="margin-bottom: 0.5rem;">Mnemonic</p>
                             <div class="input-group" style="margin-bottom: 1rem;">
-                                <input class="form-control" id="key-bip39-mnemonic" aria-describedby="key-bip39-mnemonic-field">
+                                <input class="form-control" id="key-bip39-mnemonic" aria-describedby="key-bip39-mnemonicgen">
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" id="key-bip39-mnemonic-field">Generate</button>
+                                    <button class="btn btn-outline-secondary" type="button" id="key-bip39-mnemonicgen">Generate</button>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="key-bip39-passphrase">Passphrase (optional)</label>
-                                <input class="form-control" id="key-bip39-passphrase">
+                                <input class="form-control" id="key-bip39-passphrase" type="password">
                             </div>
                             <!-- <div class="form-group">
                                 <label for="key-bip39-path">Derivation Path (optional)</label>
                                 <input class="form-control" id="key-bip39-path">
                             </div> -->
-                            <button class="btn btn-success">Generate Keypair</button>
+                            <button class="btn btn-success" id="key-bip39-generatebtn">Generate Keypair</button>
+                            <button class="btn btn-success" id="key-bip39-savebtn" style="display: none;">Save Keypair</button>
+                            <br><br><p id="key-bip39-result" style="display: none;">Public:<br>Private:</p>
                         </form>
                     </div>
                     <div class="tab-pane fade" id="key-pills-pconvert" role="tabpanel" aria-labelledby="key-pills-pconvert-tab">
@@ -70,7 +72,8 @@ export default class extends view {
                             <label for="key-pconvert-key">Private Key</label>
                             <input class="form-control" id="key-pconvert-key" type="password">
                         </div>
-                        <button class="btn btn-success">Compute Public</button>
+                        <button class="btn btn-success" id="key-pconvert-btn">Compute Public</button>
+                        <br><br><p id="key-pconvert-result" style="display: none;">Result:</p>
                     </div>
                     <div class="tab-pane fade" id="key-pills-xconvert" role="tabpanel" aria-labelledby="key-pills-xconvert-tab">
                         <h4>Avalon <--> Graphene Key Converter</h4>
@@ -94,7 +97,8 @@ export default class extends view {
                             <label for="key-xconvert-key">Key</label>
                             <input class="form-control" id="key-xconvert-key">
                         </div>
-                        <button class="btn btn-success">Convert</button><br><br>
+                        <button class="btn btn-success" id="key-xconvert-btn">Convert</button>
+                        <br><br><p id="key-xconvert-result" style="display: none;">Result:</p>
                     </div>
                     <div class="tab-pane fade" id="key-pills-authorities" role="tabpanel" aria-labelledby="key-pills-authorities-tab">
                         <h4>Key Authorities</h4>
@@ -113,9 +117,90 @@ export default class extends view {
     }
 
     init() {
+        // key authorities
         let authorityBodyHtml = ''
         for (let i in TransactionTypes)
             authorityBodyHtml += '<tr><th scope="row">'+i+'</th><td><span class="badge badge-pill badge-info">'+TransactionTypes[i]+'</span></td></tr>'
         $('#key-authority-tbody').html(authorityBodyHtml)
+
+        // bip39 keypair generator
+        $('#key-bip39-mnemonicgen').on('click',() => $('#key-bip39-mnemonic').val(cg.BIP32.generate(parseInt($('#key-bip39-wordcount').val())).toString()))
+        $('#key-bip39-generatebtn').on('click', (evt) => {
+            evt.preventDefault()
+            let pub = ''
+            let priv = ''
+            try {
+                let pk = new cg.BIP32($('#key-bip39-mnemonic').val(),$('#key-bip39-passphrase').val()).toPrivate()
+                switch ($('#key-bip39-network').val()) {
+                    case 'Avalon':
+                        pub = pk.createPublic().toAvalonString()
+                        priv = pk.toAvalonString()
+                        break
+                    case 'Graphene':
+                        pub = pk.createPublic().toString()
+                        priv = pk.toString()
+                        break
+                    default:
+                        break
+                }
+            } catch (e) {
+                $('#key-bip39-result').text(e.toString())
+                $('#key-bip39-result').show()
+                $('#key-bip39-savebtn').hide()
+                return
+            }
+            $('#key-bip39-result').html('Public: ' + pub + '<br>Private: ' + priv)
+            $('#key-bip39-result').show()
+            $('#key-bip39-savebtn').show()
+            $('#key-bip39-savebtn').on('click',(evt2) => {
+                evt2.preventDefault()
+                saveAs(new Blob([JSON.stringify({
+                    mnemonic: $('#key-bip39-mnemonic').val(),
+                    pub: pub,
+                    priv: priv
+                })],{type: 'application/json;charset=utf-8'}),'key.json')
+            })
+        })
+
+        // private to public converter
+        $('#key-pconvert-btn').on('click',(evt) => {
+            evt.preventDefault()
+            try {
+                switch ($('#key-pconvert-network').val()) {
+                    case 'Avalon':
+                        $('#key-pconvert-result').text('Public Key: ' + cg.PrivateKey.fromAvalonString($('#key-pconvert-key').val()).createPublic().toAvalonString())
+                        break
+                    case 'Graphene':
+                        $('#key-pconvert-result').text('Public Key: ' + cg.PrivateKey.fromString($('#key-pconvert-key').val()).createPublic().toString())
+                        break
+                    default:
+                        break
+                }
+            } catch (e) {
+                $('#key-pconvert-result').text(e.toString())
+            }
+            $('#key-pconvert-result').show()
+        })
+
+        // cross-chain key converter
+        $('#key-xconvert-btn').on('click',(evt) => {
+            evt.preventDefault()
+            let m = $('#key-xconvert-ktype').val() === 'Public Key' ? cg.PublicKey : cg.PrivateKey
+            try {
+                switch($('#key-xconvert-direction').val()) {
+                    case 'Avalon to Graphene':
+                        $('#key-xconvert-result').text('Result: ' + m.fromAvalonString($('#key-xconvert-key').val()).toString())
+                        break
+                    case 'Graphene to Avalon':
+                        $('#key-xconvert-result').text('Result: ' + m.fromString($('#key-xconvert-key').val()).toAvalonString())
+                        break
+                    default:
+                        break
+                }
+            } catch (e) {
+                $('#key-xconvert-result').text(e.toString())
+            }
+            $('#key-xconvert-result').show()
+        })
     }
 }
