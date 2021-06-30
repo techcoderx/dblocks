@@ -23,6 +23,31 @@ const TransactionTypes = {
     22: 'SET_PASSWORD_WEIGHT'
 }
 
+const TransactionFields = {
+    0: { name: 'accountName', pub: 'publicKey' },
+    1: { target: 'accountName' },
+    2: { target: 'accountName' },
+    3: { receiver: 'accountName', amount: 'integer', memo: 'string' },
+    4: { link: 'string', pa: 'accountName', pp: 'string', json: 'json', vt: 'integer', tag: 'string' },
+    5: { link: 'string', author: 'accountName', vt: 'integer', tag: 'string' },
+    6: { json: 'json' },
+    7: { target: 'accountName' },
+    8: { target: 'accountName' },
+    10: { id: 'string', pub: 'publicKey', types: 'array' },
+    11: { id: 'string' },
+    12: { pub: 'publicKey' },
+    13: { link: 'string', pa: 'accountName', pp: 'string', json: 'json', vt: 'integer', tag: 'string', burn: 'integer' },
+    14: { receiver: 'accountName', amount: 'integer' },
+    15: { receiver: 'accountName', amount: 'integer' },
+    16: { amount: 'integer' },
+    17: { link: 'string', author: 'accountName' },
+    18: { pub: 'publicKey' },
+    19: { link: 'string', author: 'accountName', vt: 'integer', tag: 'string', tip: 'integer' },
+    20: { id: 'string', pub: 'publicKey', types: 'array', weight: 'integer' },
+    21: { thresholds: 'json' },
+    22: { weight: 'integer' }
+}
+
 function txCardsHtml(blocks) {
     let result = ''
     for (let i = 0; i < blocks.length; i++)
