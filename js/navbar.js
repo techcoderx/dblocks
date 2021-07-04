@@ -63,3 +63,19 @@ function testnetBadge() {
     if (window.config.isTestnet)
         $('#testnet-heading-badge').show()
 }
+
+function toast(id,type,title,body,duration) {
+    return `
+        <div id="${id}" class="toast hide ${type}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="${duration}">
+            <div class="toast-header">
+                <strong class="mr-auto">${title}</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="toast-body">${body}</div>
+        </div>
+    `
+}
+
+function toastArea(id) {
+    return `<div class="position-fixed bottom-0 right-0 p-3" style="z-index: 10; right: 0; bottom: 0;" id="${id}"></div>`
+}

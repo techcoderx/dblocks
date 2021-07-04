@@ -154,6 +154,19 @@ table tr th {
 .dblocks-authority-names thead,
 .dblocks-authority-names tbody tr th { text-align: center; }
 
+/* Toasts */
+.dblocks-toaster-error .toast-header {
+    background-color: #ff3333;
+    color: white;
+}
+.dblocks-toaster-success .toast-header {
+    background-color: #28a745;
+    color: white;
+}
+.dblocks-toaster-success .toast-header .close,
+.dblocks-toaster-error .toast-header .close { color: white; }
+.toast .toast-body { color: black; }
+
 /* MOBILE DEVICES */
 @media screen and (max-width: 768px) {
     .odometer.odometer-auto-theme, .odometer.odometer-theme-car { zoom: 6; }

@@ -14,6 +14,27 @@ export default class extends view {
                 <option value="-1">Select a transaction type...</option>
             </select><br>
             <div id="signer-fields"></div>
+            <div class="modal fade" id="signer-modal" tabindex="-1" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sign Transaction</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <select class="form-control" id="signer-method" style="margin-bottom: 1rem;">
+                        <option value="-1">Select a signer...</option>
+                        <option value="0">Hive Keychain</option>
+                        <option value="1">Plaintext Private Key</option>
+                    </select>
+                    <div id="signer-method-fields"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="signer-modal-proceed-btn" disabled>Sign</button>
+                </div>
+            </div></div></div>
+            ${toastArea('signer-toast-area')}
         `
     }
 
@@ -73,9 +94,52 @@ export default class extends view {
                 else
                     $('#signer-ts-fg').show()
             })
-            $('#signer-broadcast-checkbox').on('change',() => $('#signer-signbtn').text('Sign' + ($('#signer-broadcast-checkbox').prop('checked') ? ' and Broadcast' : '')))
+            $('#signer-broadcast-checkbox').on('change',() => {
+                let txt = 'Sign' + ($('#signer-broadcast-checkbox').prop('checked') ? ' and Broadcast' : '')
+                $('#signer-signbtn').text(txt)
+                $('#signer-modal-proceed-btn').text(txt)
+            })
             $('#signer-signbtn').on('click',(evt) => {
                 evt.preventDefault()
+                $('#signer-toast-area').html('')
+                if (!$('#signer-sender').val()) {
+                    $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Transaction sender is required.',5000))
+                    return $('#signer-alert').toast('show')
+                }
+                if (!$('#signer-ts-checkbox').prop('checked') && !$('#signer-ts').val()) {
+                    $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Transaction timestamp is required.',5000))
+                    return $('#signer-alert').toast('show')
+                }
+                $('#signer-method').val('-1')
+                $('#signer-method-fields').html('')
+                $('#signer-method').off('change')
+                $('#signer-modal').modal()
+                $('#signer-method').on('change',() => {
+                    switch ($('#signer-method').val()) {
+                        case '-1':
+                            $('#signer-method-fields').html('')
+                            $('#signer-modal-proceed-btn').prop('disabled',true)
+                            break
+                        case '0':
+                            $('#signer-modal-proceed-btn').prop('disabled',false)
+                            $('#signer-method-fields').html(`
+                                <div class="form-group"><label for="signer-hk-sa">Signer Account</label><input class="form-control" id="signer-hk-sa"></div>
+                                <select class="form-control" id="signer-hk-role">
+                                    <option value="-1">Select a role to be used...</option>
+                                    <option value="0">Posting</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Memo</option>
+                                </select>
+                            `)
+                            break
+                        case '1':
+                            $('#signer-modal-proceed-btn').prop('disabled',false)
+                            $('#signer-method-fields').html('<div class="form-group"><label for="signer-pk">Key</label><input class="form-control" id="signer-pk"></div>')
+                            break
+                        default:
+                            break
+                    }
+                })
             })
         })
     }
