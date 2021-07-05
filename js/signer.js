@@ -177,6 +177,11 @@ export default class extends view {
                 switch ($('#signer-method').val()) {
                     case '0':
                         // hive keychain
+                        // error if not installed
+                        if (!window.hive_keychain) {
+                            $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Hive Keychain is not installed',5000))
+                            return $('#signer-alert').toast('show')
+                        }
                         tx.hash = cg.sha256(stringified).toString('hex')
                         hive_keychain.requestSignBuffer($('#signer-hk-sa').val(),stringified,$('#signer-hk-role').val(),(result) => {
                             let sig = cg.Signature.fromString(result.result).toAvalonSignature()
