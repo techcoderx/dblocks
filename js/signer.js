@@ -4,6 +4,7 @@ export default class extends view {
     constructor() {
         super()
         this.setTitle('Signer')
+        this.jsonFields = {}
     }
 
     getHtml() {
@@ -66,7 +67,11 @@ export default class extends view {
                         $('#signer-field-'+f).val(params.get(f))
                         break
                     case 'json':
-                        // todo handle json
+                        let json = {}
+                        try {
+                            json = JSON.parse(decodeURI(params.get(f)))
+                        } catch {}
+                        this.jsonFields[f].set(json)
                     default:
                         break
                 }
@@ -81,6 +86,7 @@ export default class extends view {
     }
 
     renderFields() {
+        this.jsonFields = {}
         let htmlFields = ''
         let txtype = parseInt($('#signer-txtype').val())
         if (txtype === -1) {
@@ -101,8 +107,9 @@ export default class extends view {
                     htmlFields += `<input class="form-control" id="signer-field-${f}" type="number">`
                     break
                 case 'json':
-                    // Text area (perhaps use a json builder?)
-                    htmlFields += `<textarea class="form-control" id="signer-field-${f}" type="number"></textarea>`
+                    // JSON builder
+                    htmlFields += `<div id="signer-field-${f}"></div>`
+                    this.jsonFields[f] = 1
                     break
                 default:
                     break
@@ -201,7 +208,7 @@ export default class extends view {
                         break
                     case 'array':
                     case 'json':
-                        tx.data[f] = JSON.parse($('#signer-field-'+f).val())
+                        tx.data[f] = this.jsonFields[f].get()
                         break
                     default:
                         break
@@ -240,6 +247,15 @@ export default class extends view {
                     break
             }
         })
+
+        // Create JSON editors
+        for (let f in this.jsonFields) {
+            this.jsonFields[f] = new JSONEditor(document.getElementById('signer-field-'+f),{
+                mode: 'code',
+                modes: ['code', 'text', 'tree', 'view'],
+                ace: ace
+            })
+        }
     }
 
     broadcastTransaction(tx) {
