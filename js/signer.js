@@ -83,6 +83,10 @@ export default class extends view {
                     <label class="form-check-label" for="signer-ts-checkbox">Use current timestamp</label>
                 </div>
                 <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="signer-legacysig-checkbox">
+                    <label class="form-check-label" for="signer-legacysig-checkbox">Use legacy signature format (pre-HF4)</label>
+                </div>
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="signer-broadcast-checkbox">
                     <label class="form-check-label" for="signer-broadcast-checkbox">Broadcast Transaction</label>
                 </div><br>
@@ -175,7 +179,8 @@ export default class extends view {
                         // hive keychain
                         tx.hash = cg.sha256(stringified).toString('hex')
                         hive_keychain.requestSignBuffer($('#signer-hk-sa').val(),stringified,$('#signer-hk-role').val(),(result) => {
-                            tx.signature = [cg.Signature.fromString(result.result).toAvalonSignature()]
+                            let sig = cg.Signature.fromString(result.result).toAvalonSignature()
+                            tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
                             console.log('keychain signature result',result)
                             console.log('tx',tx)
                             if ($('#signer-broadcast-checkbox').prop('checked'))
@@ -186,7 +191,8 @@ export default class extends view {
                         // plaintext key
                         let hash = cg.sha256(stringified)
                         tx.hash = hash.toString('hex')
-                        tx.signature = [cg.Signature.avalonCreate(hash,$('#signer-pk').val()).toAvalonSignature()]
+                        let sig = cg.Signature.avalonCreate(hash,$('#signer-pk').val()).toAvalonSignature()
+                        tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
                         console.log('tx',tx)
                         if ($('#signer-broadcast-checkbox').prop('checked'))
                             this.broadcastTransaction(tx)
