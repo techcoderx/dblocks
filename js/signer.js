@@ -46,166 +46,199 @@ export default class extends view {
             }))
         
         // Render appropriate fields
-        $('#signer-txtype').on('change',() => {
-            let htmlFields = ''
-            let txtype = parseInt($('#signer-txtype').val())
-            if (txtype === -1) {
-                return $('#signer-fields').html('')
-            }
-            for (let f in TransactionFields[txtype]) {
-                htmlFields += `<div class="form-group"><label for="signer-field-${f}">${f} (${TransactionFields[txtype][f]})</label>`
+        $('#signer-txtype').on('change',this.renderFields)
+
+        // Handle parameters if any
+        let routeSplit = window.location.hash.split('/')
+        if (routeSplit.length === 3 && routeSplit[2]) {
+            let params = new URL('https://example.com/'+routeSplit[2]).searchParams
+            let txtype = parseInt(params.get('type'))
+            if (!TransactionFields[txtype]) return
+            $('#signer-txtype').val(params.get('type'))
+            this.renderFields()
+            for (let f in TransactionFields[txtype]) if (params.get(f)) {
                 switch (TransactionFields[txtype][f]) {
                     case 'accountName':
                     case 'publicKey':
                     case 'string':
                     case 'array':
-                        // Text field
-                        htmlFields += `<input class="form-control" id="signer-field-${f}">`
-                        break
                     case 'integer':
-                        // Number field
-                        htmlFields += `<input class="form-control" id="signer-field-${f}" type="number">`
+                        $('#signer-field-'+f).val(params.get(f))
                         break
                     case 'json':
-                        // Text area (perhaps use a json builder?)
-                        htmlFields += `<textarea class="form-control" id="signer-field-${f}" type="number"></textarea>`
+                        // todo handle json
+                    default:
+                        break
+                }
+            }
+            if (params.get('sender'))
+                $('#signer-sender').val(params.get('sender'))
+            if (params.get('broadcast') === '1' || params.get('broadcast') === 'true') {
+                $('#signer-broadcast-checkbox').prop('checked',true)
+                $('#signer-signbtn').text('Sign and Broadcast')
+            }
+        }
+    }
+
+    renderFields() {
+        let htmlFields = ''
+        let txtype = parseInt($('#signer-txtype').val())
+        if (txtype === -1) {
+            return $('#signer-fields').html('')
+        }
+        for (let f in TransactionFields[txtype]) {
+            htmlFields += `<div class="form-group"><label for="signer-field-${f}">${f} (${TransactionFields[txtype][f]})</label>`
+            switch (TransactionFields[txtype][f]) {
+                case 'accountName':
+                case 'publicKey':
+                case 'string':
+                case 'array':
+                    // Text field
+                    htmlFields += `<input class="form-control" id="signer-field-${f}">`
+                    break
+                case 'integer':
+                    // Number field
+                    htmlFields += `<input class="form-control" id="signer-field-${f}" type="number">`
+                    break
+                case 'json':
+                    // Text area (perhaps use a json builder?)
+                    htmlFields += `<textarea class="form-control" id="signer-field-${f}" type="number"></textarea>`
+                    break
+                default:
+                    break
+            }
+            htmlFields += '</div>'
+        }
+        htmlFields += `
+            <div class="form-group"><label for="signer-sender">sender (accountName)</label><input class="form-control" id="signer-sender"></div>
+            <div class="form-group" style="display: none;" id="signer-ts-fg"><label for="signer-ts">timestamp (integer)</label><input class="form-control" id="signer-ts"></div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="signer-ts-checkbox" checked>
+                <label class="form-check-label" for="signer-ts-checkbox">Use current timestamp</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="signer-legacysig-checkbox">
+                <label class="form-check-label" for="signer-legacysig-checkbox">Use legacy signature format (pre-HF4)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="signer-broadcast-checkbox">
+                <label class="form-check-label" for="signer-broadcast-checkbox">Broadcast Transaction</label>
+            </div><br>
+            <button class="btn btn-success" id="signer-signbtn">Sign</button><br><br><br>`
+        $('#signer-fields').html(htmlFields)
+        $('#signer-ts-checkbox').on('change',() => {
+            if ($('#signer-ts-checkbox').prop('checked'))
+                $('#signer-ts-fg').hide()
+            else
+                $('#signer-ts-fg').show()
+        })
+        $('#signer-broadcast-checkbox').on('change',() => {
+            let txt = 'Sign' + ($('#signer-broadcast-checkbox').prop('checked') ? ' and Broadcast' : '')
+            $('#signer-signbtn').text(txt)
+            $('#signer-modal-proceed').text(txt)
+        })
+        $('#signer-signbtn').on('click',(evt) => {
+            evt.preventDefault()
+            $('#signer-toast-area').html('')
+            if (!$('#signer-sender').val()) {
+                $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Transaction sender is required.',5000))
+                return $('#signer-alert').toast('show')
+            }
+            if (!$('#signer-ts-checkbox').prop('checked') && !$('#signer-ts').val()) {
+                $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Transaction timestamp is required.',5000))
+                return $('#signer-alert').toast('show')
+            }
+            $('#signer-method').val('-1')
+            $('#signer-method-fields').html('')
+            $('#signer-method').off('change')
+            $('#signer-modal').modal()
+            $('#signer-method').on('change',() => {
+                switch ($('#signer-method').val()) {
+                    case '-1':
+                        $('#signer-method-fields').html('')
+                        $('#signer-modal-proceed').prop('disabled',true)
+                        break
+                    case '0':
+                        $('#signer-modal-proceed').prop('disabled',false)
+                        $('#signer-method-fields').html(`
+                            <div class="form-group"><label for="signer-hk-sa">Signer Account</label><input class="form-control" id="signer-hk-sa"></div>
+                            <select class="form-control" id="signer-hk-role">
+                                <option>Select a role to be used...</option>
+                                <option>Posting</option>
+                                <option>Active</option>
+                                <option>Memo</option>
+                            </select>
+                        `)
+                        break
+                    case '1':
+                        $('#signer-modal-proceed').prop('disabled',false)
+                        $('#signer-method-fields').html('<div class="form-group"><label for="signer-pk">Key</label><input class="form-control" id="signer-pk" type="password"></div>')
                         break
                     default:
                         break
                 }
-                htmlFields += '</div>'
+            })
+        })
+        $('#signer-modal-proceed').off('click')
+        $('#signer-modal-proceed').on('click',(evt) => {
+            evt.preventDefault()
+            let txtype = parseInt($('#signer-txtype').val())
+            let tx = {
+                type: txtype,
+                data: {},
+                sender: $('#signer-sender').val(),
+                ts: $('#signer-ts-checkbox').prop('checked') ? new Date().getTime() : $('#signer-ts').val()
             }
-            htmlFields += `
-                <div class="form-group"><label for="signer-sender">sender (accountName)</label><input class="form-control" id="signer-sender"></div>
-                <div class="form-group" style="display: none;" id="signer-ts-fg"><label for="signer-ts">timestamp (integer)</label><input class="form-control" id="signer-ts"></div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="signer-ts-checkbox" checked>
-                    <label class="form-check-label" for="signer-ts-checkbox">Use current timestamp</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="signer-legacysig-checkbox">
-                    <label class="form-check-label" for="signer-legacysig-checkbox">Use legacy signature format (pre-HF4)</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="signer-broadcast-checkbox">
-                    <label class="form-check-label" for="signer-broadcast-checkbox">Broadcast Transaction</label>
-                </div><br>
-                <button class="btn btn-success" id="signer-signbtn">Sign</button><br><br><br>`
-            $('#signer-fields').html(htmlFields)
-            $('#signer-ts-checkbox').on('change',() => {
-                if ($('#signer-ts-checkbox').prop('checked'))
-                    $('#signer-ts-fg').hide()
-                else
-                    $('#signer-ts-fg').show()
-            })
-            $('#signer-broadcast-checkbox').on('change',() => {
-                let txt = 'Sign' + ($('#signer-broadcast-checkbox').prop('checked') ? ' and Broadcast' : '')
-                $('#signer-signbtn').text(txt)
-                $('#signer-modal-proceed').text(txt)
-            })
-            $('#signer-signbtn').on('click',(evt) => {
-                evt.preventDefault()
-                $('#signer-toast-area').html('')
-                if (!$('#signer-sender').val()) {
-                    $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Transaction sender is required.',5000))
-                    return $('#signer-alert').toast('show')
-                }
-                if (!$('#signer-ts-checkbox').prop('checked') && !$('#signer-ts').val()) {
-                    $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Transaction timestamp is required.',5000))
-                    return $('#signer-alert').toast('show')
-                }
-                $('#signer-method').val('-1')
-                $('#signer-method-fields').html('')
-                $('#signer-method').off('change')
-                $('#signer-modal').modal()
-                $('#signer-method').on('change',() => {
-                    switch ($('#signer-method').val()) {
-                        case '-1':
-                            $('#signer-method-fields').html('')
-                            $('#signer-modal-proceed').prop('disabled',true)
-                            break
-                        case '0':
-                            $('#signer-modal-proceed').prop('disabled',false)
-                            $('#signer-method-fields').html(`
-                                <div class="form-group"><label for="signer-hk-sa">Signer Account</label><input class="form-control" id="signer-hk-sa"></div>
-                                <select class="form-control" id="signer-hk-role">
-                                    <option>Select a role to be used...</option>
-                                    <option>Posting</option>
-                                    <option>Active</option>
-                                    <option>Memo</option>
-                                </select>
-                            `)
-                            break
-                        case '1':
-                            $('#signer-modal-proceed').prop('disabled',false)
-                            $('#signer-method-fields').html('<div class="form-group"><label for="signer-pk">Key</label><input class="form-control" id="signer-pk" type="password"></div>')
-                            break
-                        default:
-                            break
-                    }
-                })
-            })
-            $('#signer-modal-proceed').off('click')
-            $('#signer-modal-proceed').on('click',(evt) => {
-                evt.preventDefault()
-                let txtype = parseInt($('#signer-txtype').val())
-                let tx = {
-                    type: txtype,
-                    data: {},
-                    sender: $('#signer-sender').val(),
-                    ts: $('#signer-ts-checkbox').prop('checked') ? new Date().getTime() : $('#signer-ts').val()
-                }
-                for (let f in TransactionFields[txtype]) {
-                    switch (TransactionFields[txtype][f]) {
-                        case 'accountName':
-                        case 'publicKey':
-                        case 'string':
-                            tx.data[f] = $('#signer-field-'+f).val()
-                            break
-                        case 'integer':
-                            tx.data[f] = parseInt($('#signer-field-'+f).val())
-                            break
-                        case 'array':
-                        case 'json':
-                            tx.data[f] = JSON.parse($('#signer-field-'+f).val())
-                            break
-                        default:
-                            break
-                    }
-                }
-                let stringified = JSON.stringify(tx)
-                switch ($('#signer-method').val()) {
-                    case '0':
-                        // hive keychain
-                        // error if not installed
-                        if (!window.hive_keychain) {
-                            $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Hive Keychain is not installed',5000))
-                            return $('#signer-alert').toast('show')
-                        }
-                        tx.hash = cg.sha256(stringified).toString('hex')
-                        hive_keychain.requestSignBuffer($('#signer-hk-sa').val(),stringified,$('#signer-hk-role').val(),(result) => {
-                            let sig = cg.Signature.fromString(result.result).toAvalonSignature()
-                            tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
-                            console.log('keychain signature result',result)
-                            console.log('tx',tx)
-                            if ($('#signer-broadcast-checkbox').prop('checked'))
-                                this.broadcastTransaction(tx)
-                        })
+            for (let f in TransactionFields[txtype]) {
+                switch (TransactionFields[txtype][f]) {
+                    case 'accountName':
+                    case 'publicKey':
+                    case 'string':
+                        tx.data[f] = $('#signer-field-'+f).val()
                         break
-                    case '1':
-                        // plaintext key
-                        let hash = cg.sha256(stringified)
-                        tx.hash = hash.toString('hex')
-                        let sig = cg.Signature.avalonCreate(hash,$('#signer-pk').val()).toAvalonSignature()
+                    case 'integer':
+                        tx.data[f] = parseInt($('#signer-field-'+f).val())
+                        break
+                    case 'array':
+                    case 'json':
+                        tx.data[f] = JSON.parse($('#signer-field-'+f).val())
+                        break
+                    default:
+                        break
+                }
+            }
+            let stringified = JSON.stringify(tx)
+            switch ($('#signer-method').val()) {
+                case '0':
+                    // hive keychain
+                    // error if not installed
+                    if (!window.hive_keychain) {
+                        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Hive Keychain is not installed',5000))
+                        return $('#signer-alert').toast('show')
+                    }
+                    tx.hash = cg.sha256(stringified).toString('hex')
+                    hive_keychain.requestSignBuffer($('#signer-hk-sa').val(),stringified,$('#signer-hk-role').val(),(result) => {
+                        let sig = cg.Signature.fromString(result.result).toAvalonSignature()
                         tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
+                        console.log('keychain signature result',result)
                         console.log('tx',tx)
                         if ($('#signer-broadcast-checkbox').prop('checked'))
                             this.broadcastTransaction(tx)
-                        break
-                    default:
-                        break
-                }
-            })
+                    })
+                    break
+                case '1':
+                    // plaintext key
+                    let hash = cg.sha256(stringified)
+                    tx.hash = hash.toString('hex')
+                    let sig = cg.Signature.avalonCreate(hash,$('#signer-pk').val()).toAvalonSignature()
+                    tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
+                    console.log('tx',tx)
+                    if ($('#signer-broadcast-checkbox').prop('checked'))
+                        this.broadcastTransaction(tx)
+                    break
+                default:
+                    break
+            }
         })
     }
 

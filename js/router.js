@@ -32,6 +32,7 @@ window.router = () => {
         { path: '/livesubcount/:account', view: livesubcount, params: 1 },
         { path: '/keys', view: keys },
         { path: '/signer', view: signer },
+        { path: '/signer/:q', view: signer, params: 1 },
         { path: '/404', view: notfound }
     ]
 
