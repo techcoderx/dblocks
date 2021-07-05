@@ -77,5 +77,5 @@ function toast(id,type,title,body,duration) {
 }
 
 function toastArea(id) {
-    return `<div class="position-fixed bottom-0 right-0 p-3" style="z-index: 10; right: 0; bottom: 0;" id="${id}"></div>`
+    return `<div class="position-fixed bottom-0 right-0 p-3" style="z-index: 2000; right: 0; bottom: 0;" id="${id}"></div>`
 }

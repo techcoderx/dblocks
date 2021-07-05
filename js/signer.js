@@ -31,7 +31,7 @@ export default class extends view {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="signer-modal-proceed-btn" disabled>Sign</button>
+                    <button type="button" class="btn btn-success" id="signer-modal-proceed" disabled>Sign</button>
                 </div>
             </div></div></div>
             ${toastArea('signer-toast-area')}
@@ -97,7 +97,7 @@ export default class extends view {
             $('#signer-broadcast-checkbox').on('change',() => {
                 let txt = 'Sign' + ($('#signer-broadcast-checkbox').prop('checked') ? ' and Broadcast' : '')
                 $('#signer-signbtn').text(txt)
-                $('#signer-modal-proceed-btn').text(txt)
+                $('#signer-modal-proceed').text(txt)
             })
             $('#signer-signbtn').on('click',(evt) => {
                 evt.preventDefault()
@@ -118,29 +118,102 @@ export default class extends view {
                     switch ($('#signer-method').val()) {
                         case '-1':
                             $('#signer-method-fields').html('')
-                            $('#signer-modal-proceed-btn').prop('disabled',true)
+                            $('#signer-modal-proceed').prop('disabled',true)
                             break
                         case '0':
-                            $('#signer-modal-proceed-btn').prop('disabled',false)
+                            $('#signer-modal-proceed').prop('disabled',false)
                             $('#signer-method-fields').html(`
                                 <div class="form-group"><label for="signer-hk-sa">Signer Account</label><input class="form-control" id="signer-hk-sa"></div>
                                 <select class="form-control" id="signer-hk-role">
-                                    <option value="-1">Select a role to be used...</option>
-                                    <option value="0">Posting</option>
-                                    <option value="1">Active</option>
-                                    <option value="2">Memo</option>
+                                    <option>Select a role to be used...</option>
+                                    <option>Posting</option>
+                                    <option>Active</option>
+                                    <option>Memo</option>
                                 </select>
                             `)
                             break
                         case '1':
-                            $('#signer-modal-proceed-btn').prop('disabled',false)
-                            $('#signer-method-fields').html('<div class="form-group"><label for="signer-pk">Key</label><input class="form-control" id="signer-pk"></div>')
+                            $('#signer-modal-proceed').prop('disabled',false)
+                            $('#signer-method-fields').html('<div class="form-group"><label for="signer-pk">Key</label><input class="form-control" id="signer-pk" type="password"></div>')
                             break
                         default:
                             break
                     }
                 })
             })
+            $('#signer-modal-proceed').off('click')
+            $('#signer-modal-proceed').on('click',(evt) => {
+                evt.preventDefault()
+                let txtype = parseInt($('#signer-txtype').val())
+                let tx = {
+                    type: txtype,
+                    data: {},
+                    sender: $('#signer-sender').val(),
+                    ts: $('#signer-ts-checkbox').prop('checked') ? new Date().getTime() : $('#signer-ts').val()
+                }
+                for (let f in TransactionFields[txtype]) {
+                    switch (TransactionFields[txtype][f]) {
+                        case 'accountName':
+                        case 'publicKey':
+                        case 'string':
+                            tx.data[f] = $('#signer-field-'+f).val()
+                            break
+                        case 'integer':
+                            tx.data[f] = parseInt($('#signer-field-'+f).val())
+                            break
+                        case 'array':
+                        case 'json':
+                            tx.data[f] = JSON.parse($('#signer-field-'+f).val())
+                            break
+                        default:
+                            break
+                    }
+                }
+                let stringified = JSON.stringify(tx)
+                switch ($('#signer-method').val()) {
+                    case '0':
+                        // hive keychain
+                        tx.hash = cg.sha256(stringified).toString('hex')
+                        hive_keychain.requestSignBuffer($('#signer-hk-sa').val(),stringified,$('#signer-hk-role').val(),(result) => {
+                            tx.signature = [cg.Signature.fromString(result.result).toAvalonSignature()]
+                            console.log('keychain signature result',result)
+                            console.log('tx',tx)
+                            if ($('#signer-broadcast-checkbox').prop('checked'))
+                                this.broadcastTransaction(tx)
+                        })
+                        break
+                    case '1':
+                        // plaintext key
+                        let hash = cg.sha256(stringified)
+                        tx.hash = hash.toString('hex')
+                        tx.signature = [cg.Signature.avalonCreate(hash,$('#signer-pk').val()).toAvalonSignature()]
+                        console.log('tx',tx)
+                        if ($('#signer-broadcast-checkbox').prop('checked'))
+                            this.broadcastTransaction(tx)
+                        break
+                    default:
+                        break
+                }
+            })
+        })
+    }
+
+    broadcastTransaction(tx) {
+        let suceed = false
+        axios.post(config.api+'/transactWaitConfirm',tx,{
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }).then((r) => {
+            suceed = true
+            console.log('result',r)
+            $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-success','Success','Transaction broadcasted successfully',5000))
+            $('#signer-alert').toast('show')
+            $('#signer-modal').modal('hide')
+        }).catch((e) => {
+            console.log('error',e)
+            if (suceed) return
+            $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','An error occured while broadcasting transaction',5000))
+            $('#signer-alert').toast('show')
         })
     }
 }

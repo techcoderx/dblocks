@@ -198,11 +198,11 @@ class Signature {
     /**
      * Creates an Avalon ECDSA signature from a given 32-byte message using an secp256k1 private key.
      * @param {UInt8Array} message 
-     * @param {UInt8Array} key 
+     * @param {String} key 
      * @returns a new Signature instance
      */
     static avalonCreate(message,key) {
-        let {signature, recid} = secp256k1.ecdsaSign(message,key)
+        let {signature, recid} = secp256k1.ecdsaSign(message,bs58.decode(key))
         return new Signature(signature,recid)
     }
 
