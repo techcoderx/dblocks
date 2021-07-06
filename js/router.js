@@ -10,6 +10,7 @@ import livesubcount from './livesubcount.js'
 import keys from './keys.js'
 import signer from './signer.js'
 import notfound from './404.js'
+import memo from './memo.js'
 
 // Live update intervals (e.g. block streams)
 window.intervals = []
@@ -33,6 +34,7 @@ window.router = () => {
         { path: '/keys', view: keys },
         { path: '/signer', view: signer },
         { path: '/signer/:q', view: signer, params: 1 },
+        { path: '/memo', view: memo },
         { path: '/404', view: notfound }
     ]
 

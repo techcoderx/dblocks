@@ -4,6 +4,7 @@ const bip32 = require('bip32')
 const bip39 = require('bip39')
 const bs58 = require('bs58')
 const secp256k1 = require('secp256k1')
+const eccrypto = require('eccrypto')
 
 /**
  * Network id used in WIF-encoding.
@@ -305,12 +306,69 @@ class BIP32 {
     }
 }
 
+/**
+ * jAvalon implementation of memo encryption/decryption
+ */
+class Memo {
+    static encrypt(pub, message = '', ephemPriv = '') {
+        if (!ephemPriv)
+            ephemPriv = BIP32.generate(12).toPrivate().toAvalonString()
+        return new Promise(async (rs,rj) => {
+            try {
+                ephemPriv = bs58.decode(ephemPriv)
+                pub = bs58.decode(pub)
+            } catch (e) {
+                return rj(e)
+            }
+            let encrypted = await eccrypto.encrypt(pub, Buffer.from(message), { ephemPrivateKey: ephemPriv })
+            encrypted.iv = bs58.encode(encrypted.iv)
+            encrypted.ephemPublicKey = secp256k1.publicKeyConvert(encrypted.ephemPublicKey, true)
+            encrypted.ephemPublicKey = bs58.encode(encrypted.ephemPublicKey)
+            encrypted.ciphertext = bs58.encode(encrypted.ciphertext)
+            encrypted.mac = bs58.encode(encrypted.mac)
+            encrypted = [
+                encrypted.iv,
+                encrypted.ephemPublicKey,
+                encrypted.ciphertext,
+                encrypted.mac
+            ]
+            encrypted = encrypted.join('_')
+            return rs(encrypted)
+        })
+    }
+
+    static decrypt(priv, encrypted = '') {
+        return new Promise((rs,rj) => {
+            if (!priv)
+                return rj('no private key?!')
+            encrypted = encrypted.split('_')
+            if (encrypted.length !== 4)
+                return rj('encrypted message should be in 4 parts')
+            try {
+                let encObj = {}
+                encObj.iv = bs58.decode(encrypted[0])
+                encObj.ephemPublicKey = bs58.decode(encrypted[1])
+                encObj.ephemPublicKey = secp256k1.publicKeyConvert(encObj.ephemPublicKey, false)
+                encObj.ciphertext = bs58.decode(encrypted[2])
+                encObj.mac = bs58.decode(encrypted[3])
+                let privBuffer = bs58.decode(priv)
+                eccrypto.decrypt(privBuffer, encObj)
+                    .then((decrypted) => rs(decrypted.toString()))
+                    .catch((e) => rj(e))
+            } catch (e) {
+                return rj(e)
+            }
+        })
+    }
+}
+
 if (typeof window !== 'undefined')
     window.cg = {
         PrivateKey,
         PublicKey,
         Signature,
         BIP32,
+        Memo,
         sha256
     }
 else
@@ -319,5 +377,6 @@ else
         PublicKey,
         Signature,
         BIP32,
+        Memo,
         sha256
     }

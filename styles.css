@@ -154,6 +154,10 @@ table tr th {
 .dblocks-authority-names thead,
 .dblocks-authority-names tbody tr th { text-align: center; }
 
+/* Memos */
+#memo-proceed { display: none; }
+#memo-result { word-wrap: break-word; }
+
 /* Toasts */
 .dblocks-toaster-error .toast-header {
     background-color: #ff3333;
