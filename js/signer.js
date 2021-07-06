@@ -131,7 +131,12 @@ export default class extends view {
                 <input class="form-check-input" type="checkbox" id="signer-broadcast-checkbox">
                 <label class="form-check-label" for="signer-broadcast-checkbox">Broadcast Transaction</label>
             </div><br>
-            <button class="btn btn-success" id="signer-signbtn">Sign</button><br><br><br>`
+            <button class="btn btn-success" id="signer-signbtn">Sign</button><br><br>
+            <div id="signer-result-area" style="display: none;">
+                <h5>Signature result</h5>
+                <div id="signer-result-json"></div><br>
+                <button class="btn btn-success" id="signer-result-broadcast">Broadcast this transaction</button><br><br>
+            </div><br>`
         $('#signer-fields').html(htmlFields)
         $('#signer-ts-checkbox').on('change',() => {
             if ($('#signer-ts-checkbox').prop('checked'))
@@ -194,7 +199,7 @@ export default class extends view {
                 type: txtype,
                 data: {},
                 sender: $('#signer-sender').val(),
-                ts: $('#signer-ts-checkbox').prop('checked') ? new Date().getTime() : $('#signer-ts').val()
+                ts: $('#signer-ts-checkbox').prop('checked') ? new Date().getTime() : parseInt($('#signer-ts').val())
             }
             for (let f in TransactionFields[txtype]) {
                 switch (TransactionFields[txtype][f]) {
@@ -225,12 +230,17 @@ export default class extends view {
                     }
                     tx.hash = cg.sha256(stringified).toString('hex')
                     hive_keychain.requestSignBuffer($('#signer-hk-sa').val(),stringified,$('#signer-hk-role').val(),(result) => {
+                        console.log('keychain signature result',result)
+                        if (result.error) {
+                            $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error',result.message,5000))
+                            return $('#signer-alert').toast('show')
+                        }
                         let sig = cg.Signature.fromString(result.result).toAvalonSignature()
                         tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
-                        console.log('keychain signature result',result)
-                        console.log('tx',tx)
                         if ($('#signer-broadcast-checkbox').prop('checked'))
                             this.broadcastTransaction(tx)
+                        else
+                            this.displayResult(tx)
                     })
                     break
                 case '1':
@@ -239,9 +249,10 @@ export default class extends view {
                     tx.hash = hash.toString('hex')
                     let sig = cg.Signature.avalonCreate(hash,$('#signer-pk').val()).toAvalonSignature()
                     tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
-                    console.log('tx',tx)
                     if ($('#signer-broadcast-checkbox').prop('checked'))
                         this.broadcastTransaction(tx)
+                    else
+                        this.displayResult(tx)
                     break
                 default:
                     break
@@ -258,9 +269,25 @@ export default class extends view {
         }
     }
 
+    displayResult(tx) {
+        $('#signer-result-json').html('')
+        let editor = new JSONEditor(document.getElementById('signer-result-json'),{
+            mode: 'code',
+            modes: ['code', 'text', 'tree', 'view'],
+            ace: ace
+        })
+        editor.set(tx)
+        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-success','Success','Transaction signed successfully without broadcasting',5000))
+        $('#signer-alert').toast('show')
+        $('#signer-modal').modal('hide')
+        $('#signer-result-area').show()
+        $('#signer-result-broadcast').off('click')
+        $('#signer-result-broadcast').on('click',() => this.broadcastTransaction(tx))
+    }
+
     broadcastTransaction(tx) {
         let suceed = false
-        axios.post(config.api+'/transactWaitConfirm',tx,{
+        axios.post('https://testnet-api.oneloved.tube/transactWaitConfirm',tx,{
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }).then((r) => {
