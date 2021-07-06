@@ -14,12 +14,7 @@ export default class extends view {
         return `
             <div class="row">
                 <div class="col-12 col-md-4">
-                    <h3>Market Info</h3>
-                    <table class="table table-sm">
-                        <tr><th scope="row">Price (USD)</th><td id="market-price-usd">Loading...</td></tr>
-                        <tr><th scope="row">Price (BTC)</th><td id="market-price-btc">Loading...</td></tr>
-                        <tr><th scope="row">Market Cap (USD)</th><td id="market-cap-usd">Loading...</td></tr>
-                    </table><br>
+                    ${!config.isTestnet ? this.marketInfoHtml() : ''}
                     <h3>Supply Info</h3>
                     <table class="table table-sm">
                         <tr><th scope="row">Circulating</th><td id="supply-circulating">Loading...</td></tr>
@@ -59,6 +54,17 @@ export default class extends view {
         `
     }
 
+    marketInfoHtml() {
+        return `
+            <h3>Market Info</h3>
+            <table class="table table-sm">
+                <tr><th scope="row">Price (USD)</th><td id="market-price-usd">Loading...</td></tr>
+                <tr><th scope="row">Price (BTC)</th><td id="market-price-btc">Loading...</td></tr>
+                <tr><th scope="row">Market Cap (USD)</th><td id="market-cap-usd">Loading...</td></tr>
+            </table><br>
+        `
+    }
+
     init() {
         // Load supply and reward pool, and update every 10 seconds
         this.fetchMarketInfo()
@@ -70,7 +76,8 @@ export default class extends view {
     }
 
     async fetchMarketInfo() {
-        // DTUBE-BTC
+        // Market info from coingecko
+        if (config.isTestnet) return
         let market = await axios.get('https://api.coingecko.com/api/v3/coins/dtube-coin?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false')
         this.priceBTC = market.data.market_data.current_price.btc
         this.priceUSD = market.data.market_data.current_price.usd
@@ -87,7 +94,7 @@ export default class extends view {
             $('#supply-circulating').text(thousandSeperator(supplyRes.data.circulating / 100) + ' DTUBE')
             $('#supply-unclaimed').text(thousandSeperator(Math.ceil(supplyRes.data.unclaimed) / 100) + ' DTUBE')
             $('#supply-total').text(thousandSeperator(Math.ceil(supplyRes.data.total) / 100) + ' DTUBE')
-            if (!isNaN(this.priceBTC) && !isNaN(this.priceUSD) && !isNaN(this.circulatingSupply))
+            if (!config.isTestnet && !isNaN(this.priceBTC) && !isNaN(this.priceUSD) && !isNaN(this.circulatingSupply))
                 $('#market-cap-usd').text('$'+thousandSeperator(Math.ceil(this.priceUSD*this.circulatingSupply)/100))
         })
     
