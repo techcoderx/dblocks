@@ -5,12 +5,21 @@ export default class extends view {
     constructor() {
         super()
         this.setTitle()
+        this.circulatingSupply = 0
+        this.priceBTC = 0
+        this.priceUSD = 0
     }
 
     getHtml() {
         return `
             <div class="row">
                 <div class="col-12 col-md-4">
+                    <h3>Market Info</h3>
+                    <table class="table table-sm">
+                        <tr><th scope="row">Price (USD)</th><td id="market-price-usd">Loading...</td></tr>
+                        <tr><th scope="row">Price (BTC)</th><td id="market-price-btc">Loading...</td></tr>
+                        <tr><th scope="row">Market Cap (USD)</th><td id="market-cap-usd">Loading...</td></tr>
+                    </table><br>
                     <h3>Supply Info</h3>
                     <table class="table table-sm">
                         <tr><th scope="row">Circulating</th><td id="supply-circulating">Loading...</td></tr>
@@ -52,17 +61,34 @@ export default class extends view {
 
     init() {
         // Load supply and reward pool, and update every 10 seconds
+        this.fetchMarketInfo()
         this.updateChainInfo()
         let blkStreamer = new BlockStreamer()
         blkStreamer.streamBlocks((newBlock) => $('#newblockslst').prepend(this.newBlockCardHtml(newBlock)))
         intervals.push(setInterval(this.updateChainInfo,10000))
+        intervals.push(setInterval(this.fetchMarketInfo,60000))
+    }
+
+    async fetchMarketInfo() {
+        // DTUBE-BTC
+        let market = await axios.get('https://api.coingecko.com/api/v3/coins/dtube-coin?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false')
+        this.priceBTC = market.data.market_data.current_price.btc
+        this.priceUSD = market.data.market_data.current_price.usd
+        if (!isNaN(this.priceBTC) && !isNaN(this.priceUSD) && !isNaN(this.circulatingSupply)) {
+            $('#market-price-btc').text('₿'+this.priceBTC)
+            $('#market-price-usd').text('$'+this.priceUSD)
+            $('#market-cap-usd').text('$'+thousandSeperator(Math.ceil(this.priceUSD*this.circulatingSupply)/100))
+        }
     }
 
     updateChainInfo() {
         axios.get(config.api + '/supply').then((supplyRes) => {
+            this.circulatingSupply = supplyRes.data.circulating
             $('#supply-circulating').text(thousandSeperator(supplyRes.data.circulating / 100) + ' DTUBE')
             $('#supply-unclaimed').text(thousandSeperator(Math.ceil(supplyRes.data.unclaimed) / 100) + ' DTUBE')
             $('#supply-total').text(thousandSeperator(Math.ceil(supplyRes.data.total) / 100) + ' DTUBE')
+            if (!isNaN(this.priceBTC) && !isNaN(this.priceUSD) && !isNaN(this.circulatingSupply))
+                $('#market-cap-usd').text('$'+thousandSeperator(Math.ceil(this.priceUSD*this.circulatingSupply)/100))
         })
     
         axios.get(config.api + '/rewardPool').then((rpRes) => {
