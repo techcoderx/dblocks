@@ -82,6 +82,8 @@ export default class extends view {
                 $('#signer-broadcast-checkbox').prop('checked',true)
                 $('#signer-signbtn').text('Sign and Broadcast')
             }
+            if (params.get('legacysig') === '1' || params.get('legacysig') === 'true')
+                $('#signer-legacysig-checkbox').prop('checked',true)
         }
     }
 
@@ -287,7 +289,7 @@ export default class extends view {
 
     broadcastTransaction(tx) {
         let suceed = false
-        axios.post('https://testnet-api.oneloved.tube/transactWaitConfirm',tx,{
+        axios.post(config.api+'/transactWaitConfirm',tx,{
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }).then((r) => {
