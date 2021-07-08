@@ -31,6 +31,7 @@ export default class extends view {
                     <div id="signer-method-fields"></div>
                 </div>
                 <div class="modal-footer">
+                    <p class="mr-auto" id="signer-modal-bw-estimation">Size:</p>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-success" id="signer-modal-proceed" disabled>Sign</button>
                 </div>
@@ -162,6 +163,7 @@ export default class extends view {
                 $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Transaction timestamp is required.',5000))
                 return $('#signer-alert').toast('show')
             }
+            $('#signer-modal-bw-estimation').text('Estimated size: ' + thousandSeperator(estimateBw(this.jsonFields)) + ' bytes')
             $('#signer-method').val('-1')
             $('#signer-method-fields').html('')
             $('#signer-method').off('change')
@@ -196,31 +198,7 @@ export default class extends view {
         $('#signer-modal-proceed').off('click')
         $('#signer-modal-proceed').on('click',(evt) => {
             evt.preventDefault()
-            let txtype = parseInt($('#signer-txtype').val())
-            let tx = {
-                type: txtype,
-                data: {},
-                sender: $('#signer-sender').val(),
-                ts: $('#signer-ts-checkbox').prop('checked') ? new Date().getTime() : parseInt($('#signer-ts').val())
-            }
-            for (let f in TransactionFields[txtype]) {
-                switch (TransactionFields[txtype][f]) {
-                    case 'accountName':
-                    case 'publicKey':
-                    case 'string':
-                        tx.data[f] = $('#signer-field-'+f).val()
-                        break
-                    case 'integer':
-                        tx.data[f] = parseInt($('#signer-field-'+f).val())
-                        break
-                    case 'array':
-                    case 'json':
-                        tx.data[f] = this.jsonFields[f].get()
-                        break
-                    default:
-                        break
-                }
-            }
+            let tx = constructRawTx(this.jsonFields)
             let stringified = JSON.stringify(tx)
             switch ($('#signer-method').val()) {
                 case '0':
@@ -270,6 +248,43 @@ export default class extends view {
             })
         }
     }
+}
+
+function constructRawTx(jsonFields) {
+    let txtype = parseInt($('#signer-txtype').val())
+    let tx = {
+        type: txtype,
+        data: {},
+        sender: $('#signer-sender').val(),
+        ts: $('#signer-ts-checkbox').prop('checked') ? new Date().getTime() : parseInt($('#signer-ts').val())
+    }
+    for (let f in TransactionFields[txtype]) {
+        switch (TransactionFields[txtype][f]) {
+            case 'accountName':
+            case 'publicKey':
+            case 'string':
+                tx.data[f] = $('#signer-field-'+f).val()
+                break
+            case 'integer':
+                tx.data[f] = parseInt($('#signer-field-'+f).val())
+                break
+            case 'array':
+            case 'json':
+                tx.data[f] = jsonFields[f].get()
+                break
+            default:
+                break
+        }
+    }
+    return tx
+}
+
+function estimateBw(jsonFields) {
+    let tx = constructRawTx(jsonFields)
+    let sig = ['2rCqhdenmJZd8PNouxqDj8GE7nwkAAfEiju1a1QMesbPxXnCjQr2SE7mP7GMymFRHZP6qiEbTkB6jfW2sSndxS3F',1]
+    tx.hash = '941c51b1eb53f1d1e36dd06dd13335286b68779a17c2ccd24b51e63a42c411ad'
+    tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
+    return JSON.stringify(tx).length
 }
 
 function displayResult(tx) {

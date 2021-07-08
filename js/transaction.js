@@ -16,6 +16,7 @@ export default class extends view {
             <div id="txn-container">
                 <h2 class="text-truncate">Transaction<small class="col-12 col-sm-9 text-muted" id="txn-id"></small></h2>
                 <p class="lead" id="includedInBlock"></p>
+                <p class="lead" id="txn-size"></p>
                 <div class="card dblocks-card" id="txn-card"></div><br>
                 <table class="table table-sm">
                     <tr><th scope="row">type</th><td id="txn-det-type"></td></tr>
@@ -41,6 +42,7 @@ export default class extends view {
         axios.get(config.api + '/tx/' + this.txhash).then((txn) => {
             $('#txn-id').text(txn.data.hash)
             $('#includedInBlock').text('Included in block #' + thousandSeperator(txn.data.includedInBlock))
+            $('#txn-size').text('Size: ' + thousandSeperator(this.getTransactionSize(txn.data)) + ' bytes')
             $('#txn-card').html('<p class="dblocks-card-content">'+txToHtml(txn.data)+'</p>')
             $('#txn-det-type').text(txn.data.type)
             $('#txn-det-type').append(' <span class="badge badge-pill badge-info">' + TransactionTypes[txn.data.type] + '</span>')
@@ -76,5 +78,9 @@ export default class extends view {
                 recid: signatures[s][1]
             })
         return parsed
+    }
+
+    getTransactionSize(tx) {
+        return JSON.stringify(tx).length - 19 - tx.includedInBlock.toString().length
     }
 }

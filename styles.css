@@ -104,6 +104,7 @@ table tr th {
 
 /* Txn details */
 #txn-notfound, #txn-error, #txn-container { display: none; }
+#includedInBlock { margin-bottom: 0; }
 
 /* Contents */
 #content-error, #content-notfound, #content-container,
