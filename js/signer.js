@@ -240,9 +240,9 @@ export default class extends view {
                         let sig = cg.Signature.fromString(result.result).toAvalonSignature()
                         tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
                         if ($('#signer-broadcast-checkbox').prop('checked'))
-                            this.broadcastTransaction(tx)
+                            broadcastTransaction(tx)
                         else
-                            this.displayResult(tx)
+                            displayResult(tx)
                     })
                     break
                 case '1':
@@ -252,9 +252,9 @@ export default class extends view {
                     let sig = cg.Signature.avalonCreate(hash,$('#signer-pk').val()).toAvalonSignature()
                     tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
                     if ($('#signer-broadcast-checkbox').prop('checked'))
-                        this.broadcastTransaction(tx)
+                        broadcastTransaction(tx)
                     else
-                        this.displayResult(tx)
+                        displayResult(tx)
                     break
                 default:
                     break
@@ -270,39 +270,39 @@ export default class extends view {
             })
         }
     }
+}
 
-    displayResult(tx) {
-        $('#signer-result-json').html('')
-        let editor = new JSONEditor(document.getElementById('signer-result-json'),{
-            mode: 'code',
-            modes: ['code', 'text', 'tree', 'view'],
-            ace: ace
-        })
-        editor.set(tx)
-        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-success','Success','Transaction signed successfully without broadcasting',5000))
+function displayResult(tx) {
+    $('#signer-result-json').html('')
+    let editor = new JSONEditor(document.getElementById('signer-result-json'),{
+        mode: 'code',
+        modes: ['code', 'text', 'tree', 'view'],
+        ace: ace
+    })
+    editor.set(tx)
+    $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-success','Success','Transaction signed successfully without broadcasting',5000))
+    $('#signer-alert').toast('show')
+    $('#signer-modal').modal('hide')
+    $('#signer-result-area').show()
+    $('#signer-result-broadcast').off('click')
+    $('#signer-result-broadcast').on('click',() => broadcastTransaction(tx))
+}
+
+function broadcastTransaction(tx) {
+    let suceed = false
+    axios.post(config.api+'/transactWaitConfirm',tx,{
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+    }).then((r) => {
+        suceed = true
+        console.log('result',r)
+        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-success','Success','Transaction broadcasted successfully',5000))
         $('#signer-alert').toast('show')
         $('#signer-modal').modal('hide')
-        $('#signer-result-area').show()
-        $('#signer-result-broadcast').off('click')
-        $('#signer-result-broadcast').on('click',() => this.broadcastTransaction(tx))
-    }
-
-    broadcastTransaction(tx) {
-        let suceed = false
-        axios.post(config.api+'/transactWaitConfirm',tx,{
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        }).then((r) => {
-            suceed = true
-            console.log('result',r)
-            $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-success','Success','Transaction broadcasted successfully',5000))
-            $('#signer-alert').toast('show')
-            $('#signer-modal').modal('hide')
-        }).catch((e) => {
-            console.log('error',e)
-            if (suceed) return
-            $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','An error occured while broadcasting transaction',5000))
-            $('#signer-alert').toast('show')
-        })
-    }
+    }).catch((e) => {
+        console.log('error',e)
+        if (suceed) return
+        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','An error occured while broadcasting transaction',5000))
+        $('#signer-alert').toast('show')
+    })
 }
