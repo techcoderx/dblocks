@@ -38,7 +38,7 @@ export default class extends view {
                         <tr><th scope="row">VP per burn</th><td>4,400 VP/DTUBE</td></tr>
                         <tr><th scope="row">BW Growth</th><td>10 bytes/DTUBE/hour</td></tr>
                         <tr><th scope="row">BW Max</th><td>64,000 bytes</td></tr>
-                        <tr><th scope="row">Leaders</th><td>13</td></tr>
+                        <tr><th scope="row">Leaders</th><td>15</td></tr>
                         <tr><th scope="row">Block Reward</th><td>0.01 DTUBE</td></tr>
                         <tr><th scope="row">Block Reward VP</th><td>100 VP</td></tr>
                         <tr><th scope="row">Master account</th><td>dtube</td></tr>
