@@ -14,6 +14,16 @@ export default class extends view {
         return `
             <div class="row">
                 <div class="col-12 col-md-4">
+                    <div id="nexthf" style="display: none;">
+                        <h3>Next Hardfork</h3>
+                        <table class="table table-sm">
+                            <tr><th scope="row">Version</th><td id="nexthf-version"></td></tr>
+                            <tr><th scope="row">Codename</th><td id="nexthf-codename"></td></tr>
+                            <tr><th scope="row">Block</th><td id="nexthf-block"></td></tr>
+                            <tr><th scope="row">Countdown</th><td id="nexthf-countdown">Loading...</td></tr>
+                            <tr><th scope="row">Release Notes</th><td id="nexthf-release"></td></tr>
+                        </table><br>
+                    </div>
                     ${!config.isTestnet ? this.marketInfoHtml() : ''}
                     <h3>Supply Info</h3>
                     <table class="table table-sm">
@@ -73,6 +83,25 @@ export default class extends view {
         blkStreamer.streamBlocks((newBlock) => $('#newblockslst').prepend(this.newBlockCardHtml(newBlock)))
         intervals.push(setInterval(this.updateChainInfo,10000))
         intervals.push(setInterval(this.fetchMarketInfo,60000))
+
+        // next hardfork
+        if (window.config.nextHf) {
+            $('#nexthf-version').text(window.config.nextHf.version)
+            $('#nexthf-codename').text(window.config.nextHf.codename)
+            $('#nexthf-block').text('#'+thousandSeperator(window.config.nextHf.block))
+            $('#nexthf-release').html('<a target="_blank" href="'+window.config.nextHf.releaseUrl+'">'+window.config.nextHf.releaseSrc+'</a>')
+            $('#nexthf').show()
+
+            // hardfork countdown
+            axios.get(config.api+'/count').then((d) => {
+                let secondsToHf = (window.config.nextHf.block - d.data.count) * 3
+                $('#nexthf-countdown').text(secondsToWords(secondsToHf))
+                intervals.push(setInterval(() => {
+                    secondsToHf -= 1
+                    $('#nexthf-countdown').text(secondsToWords(secondsToHf))
+                },1000))
+            })
+        }
     }
 
     async fetchMarketInfo() {

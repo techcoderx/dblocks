@@ -59,6 +59,14 @@ function roundDec(value = 0, decimals = 0) {
     return Math.round(value*Math.pow(10,decimals))/Math.pow(10,decimals)
 }
 
+function secondsToWords(value = 0) {
+    let d = Math.floor(value / 86400)
+    let h = Math.floor((value / 3600) - (d * 24))
+    let m = Math.floor((value / 60) - (d * 1440) - (h * 60))
+    let s = Math.floor(value - (d * 86400) - (h * 3600) - (m * 60))
+    return d+'d '+h+'h '+m+'m '+s+'s'
+}
+
 function testnetBadge() {
     if (window.config.isTestnet)
         $('#testnet-heading-badge').show()

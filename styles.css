@@ -55,6 +55,10 @@ a.nav-link {
     word-wrap: break-word;
 }
 
+#nexthf th {
+    width: 150px;
+}
+
 #acc-notfound, #acc-error, #acc-container, #acc-profile-hive, #acc-leader {
     display: none;
 }
