@@ -94,8 +94,7 @@ export default class extends view {
 
             // hardfork countdown
             axios.get(config.api+'/count').then((d) => {
-                // let secondsToHf = (window.config.nextHf.block - d.data.count) * 3
-                let secondsToHf = 70
+                let secondsToHf = (window.config.nextHf.block - d.data.count) * 3
                 $('#nexthf-countdown').text(secondsToWords(secondsToHf))
                 intervals.push(setInterval(() => {
                     if (secondsToHf > 0)
