@@ -64,7 +64,25 @@ function secondsToWords(value = 0) {
     let h = Math.floor((value / 3600) - (d * 24))
     let m = Math.floor((value / 60) - (d * 1440) - (h * 60))
     let s = Math.floor(value - (d * 86400) - (h * 3600) - (m * 60))
-    return d+'d '+h+'h '+m+'m '+s+'s'
+    let r = false
+    let result = ''
+    if (d) {
+        r = true
+        result += d+'d '
+    }
+    if (r || h) {
+        r = true
+        result += h+'h '
+    }
+    if (r || m) {
+        r = true
+        result += m+'m '
+    }
+    if (s >= 0)
+        result += s+'s'
+    else
+        result = '0s'
+    return result
 }
 
 function testnetBadge() {
