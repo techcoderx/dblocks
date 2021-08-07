@@ -291,21 +291,23 @@ function estimateBw(jsonFields) {
 
 function displayResult(tx) {
     $('#signer-result-json').html('')
-    let editor = new JSONEditor(document.getElementById('signer-result-json'),{
+    window.txeditor = new JSONEditor(document.getElementById('signer-result-json'),{
         mode: 'code',
         modes: ['code', 'text', 'tree', 'view'],
         ace: ace
     })
-    editor.set(tx)
+    window.txeditor.set(tx)
     $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-success','Success','Transaction signed successfully without broadcasting',5000))
     $('#signer-alert').toast('show')
     $('#signer-modal').modal('hide')
     $('#signer-result-area').show()
     $('#signer-result-broadcast').off('click')
-    $('#signer-result-broadcast').on('click',() => broadcastTransaction(tx))
+    $('#signer-result-broadcast').on('click',() => broadcastTransaction())
 }
 
 function broadcastTransaction(tx) {
+    if (!tx)
+        tx = window.txeditor.get()
     let suceed = false
     axios.post(config.api+'/transactWaitConfirm',tx,{
         'Accept': 'application/json, text/plain, */*',
