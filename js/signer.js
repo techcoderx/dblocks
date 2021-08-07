@@ -269,6 +269,8 @@ function constructRawTx(jsonFields) {
                 tx.data[f] = parseInt($('#signer-field-'+f).val())
                 break
             case 'array':
+                tx.data[f] = JSON.parse($('#signer-field-'+f).val())
+                break
             case 'json':
                 tx.data[f] = jsonFields[f].get()
                 break
