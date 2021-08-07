@@ -309,7 +309,7 @@ function broadcastTransaction(tx) {
     if (!tx)
         tx = window.txeditor.get()
     let suceed = false
-    axios.post(config.api+'/transactWaitConfirm',tx,{
+    axios.post(config.api+'/transact',tx,{
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
     }).then((r) => {
