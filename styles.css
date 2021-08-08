@@ -129,7 +129,7 @@ table tr th {
 #leader-table tbody tr td:nth-child(n+3) { text-align: right; }
 
 /* Account Pricing */
-.dblocks-accprice { max-width: 350px; }
+.dblocks-accprice { max-width: 700px; }
 .dblocks-accprice thead,
 .dblocks-accprice tbody tr th { text-align: center; }
 .dblocks-accprice tbody tr td { text-align: right; }
