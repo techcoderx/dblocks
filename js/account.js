@@ -33,6 +33,7 @@ export default class extends view {
                             <tr><th scope="row">Pending Rewards</th><td id="acc-meta-pending">Loading...</td></tr>
                             <tr><th scope="row">Claimable Rewards</th><td id="acc-meta-claimable">Loading...</td></tr>
                             <tr><th scope="row">Claimed Rewards</th><td id="acc-meta-claimed">Loading...</td></tr>
+                            <tr><th scope="row">Curation APR (30d)</th><td id="acc-meta-curation-apr-30d">Loading...</td></tr>
                         </table>
                         <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-dtube"><img src="icons/DTube_White.png">View channel on DTube</a>
                         <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-hive"><img src="icons/Hive_White.png">View blog on Hive</a>
@@ -138,6 +139,7 @@ export default class extends view {
             .catch(()=>
                 $('#acc-meta-claimed').text('Error'))
 
+            this.loadCurationApr('acc-meta-curation-apr-30d')
             this.updateAccount(acc.data)
             this.display()
             intervals.push(setInterval(()=>this.reloadAccount((newacc)=>this.updateAccount(newacc)),10000))
@@ -222,6 +224,33 @@ export default class extends view {
                 $('#acc-leader-ws').text('N/A')
         }
         addAnchorClickListener()
+    }
+
+    loadCurationApr(displayId = '', ts = 0, vt = 0, payout = 0, period = 2592000000) {
+        axios.get(config.api+'/votes/'+this.account+'/'+ts).then((v) => {
+            let i = 0
+            while (i < v.data.length && v.data[i].ts > new Date().getTime() - period) {
+                // only count non-self votes
+                if (v.data[i].author !== this.account) {
+                    vt += Math.abs(v.data[i].vt)
+                    payout += Math.floor(v.data[i].claimable)
+                }
+                i++
+            }
+            let lastVote = v.data[v.data.length-1]
+            if (lastVote.ts < new Date().getTime() - period || (lastVote.ts > ts && ts !== 0) || v.data.length < 50)
+                this.displayCurationApr(vt,payout,displayId)
+            else
+                this.loadCurationApr(displayId,lastVote.ts,vt,payout)
+        }).catch(() => $('#'+displayId).text('Error'))
+    }
+
+    displayCurationApr(vt = 0, payout = 0, displayId = '') {
+        console.log('totals',vt,payout)
+        if (vt === 0)
+            $('#'+displayId).text('0%')
+        else
+            $('#'+displayId).text(thousandSeperator(Math.abs(payout*365*24/vt).toFixed(2))+'%')
     }
 
     display() {
