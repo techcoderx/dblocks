@@ -105,6 +105,8 @@ export default class extends view {
                     hasClaims = true
                     break
                 }
+            // Display vote APR
+            $('#content-votes thead tr').append('<th scope="col">APR</th>')
             // Append to table
             for (let i = 0; i < content.data.votes.length; i++) {
                 votesHtml += '<tr><td>' + content.data.votes[i].u + '</td>'
@@ -125,6 +127,7 @@ export default class extends view {
                     votesHtml += '<td>' + new Date(content.data.votes[i].claimed).toLocaleString() + '</td>'
                 else if (hasClaims)
                     votesHtml += '<td></td>'
+                votesHtml += '<td>'+thousandSeperator(Math.abs(content.data.votes[i].claimable*365*24/content.data.votes[i].vt).toFixed(2))+'%</td>'
                 votesHtml += '</tr>'
             }
             $('#content-votes tbody').append(votesHtml)

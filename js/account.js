@@ -30,9 +30,9 @@ export default class extends view {
                             <tr><th scope="row">Voting Power</th><td id="acc-meta-vp"></td></tr>
                             <tr><th scope="row">Subscribers</th><td id="acc-meta-subs"></td></tr>
                             <tr><th scope="row">Subscribed To</th><td id="acc-meta-subbed"></td></tr>
-                            <tr><th scope="row">Pending Rewards</th><td id="acc-meta-pending"></td></tr>
-                            <tr><th scope="row">Claimable Rewards</th><td id="acc-meta-claimable"></td></tr>
-                            <tr><th scope="row">Claimed Rewards</th><td id="acc-meta-claimed"></td></tr>
+                            <tr><th scope="row">Pending Rewards</th><td id="acc-meta-pending">Loading...</td></tr>
+                            <tr><th scope="row">Claimable Rewards</th><td id="acc-meta-claimable">Loading...</td></tr>
+                            <tr><th scope="row">Claimed Rewards</th><td id="acc-meta-claimed">Loading...</td></tr>
                         </table>
                         <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-dtube"><img src="icons/DTube_White.png">View channel on DTube</a>
                         <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-hive"><img src="icons/Hive_White.png">View blog on Hive</a>
