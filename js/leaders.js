@@ -22,8 +22,9 @@ export default class extends view {
                         <th scope="col">Voters</th>
                         <th scope="col">Produced</th>
                         <th scope="col">Missed</th>
-                        <th scope="col">Subscribers</th>
-                        <th scope="col">Subscribed</th>
+                        <th scpoe="col">Performance</th>
+                        <th scope="col">Subs</th>
+                        <th scope="col">Subbed</th>
                     </tr></thead>
                     <tbody></tbody>
                 </table>
@@ -42,6 +43,7 @@ export default class extends view {
                 htmlresult += '<td>' + thousandSeperator(leaders.data[i].voters) + '</td>'
                 htmlresult += '<td>' + thousandSeperator(leaders.data[i].produced) + '</td>'
                 htmlresult += '<td>' + thousandSeperator(leaders.data[i].missed) + '</td>'
+                htmlresult += '<td>' + (leaders.data[i].produced+leaders.data[i].missed > 0 ? (Math.floor(leaders.data[i].produced/(leaders.data[i].produced+leaders.data[i].missed)*100000)/1000) + '%' : 'N/A') + '</td>'
                 htmlresult += '<td>' + thousandSeperator(leaders.data[i].subs) + '</td>'
                 htmlresult += '<td>' + thousandSeperator(leaders.data[i].subbed) + '</td>'
                 htmlresult += '</tr>'
