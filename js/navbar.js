@@ -85,6 +85,10 @@ function secondsToWords(value = 0) {
     return result
 }
 
+function sinceDays(ts = 0) {
+    return (new Date().getTime() - ts) / 86400000
+}
+
 function testnetBadge() {
     if (window.config.isTestnet)
         $('#testnet-heading-badge').show()

@@ -66,6 +66,7 @@ export default class extends view {
                                 <tr><th scope="row">Produced</th><td id="acc-leader-produced"></td></tr>
                                 <tr><th scope="row">Missed</th><td id="acc-leader-miss"></td></tr>
                                 <tr><th scope="row">Performance</th><td id="acc-leader-performance"></td></tr>
+                                <tr><th scope="row">Age</th><td id="acc-leader-age"></td></tr>
                             </tbody></table>
                         </div>
                         <h4>Leader Votes</h4>
@@ -321,6 +322,7 @@ export default class extends view {
             $('#acc-leader-produced').text(thousandSeperator(leader.data.produced))
             $('#acc-leader-miss').text(thousandSeperator(leader.data.missed))
             $('#acc-leader-performance').text(leader.data.produced+leader.data.missed > 0 ? (Math.floor(leader.data.produced/(leader.data.produced+leader.data.missed)*100000)/1000) + '%' : 'N/A')
+            $('#acc-leader-age').text(leader.data.sinceTs ? thousandSeperator(sinceDays(leader.data.sinceTs).toFixed(2)) + ' days' : 'N/A')
         }).catch(()=>{})
     }
 }
