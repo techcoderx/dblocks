@@ -20,7 +20,7 @@ export default class {
         let blockInterval = setInterval(() => {
             if (this.unparsedBlocks > 0 && !this.fetchingBlock) {
                 this.fetchingBlock = true
-                axios.get(config.api + '/block/' + (this.headBlock+1)).then((newBlock) => {
+                axios.get(config.api + '/block/' + this.headBlock).then((newBlock) => {
                     this.headBlock++
                     this.unparsedBlocks--
                     setTimeout(() => this.fetchingBlock = false,500)
