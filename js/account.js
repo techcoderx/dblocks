@@ -1,4 +1,5 @@
 import view from './view.js'
+import flairs from './accountFlairs.js'
 
 export default class extends view {
     constructor() {
@@ -110,6 +111,9 @@ export default class extends view {
                 $('#acc-profile-hive').show()
                 $('#acc-profile-hive').attr('href','https://peakd.com/@' + acc.data.json.profile.hive)
             }
+
+            if (flairs[this.account])
+                $('#acc-name').html($('#acc-name').html()+' <span class="badge badge-secondary">'+flairs[this.account]+'</span>')
 
             let accCreatedStr = 'Created by '
             if (acc.data.created) {
@@ -278,7 +282,9 @@ export default class extends view {
 
     formatPubKeys(key) {
         let result = '<strong>Public Key: </strong>' + key.pub + '<br><br><strong>Weight: </strong>' + (key.weight || 1) + '<br><br><strong>Permissions: </strong>'
-        if (key.types.length == 0)
+        if (key.pub === '222222222222222222222222222222222222222222222')
+            result += 'NONE'
+        else if (key.types.length == 0)
             result += 'ALL'
         else {
             let typesStringArr = []
