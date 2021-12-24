@@ -79,7 +79,7 @@ export default class extends view {
                     $('#blk-txs-heading').text(blk.data.txs.length + ' transactions in this block')
                 else
                     $('#blk-txs-heading').text('1 transaction in this block')
-                $('#blk-txs').append(txCardsHtml([blk.data]))
+                $('#blk-txs').append(txCardsHtml(blk.data.txs))
             }
     
             addAnchorClickListener()

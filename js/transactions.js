@@ -20,7 +20,9 @@ const TransactionTypes = {
     19: 'TIPPED_VOTE',
     20: 'NEW_WEIGHTED_KEY',
     21: 'SET_SIG_THRESHOLD',
-    22: 'SET_PASSWORD_WEIGHT'
+    22: 'SET_PASSWORD_WEIGHT',
+    23: 'UNSET_SIG_THRESHOLD',
+    24: 'NEW_ACCOUNT_WITH_BW'
 }
 
 const TransactionFields = {
@@ -45,18 +47,19 @@ const TransactionFields = {
     19: { link: 'string', author: 'accountName', vt: 'integer', tag: 'string', tip: 'integer' },
     20: { id: 'string', pub: 'publicKey', types: 'array', weight: 'integer' },
     21: { thresholds: 'json' },
-    22: { weight: 'integer' }
+    22: { weight: 'integer' },
+    23: { types: 'array' },
+    24: { name: 'accountName', pub: 'publicKey', bw: 'integer' }
 }
 
-function txCardsHtml(blocks) {
+function txCardsHtml(txs = []) {
     let result = ''
-    for (let i = 0; i < blocks.length; i++)
-        for (let j = 0; j < blocks[i].txs.length; j++) {
-            result += '<div class="card dblocks-card"><p class="dblocks-card-content">' + DOMPurify.sanitize(txToHtml(blocks[i].txs[j]))
-            result += ' <a href="#/tx/' + blocks[i].txs[j].hash + '" class="badge badge-pill badge-secondary">'
-            result += blocks[i].txs[j].hash.substr(0,6)
-            result += '</a></p></div>'
-        }
+    for (let j = 0; j < txs.length; j++) {
+        result += '<div class="card dblocks-card"><p class="dblocks-card-content">' + DOMPurify.sanitize(txToHtml(txs[j]))
+        result += ' <a href="#/tx/' + txs[j].hash + '" class="badge badge-pill badge-secondary">'
+        result += txs[j].hash.substr(0,6)
+        result += '</a></p></div>'
+    }
     return result
 }
 
@@ -134,6 +137,10 @@ function txToHtml(tx) {
             return result + ' set signature thresholds'
         case 22:
             return result + ' set master key weight to ' + tx.data.weight
+        case 23:
+            return result + ' unset signature thresholds'
+        case 24:
+            return result + ' created new account ' + aUser(tx.data.name) + ' with ' + thousandSeperator(tx.data.bw) + ' bytes'
         default:
             return 'Unknown transaction type ' + tx.type
     }
