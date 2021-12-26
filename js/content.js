@@ -120,7 +120,7 @@ export default class extends view {
                 else
                     votesHtml += '<td></td>'
                 if (content.data.votes[i].tip)
-                    votesHtml += '<td>' + (content.data.votes[i].tip * 100) + '%</td>'
+                    votesHtml += '<td>' + Math.round(content.data.votes[i].tip * 100) + '%</td>'
                 else if (hasAuthorTips)
                     votesHtml += '<td></td>'
                 if (content.data.votes[i].claimed)
