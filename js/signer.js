@@ -263,7 +263,10 @@ function constructRawTx(jsonFields) {
             case 'accountName':
             case 'publicKey':
             case 'string':
-                tx.data[f] = $('#signer-field-'+f).val()
+                if ((f === 'pa' || f === 'pp') && !$('#signer-field-'+f).val())
+                    tx.data[f] = null
+                else
+                    tx.data[f] = $('#signer-field-'+f).val()
                 break
             case 'integer':
                 tx.data[f] = parseInt($('#signer-field-'+f).val())
