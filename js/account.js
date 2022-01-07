@@ -5,7 +5,7 @@ export default class extends view {
     constructor() {
         super()
         this.url = new URL(window.location.href)
-        this.account = window.location.hash.split('/')[1].substr(1)
+        this.account = window.location.hash.split('/')[1].slice(1).toLowerCase()
         this.accountlastupdate = 0
         this.accountdata = null
         this.accountnotfound = false
