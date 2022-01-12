@@ -44,7 +44,7 @@ export default class extends view {
         for (let i in TransactionTypes)
             $('#signer-txtype').append($('<option>', {
                 value: i,
-                text: TransactionTypes[i]
+                text: TransactionTypes[i].name
             }))
         
         // Render appropriate fields
@@ -55,11 +55,11 @@ export default class extends view {
         if (routeSplit.length === 3 && routeSplit[2]) {
             let params = new URL('https://example.com/'+routeSplit[2]).searchParams
             let txtype = parseInt(params.get('type'))
-            if (!TransactionFields[txtype]) return
+            if (!TransactionTypes[txtype].fields) return
             $('#signer-txtype').val(params.get('type'))
             this.renderFields()
-            for (let f in TransactionFields[txtype]) if (params.get(f)) {
-                switch (TransactionFields[txtype][f]) {
+            for (let f in TransactionTypes[txtype].fields) if (params.get(f)) {
+                switch (TransactionTypes[txtype].fields[f]) {
                     case 'accountName':
                     case 'publicKey':
                     case 'string':
@@ -83,8 +83,6 @@ export default class extends view {
                 $('#signer-broadcast-checkbox').prop('checked',true)
                 $('#signer-signbtn').text('Sign and Broadcast')
             }
-            if (params.get('legacysig') === '1' || params.get('legacysig') === 'true')
-                $('#signer-legacysig-checkbox').prop('checked',true)
         }
     }
 
@@ -95,9 +93,9 @@ export default class extends view {
         if (txtype === -1) {
             return $('#signer-fields').html('')
         }
-        for (let f in TransactionFields[txtype]) {
-            htmlFields += `<div class="form-group"><label for="signer-field-${f}">${f} (${TransactionFields[txtype][f]})</label>`
-            switch (TransactionFields[txtype][f]) {
+        for (let f in TransactionTypes[txtype].fields) {
+            htmlFields += `<div class="form-group"><label for="signer-field-${f}">${f} (${TransactionTypes[txtype].fields[f]})</label>`
+            switch (TransactionTypes[txtype].fields[f]) {
                 case 'accountName':
                 case 'publicKey':
                 case 'string':
@@ -125,10 +123,6 @@ export default class extends view {
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="signer-ts-checkbox" checked>
                 <label class="form-check-label" for="signer-ts-checkbox">Use current timestamp</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="signer-legacysig-checkbox">
-                <label class="form-check-label" for="signer-legacysig-checkbox">Use legacy signature format (pre-HF4)</label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="signer-broadcast-checkbox">
@@ -216,7 +210,7 @@ export default class extends view {
                             return $('#signer-alert').toast('show')
                         }
                         let sig = cg.Signature.fromString(result.result).toAvalonSignature()
-                        tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
+                        tx.signature = [sig]
                         if ($('#signer-broadcast-checkbox').prop('checked'))
                             broadcastTransaction(tx)
                         else
@@ -228,7 +222,7 @@ export default class extends view {
                     let hash = cg.sha256(stringified)
                     tx.hash = hash.toString('hex')
                     let sig = cg.Signature.avalonCreate(hash,$('#signer-pk').val()).toAvalonSignature()
-                    tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
+                    tx.signature = [sig]
                     if ($('#signer-broadcast-checkbox').prop('checked'))
                         broadcastTransaction(tx)
                     else
@@ -258,8 +252,8 @@ function constructRawTx(jsonFields) {
         sender: $('#signer-sender').val(),
         ts: $('#signer-ts-checkbox').prop('checked') ? new Date().getTime() : parseInt($('#signer-ts').val())
     }
-    for (let f in TransactionFields[txtype]) {
-        switch (TransactionFields[txtype][f]) {
+    for (let f in TransactionTypes[txtype].fields) {
+        switch (TransactionTypes[txtype].fields[f]) {
             case 'accountName':
             case 'publicKey':
             case 'string':
@@ -288,7 +282,7 @@ function estimateBw(jsonFields) {
     let tx = constructRawTx(jsonFields)
     let sig = ['2rCqhdenmJZd8PNouxqDj8GE7nwkAAfEiju1a1QMesbPxXnCjQr2SE7mP7GMymFRHZP6qiEbTkB6jfW2sSndxS3F',1]
     tx.hash = '941c51b1eb53f1d1e36dd06dd13335286b68779a17c2ccd24b51e63a42c411ad'
-    tx.signature = $('#signer-legacysig-checkbox').prop('checked') ? sig[0] : [sig]
+    tx.signature = [sig]
     return JSON.stringify(tx).length
 }
 

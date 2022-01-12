@@ -1,55 +1,200 @@
 const TransactionTypes = {
-    0: 'NEW_ACCOUNT',
-    1: 'APPROVE_NODE_OWNER',
-    2: 'DISAPPROVE_NODE_OWNER',
-    3: 'TRANSFER',
-    4: 'COMMENT',
-    5: 'VOTE',
-    6: 'USER_JSON',
-    7: 'FOLLOW',
-    8: 'UNFOLLOW',
-    10: 'NEW_KEY',
-    11: 'REMOVE_KEY',
-    12: 'CHANGE_PASSWORD',
-    13: 'PROMOTED_COMMENT',
-    14: 'TRANSFER_VT',
-    15: 'TRANSFER_BW',
-    16: 'LIMIT_VT',
-    17: 'CLAIM_REWARD',
-    18: 'ENABLE_NODE',
-    19: 'TIPPED_VOTE',
-    20: 'NEW_WEIGHTED_KEY',
-    21: 'SET_SIG_THRESHOLD',
-    22: 'SET_PASSWORD_WEIGHT',
-    23: 'UNSET_SIG_THRESHOLD',
-    24: 'NEW_ACCOUNT_WITH_BW'
-}
-
-const TransactionFields = {
-    0: { name: 'accountName', pub: 'publicKey' },
-    1: { target: 'accountName' },
-    2: { target: 'accountName' },
-    3: { receiver: 'accountName', amount: 'integer', memo: 'string' },
-    4: { link: 'string', pa: 'accountName', pp: 'string', json: 'json', vt: 'integer', tag: 'string' },
-    5: { link: 'string', author: 'accountName', vt: 'integer', tag: 'string' },
-    6: { json: 'json' },
-    7: { target: 'accountName' },
-    8: { target: 'accountName' },
-    10: { id: 'string', pub: 'publicKey', types: 'array' },
-    11: { id: 'string' },
-    12: { pub: 'publicKey' },
-    13: { link: 'string', pa: 'accountName', pp: 'string', json: 'json', vt: 'integer', tag: 'string', burn: 'integer' },
-    14: { receiver: 'accountName', amount: 'integer' },
-    15: { receiver: 'accountName', amount: 'integer' },
-    16: { amount: 'integer' },
-    17: { link: 'string', author: 'accountName' },
-    18: { pub: 'publicKey' },
-    19: { link: 'string', author: 'accountName', vt: 'integer', tag: 'string', tip: 'integer' },
-    20: { id: 'string', pub: 'publicKey', types: 'array', weight: 'integer' },
-    21: { thresholds: 'json' },
-    22: { weight: 'integer' },
-    23: { types: 'array' },
-    24: { name: 'accountName', pub: 'publicKey', bw: 'integer' }
+    0: {
+        name: 'NEW_ACCOUNT',
+        fields: {
+            name: 'accountName',
+            pub: 'publicKey'
+        }
+    },
+    1: {
+        name: 'APPROVE_NODE_OWNER',
+        fields: {
+            target: 'accountName'
+        }
+    },
+    2: {
+        name: 'DISAPPROVE_NODE_OWNER',
+        fields: {
+            target: 'accountName'
+        }
+    },
+    3: {
+        name: 'TRANSFER',
+        fields: {
+            receiver: 'accountName',
+            amount: 'integer',
+            memo: 'string'
+        }
+    },
+    4: {
+        name: 'COMMENT',
+        fields: {
+            link: 'string',
+            pa: 'accountName',
+            pp: 'string',
+            json: 'json',
+            vt: 'integer',
+            tag: 'string'
+        }
+    },
+    5: {
+        name: 'VOTE',
+        fields: {
+            link: 'string',
+            author: 'accountName',
+            vt: 'integer',
+            tag: 'string'
+        }
+    },
+    6: {
+        name: 'USER_JSON',
+        fields: {
+            json: 'json'
+        }
+    },
+    7: {
+        name: 'FOLLOW',
+        fields: {
+            target: 'accountName'
+        }
+    },
+    8: {
+        name: 'UNFOLLOW',
+        fields: {
+            target: 'accountName'
+        }
+    },
+    10: {
+        name: 'NEW_KEY',
+        fields: {
+            id: 'string',
+            pub: 'publicKey',
+            types: 'array'
+        }
+    },
+    11: {
+        name: 'REMOVE_KEY',
+        fields: {
+            id: 'string'
+        }
+    },
+    12: {
+        name: 'CHANGE_PASSWORD',
+        fields: {
+            pub: 'publicKey'
+        }
+    },
+    13: {
+        name: 'PROMOTED_COMMENT',
+        fields: {
+            link: 'string', 
+            pa: 'accountName', 
+            pp: 'string', 
+            json: 'json', 
+            vt: 'integer', 
+            tag: 'string', 
+            burn: 'integer'
+        }
+    },
+    14: {
+        name: 'TRANSFER_VT',
+        fields: {
+            receiver: 'accountName',
+            amount: 'integer'
+        }
+    },
+    15: {
+        name: 'TRANSFER_BW',
+        fields: {
+            receiver: 'accountName',
+            amount: 'integer'
+        }
+    },
+    16: {
+        name: 'LIMIT_VT',
+        fields: {
+            amount: 'integer'
+        }
+    },
+    17: {
+        name: 'CLAIM_REWARD',
+        fields: {
+            link: 'string',
+            author: 'accountName'
+        }
+    },
+    18: {
+        name: 'ENABLE_NODE',
+        fields: {
+            pub: 'publicKey'
+        }
+    },
+    19: {
+        name: 'TIPPED_VOTE',
+        fields: {
+            link: 'string',
+            author: 'accountName',
+            vt: 'integer',
+            tag: 'string',
+            tip: 'integer'
+        }
+    },
+    20: {
+        name: 'NEW_WEIGHTED_KEY',
+        fields: {
+            id: 'string',
+            pub: 'publicKey',
+            types: 'array',
+            weight: 'integer'
+        }
+    },
+    21: {
+        name: 'SET_SIG_THRESHOLD',
+        fields: {
+            thresholds: 'json'
+        }
+    },
+    22: {
+        name: 'SET_PASSWORD_WEIGHT',
+        fields: {
+            weight: 'integer'
+        }
+    },
+    23: {
+        name: 'UNSET_SIG_THRESHOLD',
+        fields: {
+            types: 'array'
+        }
+    },
+    24: {
+        name: 'NEW_ACCOUNT_WITH_BW',
+        fields: {
+            name: 'accountName',
+            pub: 'publicKey',
+            bw: 'integer'
+        }
+    },
+    25: {
+        name: 'PLAYLIST_JSON',
+        fields: {
+            link: 'string',
+            json: 'json'
+        }
+    },
+    26: {
+        name: 'PLAYLIST_PUSH',
+        fields: {
+            link: 'string',
+            seq: 'json'
+        }
+    },
+    27: {
+        name: 'PLAYLIST_POP',
+        fields: {
+            link: 'string',
+            seq: 'array'
+        }
+    }
 }
 
 function txCardsHtml(txs = []) {
@@ -141,6 +286,12 @@ function txToHtml(tx) {
             return result + ' unset signature thresholds'
         case 24:
             return result + ' created new account ' + aUser(tx.data.name) + ' with ' + thousandSeperator(tx.data.bw) + ' bytes'
+        case 25:
+            return result + ' set playlist metadata for ' + aPlaylist(tx.sender + '/' + tx.data.link)
+        case 26:
+            return result + ' pushed '+Object.keys(tx.data.seq)+' contents to playlist ' + aPlaylist(tx.sender + '/' + tx.data.link)
+        case 27:
+            return result + ' popped '+tx.data.seq.length+' contents from playlist ' + aPlaylist(tx.sender + '/' + tx.data.link)
         default:
             return 'Unknown transaction type ' + tx.type
     }
@@ -152,4 +303,8 @@ function aUser(user) {
 
 function aContent(content) {
     return '<a href="#/content/'+content+'">@'+content+'</a>'
+}
+
+function aPlaylist(playlist) {
+    return '<a href="#/playlist/'+playlist+'">@'+playlist+'</a>'
 }

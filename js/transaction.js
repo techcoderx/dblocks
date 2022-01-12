@@ -45,7 +45,7 @@ export default class extends view {
             $('#txn-size').text('Size: ' + thousandSeperator(this.getTransactionSize(txn.data)) + ' bytes')
             $('#txn-card').html('<p class="dblocks-card-content">'+txToHtml(txn.data)+'</p>')
             $('#txn-det-type').text(txn.data.type)
-            $('#txn-det-type').append(' <span class="badge badge-pill badge-info">' + TransactionTypes[txn.data.type] + '</span>')
+            $('#txn-det-type').append(' <span class="badge badge-pill badge-info">' + TransactionTypes[txn.data.type].name + '</span>')
             $('#txn-det-sender').text(txn.data.sender)
             $('#txn-det-ts').text(txn.data.ts)
             $('#txn-det-ts').append(' <span class="badge badge-pill badge-info">' + new Date(txn.data.ts).toLocaleString() + '</span>')

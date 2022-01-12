@@ -289,7 +289,7 @@ export default class extends view {
         else {
             let typesStringArr = []
             for (let i = 0; i < key.types.length; i++) {
-                typesStringArr.push(TransactionTypes[key.types[i]])
+                typesStringArr.push(TransactionTypes[key.types[i]].name)
             }
             result += typesStringArr.join(', ')
         }
@@ -307,7 +307,7 @@ export default class extends view {
             result += '<tr><th scope="row">Default</th><td>1</td></tr>'
         
         for (let t in thresholds) if (t !== 'default')
-            result += '<tr><th scope="row"><span class="badge badge-pill badge-info">' + TransactionTypes[t] + '</span></th><td>' + thresholds[t] + '</td></tr>'
+            result += '<tr><th scope="row"><span class="badge badge-pill badge-info">' + TransactionTypes[t].name + '</span></th><td>' + thresholds[t] + '</td></tr>'
         return result
     }
 

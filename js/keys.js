@@ -120,7 +120,7 @@ export default class extends view {
         // key authorities
         let authorityBodyHtml = ''
         for (let i in TransactionTypes)
-            authorityBodyHtml += '<tr><th scope="row">'+i+'</th><td><span class="badge badge-pill badge-info">'+TransactionTypes[i]+'</span></td></tr>'
+            authorityBodyHtml += '<tr><th scope="row">'+i+'</th><td><span class="badge badge-pill badge-info">'+TransactionTypes[i].name+'</span></td></tr>'
         $('#key-authority-tbody').html(authorityBodyHtml)
 
         // bip39 keypair generator
