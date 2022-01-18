@@ -11,6 +11,7 @@ import keys from './keys.js'
 import signer from './signer.js'
 import notfound from './404.js'
 import memo from './memo.js'
+import rewards from './rewards.js'
 
 // Live update intervals (e.g. block streams)
 window.intervals = []
@@ -35,6 +36,7 @@ window.router = () => {
         { path: '/signer', view: signer },
         { path: '/signer/:q', view: signer, params: 1 },
         { path: '/memo', view: memo },
+        { path: '/rewards', view: rewards },
         { path: '/404', view: notfound }
     ]
 
