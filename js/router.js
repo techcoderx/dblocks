@@ -3,6 +3,7 @@ import block from './block.js'
 import transaction from './transaction.js'
 import account from './account.js'
 import content from './content.js'
+import playlist from './playlist.js'
 import leaders from './leaders.js'
 import accountprice from './accountprice.js'
 import richlist from './richlist.js'
@@ -27,6 +28,7 @@ window.router = () => {
         { path: '/@:account', view: account, params: 1 },
         { path: '/@:account/:page', view: account, params: 2 },
         { path: '/content/:author/:link', view: content, params: 2 },
+        { path: '/playlist/:author/:link', view: playlist, params: 2 },
         { path: '/leaders', view: leaders },
         { path: '/accountprice', view: accountprice },
         { path: '/richlist', view: richlist },

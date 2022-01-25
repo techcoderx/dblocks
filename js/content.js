@@ -4,7 +4,7 @@ export default class extends view {
     constructor() {
         super()
         this.setTitle('Content')
-        this.contentId = window.location.hash.substr(10)
+        this.contentId = window.location.hash.substring(10)
     }
 
     getHtml() {

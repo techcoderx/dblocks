@@ -288,7 +288,7 @@ export default class extends view {
             result += 'ALL'
         else {
             let typesStringArr = []
-            for (let i = 0; i < key.types.length; i++) {
+            for (let i = 0; i < key.types.length; i++) if (TransactionTypes[key.types[i]]) {
                 typesStringArr.push(TransactionTypes[key.types[i]].name)
             }
             result += typesStringArr.join(', ')

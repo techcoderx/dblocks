@@ -124,6 +124,10 @@ table tr th {
 #content-votes tbody tr td:nth-child(3),
 #content-votes tbody tr td:nth-child(4) { text-align: right; }
 
+/* Playlists */
+#playlist-error, #playlist-notfound, #playlist-container,
+.playlist-parent, #playlist-comments { display: none; }
+
 /* Leaders */
 #leader-error, #leader-container { display: none; }
 #leader-table thead { text-align: center; }

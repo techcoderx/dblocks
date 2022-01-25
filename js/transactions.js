@@ -289,7 +289,7 @@ function txToHtml(tx) {
         case 25:
             return result + ' set playlist metadata for ' + aPlaylist(tx.sender + '/' + tx.data.link)
         case 26:
-            return result + ' pushed '+Object.keys(tx.data.seq)+' contents to playlist ' + aPlaylist(tx.sender + '/' + tx.data.link)
+            return result + ' pushed '+Object.keys(tx.data.seq).length+' contents to playlist ' + aPlaylist(tx.sender + '/' + tx.data.link)
         case 27:
             return result + ' popped '+tx.data.seq.length+' contents from playlist ' + aPlaylist(tx.sender + '/' + tx.data.link)
         default:
