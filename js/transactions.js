@@ -194,6 +194,13 @@ const TransactionTypes = {
             link: 'string',
             seq: 'array'
         }
+    },
+    28: {
+        name: 'COMMENT_EDIT',
+        fields: {
+            link: 'string',
+            json: 'json'
+        }
     }
 }
 
@@ -292,6 +299,8 @@ function txToHtml(tx) {
             return result + ' pushed '+Object.keys(tx.data.seq).length+' contents to playlist ' + aPlaylist(tx.sender + '/' + tx.data.link)
         case 27:
             return result + ' popped '+tx.data.seq.length+' contents from playlist ' + aPlaylist(tx.sender + '/' + tx.data.link)
+        case 28:
+            return result + ' edited '+aContent(tx.sender+'/'+tx.data.link)
         default:
             return 'Unknown transaction type ' + tx.type
     }
