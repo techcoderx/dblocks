@@ -54,6 +54,11 @@ export default class extends view {
                             </div>
                             </div>
                         </div>
+                        <div id="acc-auths-section">
+                            <br>
+                            <h4>Account Auths</h4>
+                            <div class="accordion" id="acc-auth"></div>
+                        </div>
                         <br>
                         <h4>Signature Thresholds</h4>
                         <table class="table table-sm dblocks-acc-det-table"><tbody id="acc-thresholds"></tbody></table>
@@ -106,6 +111,11 @@ export default class extends view {
             }))
             $('#acc-customkey').append(this.customKeyHtml(acc.data.keys))
             $('#acc-profile-dtube').attr('href','https://d.tube/#!/c/' + acc.data.name)
+
+            if (acc.data.auths && acc.data.auths.length > 0) {
+                $('#acc-auth').append(this.accountAuthsHtml(acc.data.auths))
+                $('#acc-auths-section').show()
+            }
 
             if (acc.data.json && acc.data.json.profile && acc.data.json.profile.hive) {
                 $('#acc-profile-hive').show()
@@ -281,7 +291,7 @@ export default class extends view {
     }
 
     formatPubKeys(key) {
-        let result = '<strong>Public Key: </strong>' + key.pub + '<br><br><strong>Weight: </strong>' + (key.weight || 1) + '<br><br><strong>Permissions: </strong>'
+        let result = '<p><strong>Public Key: </strong>' + key.pub + '</p><p><strong>Weight: </strong>' + (key.weight || 1) + '</p><p><strong>Permissions: </strong>'
         if (key.pub === '222222222222222222222222222222222222222222222')
             result += 'NONE'
         else if (key.types.length == 0)
@@ -293,6 +303,29 @@ export default class extends view {
             }
             result += typesStringArr.join(', ')
         }
+        result += '</p>'
+        return result
+    }
+
+    accountAuthsHtml(auths) {
+        let result = ''
+        for (let i in auths) {
+            let sanitizedId = DOMPurify.sanitize(auths[i].id)
+            result += '<div class="card"><div class="card-header" id="acc-auth-card-' + i + '">'
+            result += '<h5 class="mb-0"><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#acc-auth-collapse-' + i + '" aria-expanded="true" aria-controls="acc-auth-collapse-' + i + '">' + auths[i].user+'/'+sanitizedId + '</button></h5></div>'
+            result += '<div id="acc-auth-collapse-' + i + '" class="collapse" aria-labelledby="acc-auth-card-' + i + '" data-parent="#acc-auth">'
+            result += '<div class="card-body">' + this.formatAuths(auths[i]) + '</div></div></div>'
+        }
+        return result
+    }
+
+    formatAuths(auth) {
+        let result = '<p><strong>Username: </strong>' + auth.user + '</p><p><strong>Authorized Key ID: </strong>' + auth.id + '</p><p><strong>Weight: </strong>' + auth.weight + '</p><p><strong>Permissions: </strong>'
+        let typesStringArr = []
+        for (let i = 0; i < auth.types.length; i++) if (TransactionTypes[auth.types[i]])
+            typesStringArr.push(TransactionTypes[auth.types[i]].name)
+        result += typesStringArr.join(', ')
+        result += '</p>'
         return result
     }
 

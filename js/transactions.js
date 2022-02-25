@@ -201,6 +201,22 @@ const TransactionTypes = {
             link: 'string',
             json: 'json'
         }
+    },
+    29: {
+        name: 'ACCOUNT_AUTHORIZE',
+        fields: {
+            user: 'accountName',
+            id: 'string',
+            types: 'array',
+            weight: 'integer'
+        }
+    },
+    30: {
+        name: 'ACCOUNT_REVOKE',
+        fields: {
+            user: 'accountName',
+            id: 'string'
+        }
     }
 }
 
@@ -301,6 +317,10 @@ function txToHtml(tx) {
             return result + ' popped '+tx.data.seq.length+' contents from playlist ' + aPlaylist(tx.sender + '/' + tx.data.link)
         case 28:
             return result + ' edited '+aContent(tx.sender+'/'+tx.data.link)
+        case 29:
+            return result + ' authorized '+aUser(tx.data.user)+' for '+tx.data.types.length+' tx types with id '+tx.data.id+' and weight '+tx.data.weight
+        case 30:
+            return result + ' revoked '+aUser(tx.data.user)+' with id '+tx.data.id
         default:
             return 'Unknown transaction type ' + tx.type
     }

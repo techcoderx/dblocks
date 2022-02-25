@@ -59,7 +59,7 @@ a.nav-link {
     width: 150px;
 }
 
-#acc-notfound, #acc-error, #acc-container, #acc-profile-hive, #acc-leader {
+#acc-notfound, #acc-error, #acc-container, #acc-profile-hive, #acc-leader, #acc-auths-section {
     display: none;
 }
 
@@ -96,6 +96,11 @@ a.nav-link {
 
 #acc-leader table tr th {
     min-width: 100px;
+}
+
+#acc-customkey p,
+#acc-auth p {
+    margin-block-end: 0.5em;
 }
 
 table tr th {
