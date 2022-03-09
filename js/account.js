@@ -257,7 +257,7 @@ export default class extends view {
             if (lastVote.ts < new Date().getTime() - period || (lastVote.ts > ts && ts !== 0) || v.data.length < 50)
                 this.displayCurationApr(vt,payout,displayId)
             else
-                this.loadCurationApr(displayId,lastVote.ts,vt,payout)
+                this.loadCurationApr(displayId,lastVote.contentTs,vt,payout)
         }).catch(() => $('#'+displayId).text('Error'))
     }
 
