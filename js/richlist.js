@@ -74,14 +74,17 @@ export default class extends view {
             let totalAccounts = 0
 
             // first loop to tally up total balance and accounts
-            for (let i = 0; i < dist.data.length; i++) {
+            for (let i = 0; i < dist.data.length; i++) if (dist.data[i]) {
                 totalBalance += dist.data[i].sum
                 totalAccounts += dist.data[i].count
             }
 
             // second loop to display them
             for (let i = 0; i < dist.data.length; i++)
-                $('#distribution-'+i).append('<td>'+thousandSeperator(dist.data[i].count)+'</td><td>'+roundDec(dist.data[i].count/totalAccounts*100,2)+'%</td><td>'+thousandSeperator(dist.data[i].sum/100)+' DTUBE</td><td>'+roundDec(dist.data[i].sum/totalBalance*100,2)+'%</td>')
+                if (dist.data[i])
+                    $('#distribution-'+i).append('<td>'+thousandSeperator(dist.data[i].count)+'</td><td>'+roundDec(dist.data[i].count/totalAccounts*100,2)+'%</td><td>'+thousandSeperator(dist.data[i].sum/100)+' DTUBE</td><td>'+roundDec(dist.data[i].sum/totalBalance*100,2)+'%</td>')
+                else
+                    $('#distribution-'+i).append('<td>0</td><td>0%</td><td>0 DTUBE</td><td>0%</td>')
             $('#distribution-total').append('<td><strong>'+thousandSeperator(totalAccounts)+'</strong></td><td><strong>100%</strong></td><td><strong>'+thousandSeperator(totalBalance/100)+' DTUBE</strong></td><td><strong>100%</strong></td>')
 
             this.distLoaded = true
