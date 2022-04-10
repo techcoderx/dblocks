@@ -185,7 +185,7 @@ const TransactionTypes = {
         name: 'PLAYLIST_PUSH',
         fields: {
             link: 'string',
-            seq: 'json'
+            seq: 'array'
         }
     },
     27: {
