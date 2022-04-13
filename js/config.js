@@ -1,5 +1,5 @@
 window.config = {
-    api: 'https://avalon.oneloved.tube',
+    api: 'https://api.avalonblocks.com',
     isTestnet: false,
     // nextHf: {
     //     version: '1.5',
