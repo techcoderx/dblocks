@@ -14,12 +14,15 @@ export default class extends view {
             ${this.notFoundHtml('blk','Block')}
             <div id="blk-container">
                 <div class="row blk-head">
-                    <h2 class="col-12 col-sm-9" id="blk-num"></h2>
+                    <div class="col-12 col-sm-9">
+                        <h2 id="blk-num"></h2>
+                        <p class="lead" id="blk-size"></p>
+                    </div>
                     <div class="col-12 col-sm-3"><div class="btn-group blk-btn-prevnext" role="group">
                         <a type="button" class="btn btn-outline-secondary" id="blk-btn-prev">Previous</a>
                         <a type="button" class="btn btn-outline-secondary" id="blk-btn-next">Next</a>
                     </div></div>
-                </div><br>
+                </div>
                 <table class="table table-sm">
                     <tr><th scope="row">phash</th><td id="blk-det-phash"></td></tr>
                     <tr><th scope="row">timestamp</th><td id="blk-det-ts"></td></tr>
@@ -46,6 +49,7 @@ export default class extends view {
         }
         axios.get(config.api + '/block/' + this.blockNum).then((blk) => {
             $('#blk-num').text('Block #'+thousandSeperator(this.blockNum))
+            $('#blk-size').text('Block Size: '+thousandSeperator(JSON.stringify(blk.data).length)+' bytes')
             $('#blk-det-phash').text(blk.data.phash)
             $('#blk-det-ts').text(blk.data.timestamp)
             $('#blk-det-ts').append(' <span class="badge badge-pill badge-info">' + new Date(blk.data.timestamp).toLocaleString() + '</span>')

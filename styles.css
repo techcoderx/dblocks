@@ -109,7 +109,7 @@ table tr th {
 
 /* Block details */
 #blk-notfound, #blk-error, #blk-container { display: none; }
-.blk-head { width: 100%; }
+.blk-head { width: 100%; margin-bottom: 10px; }
 .blk-btn-prevnext { float: right; }
 
 /* Txn details */
