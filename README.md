@@ -15,4 +15,4 @@ http-server
 
 ## Using your own Avalon API
 
-To use your own Avalon API node instead of the default `avalon.oneloved.tube`, replace the API node in [config.js](https://github.com/techcoderx/dblocks/blob/main/js/config.js). Indicate if the API node points to a testnet in `config.isTestnet`.
+To use your own Avalon API node instead of the default `api.avalonblocks.com`, replace the API node in [config.js](https://github.com/techcoderx/dblocks/blob/main/js/config.js). Indicate if the API node points to a testnet in `config.isTestnet`.
