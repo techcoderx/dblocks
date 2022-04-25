@@ -103,9 +103,20 @@ export default class extends view {
                     // Text field
                     htmlFields += `<input class="form-control" id="signer-field-${f}">`
                     break
+                case 'long string':
+                    htmlFields += `<textarea class="form-control" id="signer-field-${f}" rows="3"></textarea>`
+                    break
                 case 'integer':
                     // Number field
                     htmlFields += `<input class="form-control" id="signer-field-${f}" type="number">`
+                    break
+                case 'boolean':
+                    // Boolean
+                    htmlFields += 
+                        `<div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="signer-field-${f}">
+                            <label class="custom-control-label" for="signer-field-${f}"></label>
+                        </div>`
                     break
                 case 'json':
                     // JSON builder
@@ -257,6 +268,7 @@ function constructRawTx(jsonFields) {
             case 'accountName':
             case 'publicKey':
             case 'string':
+            case 'long string':
                 if ((f === 'pa' || f === 'pp') && !$('#signer-field-'+f).val())
                     tx.data[f] = null
                 else
@@ -267,6 +279,9 @@ function constructRawTx(jsonFields) {
                 break
             case 'array':
                 tx.data[f] = JSON.parse($('#signer-field-'+f).val())
+                break
+            case 'boolean':
+                tx.data[f] = $('#signer-field-'+f).prop('checked')
                 break
             case 'json':
                 tx.data[f] = jsonFields[f].get()

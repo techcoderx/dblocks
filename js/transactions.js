@@ -217,6 +217,63 @@ const TransactionTypes = {
             user: 'accountName',
             id: 'string'
         }
+    },
+    31: {
+        name: 'FUND_REQUEST_CREATE',
+        fields: {
+            title: 'string',
+            description: 'long string',
+            url: 'string',
+            requested: 'integer',
+            receiver: 'accountName'
+        }
+    },
+    32: {
+        name: 'FUND_REQUEST_CONTRIB',
+        fields: {
+            id: 'integer',
+            amount: 'integer'
+        }
+    },
+    33: {
+        name: 'FUND_REQUEST_WORK',
+        fields: {
+            id: 'integer',
+            work: 'json'
+        }
+    },
+    34: {
+        name: 'FUND_REQUEST_WORK_REVIEW',
+        fields: {
+            id: 'integer',
+            approve: 'boolean',
+            memo: 'string'
+        }
+    },
+    35: {
+        name: 'PROPOSAL_VOTE',
+        fields: {
+            id: 'integer',
+            amount: 'integer'
+        }
+    },
+    36: {
+        name: 'PROPOSAL_EDIT',
+        fields: {
+            id: 'integer',
+            title: 'string',
+            description: 'long string',
+            url: 'string'
+        }
+    },
+    37: {
+        name: 'CHAIN_UPDATE_CREATE',
+        fields: {
+            title: 'string',
+            description: 'long string',
+            url: 'string',
+            changes: 'array'
+        }
     }
 }
 
@@ -321,6 +378,20 @@ function txToHtml(tx) {
             return result + ' authorized '+aUser(tx.data.user)+' for '+tx.data.types.length+' tx types with id '+tx.data.id+' and weight '+tx.data.weight
         case 30:
             return result + ' revoked '+aUser(tx.data.user)+' with id '+tx.data.id
+        case 31:
+            return result + ' created a fund request of ' + thousandSeperator(tx.data.requested/100) + ' DTUBE with receiver ' + aUser(tx.data.receiver)
+        case 32:
+            return result + ' contributed ' + thousandSeperator(tx.data.amount/100) + ' DTUBE to fund request ID #' + tx.data.id
+        case 33:
+            return result + ' submitted work for fund request ID #' + tx.data.id
+        case 34:
+            return result + (tx.data.approve ? ' approved' : ' disapproved') + ' work for fund request ID #' + tx.data.id + ' with memo ' + tx.data.memo
+        case 35:
+            return result + (tx.data.amount > 0 ? ' approved' : ' disapproved') + ' proposal ID #' + tx.data.id + ' with vote weight of ' + thousandSeperator(Math.abs(tx.data.amount/100)) + ' DTUBE'
+        case 36:
+            return result + ' edited proposal ID #' + tx.data.id
+        case 37:
+            return result + ' created a chain update proposal with ' + tx.data.changes.length + ' changes'
         default:
             return 'Unknown transaction type ' + tx.type
     }
