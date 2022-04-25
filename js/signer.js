@@ -331,9 +331,12 @@ function broadcastTransaction(tx) {
         $('#signer-alert').toast('show')
         $('#signer-modal').modal('hide')
     }).catch((e) => {
-        console.log('error',e)
+        let errorMessage = e.toString()
+        if (e.response && e.response.data && e.response.data.error)
+            errorMessage = e.response.data.error
+        console.log(errorMessage)
         if (suceed) return
-        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','An error occured while broadcasting transaction',5000))
+        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error',errorMessage,5000))
         $('#signer-alert').toast('show')
     })
 }
