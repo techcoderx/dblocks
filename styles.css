@@ -3,7 +3,7 @@
 }
 
 /* Show hand when hovered on tab links */
-.nav-link {
+.nav-link, a.dropdown-item {
     cursor: pointer;
 }
 
@@ -163,6 +163,20 @@ table tr th {
 
 .form-inline {
     padding-right: 15px;
+}
+
+/* Governance */
+#gov-type-dropdown, #gov-status-row {
+    display: inline-block;
+}
+
+#gov-status-row {
+    margin: 0px 15px;
+}
+
+#gov-status-row .badge {
+    margin: 0px 2px;
+    cursor: pointer;
 }
 
 /* Key Utils */

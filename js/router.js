@@ -8,6 +8,7 @@ import leaders from './leaders.js'
 import accountprice from './accountprice.js'
 import richlist from './richlist.js'
 import livesubcount from './livesubcount.js'
+import governance from './governance.js'
 import keys from './keys.js'
 import signer from './signer.js'
 import notfound from './404.js'
@@ -34,6 +35,7 @@ window.router = () => {
         { path: '/richlist', view: richlist },
         { path: '/livesubcount', view: livesubcount },
         { path: '/livesubcount/:account', view: livesubcount, params: 1 },
+        { path: '/governance', view: governance },
         { path: '/keys', view: keys },
         { path: '/signer', view: signer },
         { path: '/signer/:q', view: signer, params: 1 },
