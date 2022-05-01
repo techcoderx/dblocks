@@ -37,7 +37,7 @@ export default class extends view {
                 <a class="badge badge-pill badge-secondary" id="gov-status-1">Failed</a>
                 <a class="badge badge-pill badge-secondary" id="gov-status-2">Successful</a>
             </div>
-            <div class="row" id="gov-proposals"></div>
+            <div class="row" id="gov-proposals"><i>Loading Proposals...</i></div>
         `
     }
 
@@ -101,7 +101,7 @@ export default class extends view {
             <div class="card gov-card"><div class="gov-card-content">
                 <div class="row">
                     <div class="col-6">
-                    <h5 class="gov-card-id">#${this.proposals[i]._id}</h5><div class="badge badge-pill badge-info gov-card-type">${ProposalTypes[this.proposals[i].type].name}</div>
+                    <h5 class="gov-card-id text-muted">#${this.proposals[i]._id}</h5><div class="badge badge-pill badge-info gov-card-type">${ProposalTypes[this.proposals[i].type].name}</div>
                 </div>
                 <div class="col-6">
                     <h6 class="float-right gov-card-summary">${this.getBriefDesc(this.proposals[i])}</h6>

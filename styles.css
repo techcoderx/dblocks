@@ -133,6 +133,9 @@ table tr th {
 #playlist-error, #playlist-notfound, #playlist-container,
 .playlist-parent, #playlist-comments { display: none; }
 
+/* Proposals */
+#prop-notfound, #prop-error, #prop-container { display: none; }
+
 /* Leaders */
 #leader-error, #leader-container { display: none; }
 #leader-table thead { text-align: center; }
