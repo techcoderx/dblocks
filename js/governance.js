@@ -98,7 +98,7 @@ export default class extends view {
         for (let i in this.proposals) {
             let totalWidthAmount = Math.max(this.minVotingBarAmount,this.proposals[i].approvals+this.proposals[i].disapprovals)
             result += `
-            <div class="card gov-card"><div class="gov-card-content">
+            <a href="#/proposal/${this.proposals[i]._id}" class="card gov-card" id="gov-card-${this.proposals[i]._id}"><div class="gov-card-content">
                 <div class="row">
                     <div class="col-6">
                     <h5 class="gov-card-id text-muted">#${this.proposals[i]._id}</h5><div class="badge badge-pill badge-info gov-card-type">${ProposalTypes[this.proposals[i].type].name}</div>
@@ -107,16 +107,16 @@ export default class extends view {
                     <h6 class="float-right gov-card-summary">${this.getBriefDesc(this.proposals[i])}</h6>
                 </div>
             </div>
-            <h3 class="gov-card-title">${this.proposals[i].title}</h3>
-            <p>by ${aUser(this.proposals[i].creator)+(this.proposals[i].receiver?' with beneficiary '+aUser(this.proposals[i].receiver):'')}</p><br>
+            <h3 class="gov-card-title">${this.proposals[i].title ? this.proposals[i].title : '<i>Untitled Proposal</i>'}</h3>
+            <p>by ${this.proposals[i].creator+(this.proposals[i].receiver?' with beneficiary '+this.proposals[i].receiver:'')}</p><br>
             <div class="progress" id="gov-progressbar-${this.proposals[i]._id}">
                 <p class="gov-card-threshold-text" id="gov-threshold-text-${this.proposals[i]._id}">Threshold:<br>${thousandSeperator((this.proposals[i].threshold || this.votingThreshold)/100)} DTUBE</p>
                 <div class="progress-bar-marker" role="progressbar" id="gov-threshold-marker-${this.proposals[i]._id}"></div>
                 <div class="progress-bar bg-success" role="progressbar" style="width: ${this.proposals[i].approvals/totalWidthAmount*100}%"></div>
                 <div class="progress-bar bg-danger" role="progressbar" style="width: ${this.proposals[i].disapprovals/totalWidthAmount*100}%"></div>
             </div><br>
-            <p>${this.getTimeText(this.proposals[i])}</p>
-            </div></div>
+            <p class="gov-card-timetext">${getTimeText(this.proposals[i])}</p>
+            </div></a>
             `
         }
         if (this.proposals.length % 2 !== 0)
@@ -124,6 +124,8 @@ export default class extends view {
         $('#gov-proposals').html(DOMPurify.sanitize(result))
         this.markThresholds()
         this.resizeObserver = new ResizeObserver(() => this.markThresholds()).observe($('#gov-progressbar-'+this.proposals[0]._id)[0])
+        for (let i in this.proposals)
+            $('#gov-card-'+this.proposals[i]._id).hover(() => $('#gov-card-'+this.proposals[i]._id).addClass('border-success'), () => $('#gov-card-'+this.proposals[i]._id).removeClass('border-success'))
     }
 
     markThresholds() {
@@ -142,41 +144,6 @@ export default class extends view {
                 return 'Requested: '+thousandSeperator(proposal.requested/100)+' DTUBE'
             case 2:
                 return 'Updating: '+proposal.changes.length+' parameters'
-        }
-    }
-
-    getTimeText(proposal) {
-        if (proposal.type === 1) {
-            switch (proposal.status) {
-                case 0:
-                    return 'Voting Ends: '+new Date(proposal.votingEnds).toLocaleString()
-                case 1:
-                    return 'Voting Failed: '+new Date(proposal.votingEnds).toLocaleString()
-                case 2:
-                    return 'Funding Ends: '+new Date(proposal.fundingEnds).toLocaleString()
-                case 3:
-                case 8:
-                    return 'Deadline: '+new Date(proposal.deadline).toLocaleString()
-                case 4:
-                    return 'Funding Failed: '+new Date(proposal.fundingEnds).toLocaleString()
-                case 5:
-                    return 'Review Ends: '+new Date(proposal.reviewDeadline).toLocaleString()
-                case 6:
-                    return 'Paid: '+new Date(proposal.paid).toLocaleString()
-                case 7:
-                    return 'Expired: '+new Date(proposal.paid).toLocaleString()
-            }
-        } else if (proposal.type === 2) {
-            switch (proposal.status) {
-                case 0:
-                    return 'Voting Ends: '+new Date(proposal.votingEnds).toLocaleString()
-                case 1:
-                    return 'Voting Failed: '+new Date(proposal.votingEnds).toLocaleString()
-                case 2:
-                    return 'Execution Scheduled: '+new Date(proposal.executionTs).toLocaleString()
-                case 3:
-                    return 'Executed: '+new Date(proposal.executionTs).toLocaleString()
-            }
         }
     }
 }

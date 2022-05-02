@@ -5,6 +5,8 @@ export default class extends view {
         super()
         this.id = parseInt(window.location.hash.slice(11))
         this.setTitle('Proposal #'+this.id)
+        this.minVotingBarAmount = 100000000
+        this.votingThreshold = 50000000
     }
 
     getHtml() {
@@ -17,7 +19,18 @@ export default class extends view {
                     <div class="col-12 col-lg-9">
                         <h5 class="text-muted">Proposal #${this.id}</h5>
                         <h2 id="prop-title"></h2>
-                        <p id="prop-by"></p><hr>
+                        <p id="prop-by"></p>
+                        <p id="prop-url-text">Proposal URL: <a id="prop-url"></a></p><hr>
+                        <div class="card prop-card" id="prop-card"><div class="prop-card-content">
+                            <h4>Voting Results</h4>
+                            <div class="progress" id="prop-progressbar">
+                                <p class="gov-card-threshold-text" id="prop-threshold-text">Threshold:<br>${thousandSeperator(this.votingThreshold)} DTUBE</p>
+                                <div class="progress-bar-marker" role="progressbar" id="prop-threshold-marker"></div>
+                                <div class="progress-bar bg-success" role="progressbar" id="prop-bar-approves"></div>
+                                <div class="progress-bar bg-danger" role="progressbar" id="prop-bar-disapproves"></div>
+                            </div><br>
+                            <p class="prop-timetext" id="prop-timetext"></p>
+                        </div></div><hr>
                         <p id="prop-desc"></p>
                     </div>
                     <div class="col-12 col-lg-3">
@@ -28,7 +41,13 @@ export default class extends view {
                             <tr><th scope="row">Fee</th><td id="prop-fee"></td></tr>
                             <tr><th scope="row">Approvals</th><td id="prop-appr"></td></tr>
                             <tr><th scope="row">Disapprovals</th><td id="prop-disappr"></td></tr>
+                            <tr class="d-none" id="prop-requested-row"><th scope="row">Requested</th><td id="prop-requested"></td></tr>
+                            <tr class="d-none" id="prop-raised-row"><th scope="row">Raised</th><td id="prop-raised"></td></tr>
                         </table>
+                        <div class="d-none" id="prop-chain-update">
+                            <h5>Params</h5>
+                        </div>
+                        <button type="button" class="btn btn-success d-none" id="prop-action"></button>
                     </div>
                 </div>
             </div>
@@ -43,15 +62,61 @@ export default class extends view {
             return
         }
 
-        axios.get(config.api+'/proposal/'+this.id).then((prop) => {
+        axios.get(config.api+'/proposal/'+this.id).then(async (prop) => {
             $('#prop-title').text(prop.data.title)
             $('#prop-by').html(DOMPurify.sanitize('by '+aUser(prop.data.creator)+(prop.data.receiver?' with beneficiary '+aUser(prop.data.receiver):'')+' • '+new Date(prop.data.ts).toLocaleString()))
             $('#prop-desc').text(prop.data.description)
+            $('#prop-url').text(prop.data.url)
+            $('#prop-url').attr('href',prop.data.url)
             $('#prop-type').text(ProposalTypes[prop.data.type].name)
             $('#prop-status').text(ProposalTypes[prop.data.type].statuses[prop.data.status])
             $('#prop-fee').text(thousandSeperator(prop.data.fee/100)+' DTUBE')
             $('#prop-appr').text(thousandSeperator(prop.data.approvals/100)+' DTUBE')
             $('#prop-disappr').text(thousandSeperator(prop.data.disapprovals/100)+' DTUBE')
+            $('#prop-timetext').text(getTimeText(prop.data))
+
+            switch (prop.data.type) {
+                case 1:
+                    $('#prop-requested-row').removeClass('d-none')
+                    $('#prop-raised-row').removeClass('d-none')
+                    $('#prop-requested').text(thousandSeperator(prop.data.requested/100)+' DTUBE')
+                    $('#prop-raised').text(thousandSeperator(prop.data.raised/100)+' DTUBE')
+                    switch (prop.data.status) {
+                        case 0:
+                            $('#prop-action').text('Vote')
+                            $('#prop-action').removeClass('d-none')
+                            break
+                        case 2:
+                            $('#prop-action').text('Fund')
+                            $('#prop-action').removeClass('d-none')
+                            break
+                        case 3:
+                        case 8:
+                            $('#prop-action').text('Submit Work')
+                            $('#prop-action').removeClass('d-none')
+                            break
+                        case 4:
+                            $('#prop-action').text('Review Work')
+                            $('#prop-action').removeClass('d-none')
+                            break
+                    }
+                    break
+                case 2:
+                    $('#prop-chain-update').removeClass('d-none')
+                    $('#prop-chain-update').append(jsonToTableRecursive(this.changesJson(prop.data.changes)))
+                    if (prop.data.status === 0) {
+                        $('#prop-action').text('Vote')
+                        $('#prop-action').removeClass('d-none')
+                    }
+                    break
+            }
+
+            if (!prop.data.title)
+                $('#prop-title').html('<i>Untitled Proposal</i>')
+            if (!prop.data.description)
+                $('#prop-desc').html('<i>This proposal does not contain a description.</i>')
+            if (!prop.data.url)
+                $('#prop-url-text').addClass('d-none')
 
             switch (prop.data.state) {
                 case 0:
@@ -64,8 +129,14 @@ export default class extends view {
                     $('#prop-status').addClass('badge-success')
                     break
             }
-            
-            // $('#')
+
+            try {
+                this.votingThreshold = (await axios.get(config.api+'/config')).data.daoVotingThreshold
+                $('#prop-threshold-text').html('Threshold:<br>'+thousandSeperator(this.votingThreshold/100)+' DTUBE')
+            } catch {}
+
+            this.drawVotingProgress(prop.data)
+            this.resizeObserver = new ResizeObserver(() => this.drawVotingProgress(prop.data)).observe($('#prop-progressbar')[0])
 
             $('#prop-loading').hide()
             $('.spinner-border').hide()
@@ -78,5 +149,22 @@ export default class extends view {
             else
                 $('#prop-error').show()
         })
+    }
+
+    drawVotingProgress(proposal) {
+        let totalWidthAmount = Math.max(this.minVotingBarAmount,proposal.approvals+proposal.disapprovals)
+        let width = $('#prop-progressbar').width()
+        let transform = (proposal.threshold || this.votingThreshold)*width/totalWidthAmount
+        $('#prop-threshold-marker').css('transform','translate('+transform+'px, 0px)')
+        $('#prop-threshold-text').css('transform','translate('+(transform-40)+'px, -30px)')
+        $('#prop-bar-approves').css('width',(100*proposal.approvals/totalWidthAmount)+'%')
+        $('#prop-bar-disapproves').css('width',(100*proposal.disapprovals/totalWidthAmount)+'%')
+    }
+
+    changesJson(changesArray) {
+        let result = {}
+        for (let c in changesArray)
+            result[changesArray[c][0]] = changesArray[c][1]
+        return result
     }
 }

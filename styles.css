@@ -135,6 +135,13 @@ table tr th {
 
 /* Proposals */
 #prop-notfound, #prop-error, #prop-container { display: none; }
+#prop-chain-update table { font-size: 12px; }
+.prop-card {
+    padding: 15px 20px;
+    border-radius: 10px;
+}
+.prop-card .progress { margin-top: 40px; }
+.prop-card-content { margin: 0px; }
 
 /* Leaders */
 #leader-error, #leader-container { display: none; }
@@ -186,6 +193,8 @@ table tr th {
     padding: 15px 20px;
     border-radius: 10px;
     width: 550px;
+    cursor: pointer;
+    text-decoration: none!important;
 }
 
 #gov-proposals {
@@ -225,7 +234,12 @@ table tr th {
     width: 1px;
     transform: translate(0px, 0px);
 }
-[data-theme=dark] .gov-card .progress {
+.gov-card-timetext,
+.prop-timetext {
+    margin-bottom: 0.25em;
+}
+[data-theme=dark] .gov-card .progress,
+[data-theme=dark] .prop-card .progress {
     background-color: #2b2b2b;
 }
 [data-theme=dark] .progress-bar-marker { 
