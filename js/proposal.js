@@ -74,6 +74,28 @@ export default class extends view {
                         </div>
                     </div>
                 </div>
+                <div class="modal fade" id="prop-list-contribs-modal" tabindex="-1" role="dialog" aria-labelledby="prop-list-contribs-modal-title" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="prop-list-voters-modal-title">Contributors</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-sm table-striped">
+                                    <thead><tr>
+                                        <th scope="col">Contributor</th>
+                                        <th scope="col">Amount</th>
+                                    </tr></thead>
+                                    <tbody id="prop-contribs-tbody"></tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer"><button type="button" class="btn btn-success" data-dismiss="modal">Close</button></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         `
     }
@@ -105,6 +127,11 @@ export default class extends view {
                     $('#prop-raised-row').removeClass('d-none')
                     $('#prop-requested').text(thousandSeperator(prop.data.requested/100)+' DTUBE')
                     $('#prop-raised').text(thousandSeperator(prop.data.raised/100)+' DTUBE')
+                    $('#prop-raised').append(` <a class="badge badge-success" id="prop-list-contrib-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-heart" viewBox="0 0 16 16">
+                            <path d="M9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4Zm13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276Z"/>
+                        </svg>
+                    </a>`)
                     switch (prop.data.status) {
                         case 0:
                             $('#prop-action').text('Vote')
@@ -183,6 +210,15 @@ export default class extends view {
                     setTimeout(() => $('#prop-list-voters-btn').text('List Voters'),5000)
                 })
             })
+
+            if (prop.data.type === 1)
+                $('#prop-list-contrib-btn').on('click',() => {
+                    let contribTbody = ''
+                    for (let c in prop.data.contrib)
+                        contribTbody += '<tr><td>'+DOMPurify.sanitize(c)+'</td><td>'+thousandSeperator(prop.data.contrib[c]/100)+' DTUBE</td></tr>'
+                    $('#prop-contribs-tbody').html(contribTbody)
+                    $('#prop-list-contribs-modal').modal()
+                })
 
             $('#prop-loading').hide()
             $('.spinner-border').hide()
