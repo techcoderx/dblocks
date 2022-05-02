@@ -22,7 +22,8 @@ export default class extends view {
                         <p id="prop-by"></p>
                         <p id="prop-url-text">Proposal URL: <a id="prop-url"></a></p><hr>
                         <div class="card prop-card" id="prop-card"><div class="prop-card-content">
-                            <h4>Voting Results</h4>
+                            <h4 class="d-inline-block">Voting Results</h4>
+                            <button type="button" class="btn btn-success float-right" id="prop-list-voters-btn">List Voters</button>
                             <div class="progress" id="prop-progressbar">
                                 <p class="gov-card-threshold-text" id="prop-threshold-text">Threshold:<br>${thousandSeperator(this.votingThreshold)} DTUBE</p>
                                 <div class="progress-bar-marker" role="progressbar" id="prop-threshold-marker"></div>
@@ -48,6 +49,29 @@ export default class extends view {
                             <h5>Params</h5>
                         </div>
                         <button type="button" class="btn btn-success d-none" id="prop-action"></button>
+                    </div>
+                </div>
+                <div class="modal fade" id="prop-list-voters-modal" tabindex="-1" role="dialog" aria-labelledby="prop-list-voters-modal-title" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="prop-list-voters-modal-title">Voters</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-sm table-striped">
+                                    <thead><tr>
+                                        <th scope="col">Voter</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Approves?</th>
+                                    </tr></thead>
+                                    <tbody id="prop-voters-tbody"></tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer"><button type="button" class="btn btn-success" data-dismiss="modal">Close</button></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -137,6 +161,28 @@ export default class extends view {
 
             this.drawVotingProgress(prop.data)
             this.resizeObserver = new ResizeObserver(() => this.drawVotingProgress(prop.data)).observe($('#prop-progressbar')[0])
+
+            $('#prop-list-voters-btn').on('click',() => {
+                if ($('#prop-list-voters-btn').text() === 'Loading...') return
+                $('#prop-list-voters-btn').text('Loading...')
+                axios.get(config.api+'/proposal/votes/'+this.id).then((votes) => {
+                    votes.data = votes.data.sort((a,b) => b.amount - a.amount)
+                    let votersTbody = ''
+                    for (let i in votes.data) {
+                        votersTbody += '<tr>'
+                        votersTbody += '<td>'+DOMPurify.sanitize(votes.data[i].voter)+'</td>'
+                        votersTbody += '<td>'+thousandSeperator(votes.data[i].amount/100)+' DTUBE</td>'
+                        votersTbody += '<td>'+(!votes.data[i].veto).toString()+'</td>'
+                        votersTbody += '</tr>'
+                    }
+                    $('#prop-voters-tbody').html(votersTbody)
+                    $('#prop-list-voters-modal').modal()
+                    $('#prop-list-voters-btn').text('List Voters')
+                }).catch(() => {
+                    $('#prop-list-voters-btn').text('Errored')
+                    setTimeout(() => $('#prop-list-voters-btn').text('List Voters'),5000)
+                })
+            })
 
             $('#prop-loading').hide()
             $('.spinner-border').hide()
