@@ -67,6 +67,18 @@ export default class extends view {
                     case 'integer':
                         $('#signer-field-'+f).val(params.get(f))
                         break
+                    case 'asset':
+                        let split = params.get(f).split(' ')
+                        let currency = 'centiDTUBE'
+                        let amount = 0
+                        if (split.length === 2 && split[1] === 'DTUBE') {
+                            currency = 'DTUBE'
+                            amount = parseFloat(split[0])
+                        } else
+                            amount = parseInt(split[0])
+                        $('#signer-field-'+f).val(amount)
+                        $('#signer-field-'+f+'-asset').text(currency)
+                        break
                     case 'json':
                         let json = {}
                         try {
@@ -93,6 +105,7 @@ export default class extends view {
         if (txtype === -1) {
             return $('#signer-fields').html('')
         }
+        let assetFields = []
         for (let f in TransactionTypes[txtype].fields) {
             htmlFields += `<div class="form-group"><label for="signer-field-${f}">${f} (${TransactionTypes[txtype].fields[f]})</label>`
             switch (TransactionTypes[txtype].fields[f]) {
@@ -109,6 +122,21 @@ export default class extends view {
                 case 'integer':
                     // Number field
                     htmlFields += `<input class="form-control" id="signer-field-${f}" type="number">`
+                    break
+                case 'asset':
+                    // Token amount
+                    htmlFields +=
+                        `<div class="input-group">
+                            <input type="number" class="form-control" min="0" id="signer-field-${f}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" id="signer-field-${f}-asset">DTUBE</button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" id="signer-field-${f}-asset-DTUBE">DTUBE</a>
+                                    <a class="dropdown-item" id="signer-field-${f}-asset-centiDTUBE">centiDTUBE</a>
+                                </div>
+                            </div>
+                        </div>`
+                    assetFields.push(f)
                     break
                 case 'boolean':
                     // Boolean
@@ -252,6 +280,12 @@ export default class extends view {
                 ace: ace
             })
         }
+
+        // Asset fields
+        for (let f in assetFields) {
+            $('#signer-field-'+assetFields[f]+'-asset-DTUBE').on('click',() => $('#signer-field-'+assetFields[f]+'-asset').html('DTUBE'))
+            $('#signer-field-'+assetFields[f]+'-asset-centiDTUBE').on('click',() => $('#signer-field-'+assetFields[f]+'-asset').html('centiDTUBE'))
+        }
     }
 }
 
@@ -276,6 +310,12 @@ function constructRawTx(jsonFields) {
                 break
             case 'integer':
                 tx.data[f] = parseInt($('#signer-field-'+f).val())
+                break
+            case 'asset':
+                if ($('#signer-field-'+f+'-asset').text() === 'DTUBE')
+                    tx.data[f] = Math.round(parseFloat($('#signer-field-'+f).val())*100)
+                else
+                    tx.data[f] = parseInt($('#signer-field-'+f).val())
                 break
             case 'array':
                 tx.data[f] = JSON.parse($('#signer-field-'+f).val())

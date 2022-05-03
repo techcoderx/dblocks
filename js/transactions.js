@@ -22,7 +22,7 @@ const TransactionTypes = {
         name: 'TRANSFER',
         fields: {
             receiver: 'accountName',
-            amount: 'integer',
+            amount: 'asset',
             memo: 'string'
         }
     },
@@ -93,7 +93,7 @@ const TransactionTypes = {
             json: 'json', 
             vt: 'integer', 
             tag: 'string', 
-            burn: 'integer'
+            burn: 'asset'
         }
     },
     14: {
@@ -224,7 +224,7 @@ const TransactionTypes = {
             title: 'string',
             description: 'long string',
             url: 'string',
-            requested: 'integer',
+            requested: 'asset',
             receiver: 'accountName'
         }
     },
@@ -232,7 +232,7 @@ const TransactionTypes = {
         name: 'FUND_REQUEST_CONTRIB',
         fields: {
             id: 'integer',
-            amount: 'integer'
+            amount: 'asset'
         }
     },
     33: {
@@ -254,7 +254,7 @@ const TransactionTypes = {
         name: 'PROPOSAL_VOTE',
         fields: {
             id: 'integer',
-            amount: 'integer'
+            amount: 'asset'
         }
     },
     36: {
