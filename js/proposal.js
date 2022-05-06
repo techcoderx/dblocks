@@ -136,19 +136,23 @@ export default class extends view {
                         case 0:
                             $('#prop-action').text('Vote')
                             $('#prop-action').removeClass('d-none')
+                            $('#prop-action').click(() => window.navigateTo('#/signer/?type=35&id='+this.id))
                             break
                         case 2:
                             $('#prop-action').text('Fund')
                             $('#prop-action').removeClass('d-none')
+                            $('#prop-action').click(() => window.navigateTo('#/signer/?type=32&id='+this.id))
                             break
                         case 3:
                         case 8:
                             $('#prop-action').text('Submit Work')
                             $('#prop-action').removeClass('d-none')
+                            $('#prop-action').click(() => window.navigateTo('#/signer/?type=33&id='+this.id))
                             break
                         case 4:
                             $('#prop-action').text('Review Work')
                             $('#prop-action').removeClass('d-none')
+                            $('#prop-action').click(() => window.navigateTo('#/signer/?type=34&id='+this.id))
                             break
                     }
                     break
