@@ -44,6 +44,7 @@ export default class extends view {
                             <tr><th scope="row">Disapprovals</th><td id="prop-disappr"></td></tr>
                             <tr class="d-none" id="prop-requested-row"><th scope="row">Requested</th><td id="prop-requested"></td></tr>
                             <tr class="d-none" id="prop-raised-row"><th scope="row">Raised</th><td id="prop-raised"></td></tr>
+                            <tr><th scope="row">Snapshot</th><td id="prop-snapshot"></td></tr>
                         </table>
                         <div class="d-none" id="prop-chain-update">
                             <h5>Params</h5>
@@ -165,6 +166,10 @@ export default class extends view {
                     }
                     break
             }
+
+            $('#prop-snapshot').html('<p id="prop-snapshot-list" class="m-0" data-toggle="tooltip" data-placement="auto" title="'+DOMPurify.sanitize(listWords(prop.data.leaderSnapshot))+'"></p>')
+            $('#prop-snapshot-list').text(prop.data.leaderSnapshot.length+' leaders')
+            $('#prop-snapshot-list').tooltip()
 
             if (!prop.data.title)
                 $('#prop-title').html('<i>Untitled Proposal</i>')
