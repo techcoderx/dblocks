@@ -63,6 +63,7 @@ export default class extends view {
                     case 'accountName':
                     case 'publicKey':
                     case 'string':
+                    case 'long string':
                     case 'array':
                     case 'integer':
                         $('#signer-field-'+f).val(params.get(f))
@@ -127,7 +128,7 @@ export default class extends view {
                     // Token amount
                     htmlFields +=
                         `<div class="input-group">
-                            <input type="number" class="form-control" min="0" id="signer-field-${f}">
+                            <input type="number" class="form-control" min="0" id="signer-field-${f}" style="max-width: 250px;">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" id="signer-field-${f}-asset">DTUBE</button>
                                 <div class="dropdown-menu">

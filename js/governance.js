@@ -18,7 +18,7 @@ export default class extends view {
                     <p>Explore funding requests and chain update proposals in the Avalon DAO.</p>
                 </div>
                 <div class="col-12 col-sm-5">
-                    <button type="button" class="btn btn-success float-right">+ New Proposal</button>
+                    <a href="#/governance/new" class="btn btn-success float-right">+ New Proposal</a>
                 </div>
             </div>
             <div class="dropdown" id="gov-type-dropdown">

@@ -215,7 +215,8 @@ export default class extends view {
                 })
             })
 
-            if (prop.data.type === 1)
+            if (prop.data.type === 1) {
+                $('#prop-list-contrib-btn').css('cursor','pointer')
                 $('#prop-list-contrib-btn').on('click',() => {
                     let contribTbody = ''
                     for (let c in prop.data.contrib)
@@ -223,6 +224,7 @@ export default class extends view {
                     $('#prop-contribs-tbody').html(contribTbody)
                     $('#prop-list-contribs-modal').modal()
                 })
+            }
 
             $('#prop-loading').hide()
             $('.spinner-border').hide()

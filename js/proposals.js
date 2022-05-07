@@ -30,6 +30,52 @@ const ProposalState = [
     'SUCCESS'
 ]
 
+const ChainParams = [
+    // account pricing
+    'accountPriceBase',
+    'accountPriceCharMult',
+    'accountPriceChars',
+    'accountPriceMin',
+
+    // economy
+    'ecoStartRent',
+    'ecoBaseRent',
+    'ecoDvRentFactor',
+    'ecoPunishPercent',
+    'ecoRentStartTime',
+    'ecoRentEndTime',
+    'ecoClaimTime',
+
+    // reward pool
+    'rewardPoolMaxShare',
+    'rewardPoolAmount',
+
+    // misc
+    'masterFee',
+    'vtPerBurn',
+    'preloadVt',
+    'preloadBwGrowth',
+
+    // dao
+    'daoVotingPeriodSeconds',
+    'daoVotingThreshold',
+    'chainUpdateFee',
+    'chainUpdateMaxParams',
+    'chainUpdateGracePeriodSeconds',
+    'fundRequestBaseFee',
+    'fundRequestSubFee',
+    'fundRequestSubMult',
+    'fundRequestSubStart',
+    'fundRequestContribPeriodSeconds',
+    'fundRequestDeadlineSeconds',
+    'fundRequestDeadlineExtSeconds',
+    'fundRequestReviewPeriodSeconds'
+]
+
+const ChainParamsGroups = {
+    ecoRentTimes: ['ecoRentStartTime','ecoRentEndTime','ecoClaimTime']
+}
+
 function getTimeText(proposal) {
     if (proposal.type === 1) {
         switch (proposal.status) {

@@ -245,6 +245,17 @@ table tr th {
 [data-theme=dark] .progress-bar-marker { 
     background-color: #ffffff;
 }
+.newgov-card {
+    border-radius: 10px;
+    margin: 10px 0px;
+}
+.newgov-card-body {
+    height: 200px;
+    margin: 0px;
+}
+.newgov-card-btn {
+    align-self: flex-end;
+}
 
 /* Key Utils */
 .dblocks-authority-names { max-width: 350px; }

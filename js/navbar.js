@@ -89,6 +89,14 @@ function sinceDays(ts = 0) {
     return (new Date().getTime() - ts) / 86400000
 }
 
+function listWords(arr = []) {
+    if (arr.length === 0)
+        return ''
+    else if (arr.length === 1)
+        return arr[0]
+    return arr.slice(0,-1).join(', ')+' and '+arr[arr.length-1]
+}
+
 function testnetBadge() {
     if (window.config.isTestnet)
         $('#testnet-heading-badge').show()
