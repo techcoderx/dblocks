@@ -38,7 +38,7 @@ export default class extends view {
                         </table>
                         <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-dtube"><img src="icons/DTube_White.png">View channel on DTube</a>
                         <a type="button" target="_blank" class="btn btn-primary btn-block" id="acc-profile-hive"><img src="icons/Hive_White.png">View blog on Hive</a>
-                        ${flairs[this.account] === 'Master' ? '<a type="button" href="#/governance/new" class="btn btn-success btn-block acc-masterdao-btn">View MasterDAO</a>' : ''}
+                        ${flairs[this.account] === 'Master' ? '<a type="button" href="#/masterdao" class="btn btn-success btn-block acc-masterdao-btn">View MasterDAO</a>' : ''}
                         <h6><br></h6>
                         <div id="acc-profile-metadata">
                             <h4>Metadata</h4>
