@@ -45,6 +45,16 @@ function jsonToTableRecursive(json,isInner) {
     return result
 }
 
+function availableBalance(account,ts) {
+    if (!account.voteLock)
+        return account.balance
+    let newLock = 0
+    for (let v in account.proposalVotes)
+        if (account.proposalVotes[v].end > ts && account.proposalVotes[v].amount - account.proposalVotes[v].bonus > newLock)
+            newLock = account.proposalVotes[v].amount - account.proposalVotes[v].bonus
+    return account.balance - newLock
+}
+
 function thousandSeperator(num) {
     let num_parts = num.toString().split(".");
     num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");

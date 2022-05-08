@@ -27,6 +27,7 @@ export default class extends view {
                     <div class="col-12 col-lg-4">
                         <table class="table table-sm">
                             <tr><th scope="row">Balance</th><td id="acc-meta-bal"></td></tr>
+                            <tr><th scope="row">Vote Locked</th><td id="acc-meta-votelock"></td></tr>
                             <tr><th scope="row">Bandwidth</th><td id="acc-meta-bw"></td></tr>
                             <tr><th scope="row">Voting Power</th><td id="acc-meta-vp"></td></tr>
                             <tr><th scope="row">Subscribers</th><td id="acc-meta-subs"></td></tr>
@@ -222,6 +223,7 @@ export default class extends view {
 
     updateAccount(acc) {
         $('#acc-meta-bal').text(thousandSeperator(acc.balance / 100) + ' DTUBE')
+        $('#acc-meta-votelock').text(thousandSeperator((acc.balance - availableBalance(acc,new Date().getTime())) / 100) + ' DTUBE')
         $('#acc-meta-bw').text(thousandSeperator(bandwidth(acc)) + ' bytes')
         $('#acc-meta-vp').text(thousandSeperator(votingPower(acc)) + ' VP')
         $('#acc-meta-subs').text(thousandSeperator(acc.followers.length))
