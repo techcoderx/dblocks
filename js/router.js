@@ -13,6 +13,8 @@ import governance from './governance.js'
 import govnew from './govNew.js'
 import govnewfundrequest from './govNewFundRequest.js'
 import govnewchainupdate from './govNewChainUpdate.js'
+import masterdao from './masterDao.js'
+import masterop from './masterDaoOp.js'
 import keys from './keys.js'
 import signer from './signer.js'
 import notfound from './404.js'
@@ -44,6 +46,8 @@ window.router = () => {
         { path: '/governance/new', view: govnew },
         { path: '/governance/new/1', view: govnewfundrequest },
         { path: '/governance/new/2', view: govnewchainupdate },
+        { path: '/masterdao', view: masterdao },
+        { path: '/masterop/:id', view: masterop, params: 1 },
         { path: '/keys', view: keys },
         { path: '/signer', view: signer },
         { path: '/signer/:q', view: signer, params: 1 },

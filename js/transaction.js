@@ -5,7 +5,7 @@ export default class extends view {
         super()
         this.setTitle('Transaction')
         this.txhashChars = /^[a-f0-9]*$/
-        this.txhash = window.location.hash.substr(5)
+        this.txhash = window.location.hash.slice(5)
     }
 
     getHtml() {

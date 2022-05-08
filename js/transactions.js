@@ -274,6 +274,19 @@ const TransactionTypes = {
             url: 'string',
             changes: 'array'
         }
+    },
+    38: {
+        name: 'MD_QUEUE',
+        fields: {
+            txtype: 'integer',
+            payload: 'json'
+        }
+    },
+    39: {
+        name: 'MD_SIGN',
+        fields: {
+            id: 'integer',
+        }
     }
 }
 
@@ -392,9 +405,29 @@ function txToHtml(tx) {
             return result + ' edited proposal ID #' + tx.data.id
         case 37:
             return result + ' created a chain update proposal with ' + tx.data.changes.length + ' changes'
+        case 38:
+            return result + ' queued transaction type ' + tx.data.txtype + ' in master DAO'
+        case 39:
+            return result + ' approved master DAO transaction #' + tx.data.id
         default:
             return 'Unknown transaction type ' + tx.type
     }
+}
+
+function masterDaoCards(ops = []) {
+    let result = ''
+    for (let j = 0; j < ops.length; j++) {
+        result += '<div class="card dblocks-card"><p class="dblocks-card-content">' + DOMPurify.sanitize(txToHtml({
+            type: ops[j].type,
+            data: ops[j].data,
+            sender: config.masterDao,
+            ts: ops[j].executed || ops[j].ts
+        }))
+        result += ' <a href="#/masterop/' + ops[j]._id + '" class="badge badge-pill badge-secondary">'
+        result += '#'+ops[j]._id
+        result += '</a></p></div>'
+    }
+    return result
 }
 
 function aUser(user) {

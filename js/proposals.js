@@ -52,6 +52,7 @@ const ChainParams = [
 
     // misc
     'masterFee',
+    'masterDaoTxExp',
     'vtPerBurn',
     'preloadVt',
     'preloadBwGrowth',

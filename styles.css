@@ -184,7 +184,8 @@ table tr th {
     margin: 0px 15px;
 }
 
-#gov-status-row .badge {
+#gov-status-row .badge,
+#masterdao-status-row .badge {
     margin: 0px 2px;
     cursor: pointer;
 }
@@ -256,6 +257,7 @@ table tr th {
 .newgov-card-btn {
     align-self: flex-end;
 }
+#mdop-notfound, #mdop-error, #mdop-container { display: none; }
 
 /* Key Utils */
 .dblocks-authority-names { max-width: 350px; }
