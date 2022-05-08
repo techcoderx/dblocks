@@ -163,6 +163,7 @@ export default class extends view {
                     if (prop.data.status === 0) {
                         $('#prop-action').text('Vote')
                         $('#prop-action').removeClass('d-none')
+                        $('#prop-action').click(() => window.navigateTo('#/signer/?type=35&id='+this.id))
                     }
                     break
             }
