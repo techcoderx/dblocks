@@ -193,7 +193,7 @@ export default class extends view {
 
             try {
                 this.votingThreshold = (await axios.get(config.api+'/config')).data.daoVotingThreshold
-                $('#prop-threshold-text').html('Threshold:<br>'+thousandSeperator(this.votingThreshold/100)+' DTUBE')
+                $('#prop-threshold-text').html('Threshold:<br>'+thousandSeperator((prop.data.threshold || this.votingThreshold)/100)+' DTUBE')
             } catch {}
 
             this.drawVotingProgress(prop.data)
