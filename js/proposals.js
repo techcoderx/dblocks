@@ -96,7 +96,7 @@ function getTimeText(proposal) {
             case 6:
                 return 'Paid: '+new Date(proposal.paid).toLocaleString()
             case 7:
-                return 'Expired: '+new Date(proposal.paid).toLocaleString()
+                return 'Expired: '+new Date(proposal.deadline).toLocaleString()
         }
     } else if (proposal.type === 2) {
         switch (proposal.status) {
