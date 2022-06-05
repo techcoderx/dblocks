@@ -146,4 +146,5 @@ $(() => {
     testnetBadge()
     router()
     loadDisplayMode()
+    initAuth()
 })

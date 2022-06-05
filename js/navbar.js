@@ -127,3 +127,150 @@ function toast(id,type,title,body,duration) {
 function toastArea(id) {
     return `<div class="position-fixed bottom-0 right-0 p-3" style="z-index: 2000; right: 0; bottom: 0;" id="${id}"></div>`
 }
+
+function initAuth() {
+    let storedLogin = localStorage.getItem('login')
+    try {
+        storedLogin = JSON.parse(storedLogin)
+        if (storedLogin.username)
+            return loadLogin(storedLogin)
+    } catch {}
+    $('#login-method').on('change',() => {
+        switch ($('#login-method').val()) {
+            case '-1':
+                $('#login-method-fields').html('')
+                $('#login-modal-proceed').prop('disabled',true)
+                break
+            case '0':
+                if (!window.hive_keychain) {
+                    $('#login-modal-proceed').prop('disabled',true)
+                    $('#login-method-fields').html('<div class="alert alert-warning" role="alert">Hive Keychain is not installed. Please install the <a href="https://hive-keychain.com" target="_blank">extension</a> and reload, or select another login method.</div>')
+                } else {
+                    $('#login-modal-proceed').prop('disabled',false)
+                    $('#login-method-fields').html(`
+                        <div class="form-group"><label for="login-username">Username</label><input class="form-control" id="login-username"></div>
+                        <div class="form-group"><label for="login-hk-sa">Signer Account</label><input class="form-control" id="login-hk-sa"></div>
+                        <select class="form-control" id="login-hk-role">
+                            <option>Select a role to be used...</option>
+                            <option>Posting</option>
+                            <option>Active</option>
+                            <option>Memo</option>
+                        </select>
+                        <div class="form-check" style="margin-top: 0.75em;">
+                            <input class="form-check-input" type="checkbox" id="login-rememberme" checked>
+                            <label class="form-check-label" for="login-rememberme">Remember Me</label>
+                        </div>
+                    `)
+                }
+                break
+            case '1':
+                $('#login-modal-proceed').prop('disabled',false)
+                $('#login-method-fields').html(`
+                    <div class="form-group"><label for="login-username">Username</label><input class="form-control" id="login-username"></div>
+                    <div class="form-group"><label for="login-pk">Key</label><input class="form-control" id="login-pk" type="password"></div>
+                    <div class="form-check" style="margin-top: 0.75em;">
+                        <input class="form-check-input" type="checkbox" id="login-rememberme" checked>
+                        <label class="form-check-label" for="login-rememberme">Remember Me</label>
+                    </div>
+                `)
+                break
+            default:
+                break
+        }
+    })
+    $('#login-modal-proceed').on('click',(evt) => {
+        evt.preventDefault()
+        switch ($('#login-method').val()) {
+            case '0':
+                hive_keychain.requestSignBuffer($('#login-hk-sa').val(),'Avalon Blocks Login',$('#login-hk-role').val(),(result) => {
+                    if (result.error) {
+                        $('#login-alert').text(result.message)
+                        return $('#login-alert').removeClass('d-none')
+                    }
+                    let pub = new cg.PublicKey(cg.Signature.fromString(result.result).recover(cg.sha256('Avalon Blocks Login'))).toAvalonString()
+                    axios.get(config.api+'/account/'+$('#login-username').val()).then((user) => {
+                        let found = false
+                        if (user.data.pub === pub)
+                            found = true
+                        else for (let k in user.data.keys) if (user.data.keys[k].pub === pub)
+                            found = true
+                        if (!found) {
+                            $('#login-alert').text('Invalid key')
+                            return $('#login-alert').removeClass('d-none')
+                        }
+                        let auth = {
+                            username: $('#login-username').val(),
+                            method: 'keychain',
+                            signer: $('#login-hk-sa').val(),
+                            role: $('#login-hk-role').val()
+                        }
+                        if ($('#login-rememberme').prop('checked'))
+                            localStorage.setItem('login', JSON.stringify(auth))
+                        $('#login-modal').modal('toggle')
+                        loadLogin(auth)
+                    }).catch((e) => {
+                        if (e.response && e.response.status === 404)
+                            $('#login-alert').text('Account does not exist')
+                        else
+                            $('#login-alert').text('Failed to fetch account info')
+                        return $('#login-alert').removeClass('d-none')
+                    })
+                })
+                break
+            case '1':
+                let pub = ''
+                try {
+                    pub = cg.PrivateKey.fromAvalonString($('#login-pk').val()).createPublic('STM').toAvalonString()
+                } catch {
+                    $('#login-alert').text('Invalid key')
+                    return $('#login-alert').removeClass('d-none')
+                }
+                axios.get(config.api+'/account/'+$('#login-username').val()).then((user) => {
+                    let found = false
+                    if (user.data.pub === pub)
+                        found = true
+                    else for (let k in user.data.keys) if (user.data.keys[k].pub === pub)
+                        found = true
+                    if (!found) {
+                        $('#login-alert').text('Invalid key')
+                        return $('#login-alert').removeClass('d-none')
+                    }
+                    let auth = {
+                        username: $('#login-username').val(),
+                        method: 'plaintext',
+                        key: $('#login-pk').val()
+                    }
+                    if ($('#login-rememberme').prop('checked'))
+                        localStorage.setItem('login', JSON.stringify(auth))
+                    $('#login-modal').modal('toggle')
+                    loadLogin(auth)
+                }).catch((e) => {
+                    if (e.response && e.response.status === 404)
+                        $('#login-alert').text('Account does not exist')
+                    else
+                        $('#login-alert').text('Failed to fetch account info')
+                    return $('#login-alert').removeClass('d-none')
+                })
+                break
+        }
+    })
+}
+
+function loadLogin(auth) {
+    window.auth = auth
+    $('#login-form').hide()
+    $('#login-alert').hide()
+    $('#login-modal-proceed').hide()
+    $('#login-modal-logout').removeClass('d-none')
+    $('#login-modal-logout').on('click',(evt) => {
+        evt.preventDefault()
+        localStorage.removeItem('login')
+        window.auth = {}
+        $('#login-form').show()
+        $('#login-modal-proceed').show()
+        $('#auth-btn').text('Login')
+        $('#login-modal').modal('toggle')
+        initAuth()
+    })
+    $('#auth-btn').text(auth.username)
+}

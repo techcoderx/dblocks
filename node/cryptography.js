@@ -211,8 +211,8 @@ class Signature {
      * Recover public key from signature by providing original signed message.
      * @param message 32-byte message that was used to create the signature.
      */
-    recover(message, prefix = 'STM') {
-        return grapheneEncodePub(secp256k1.ecdsaRecover(this.data, this.recovery, message),prefix)
+    recover(message) {
+        return secp256k1.ecdsaRecover(this.data, this.recovery, message)
     }
 
     toBuffer () {
