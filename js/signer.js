@@ -92,6 +92,8 @@ export default class extends view {
             }
             if (params.get('sender'))
                 $('#signer-sender').val(params.get('sender'))
+            else if (window.auth && window.auth.username)
+                $('#signer-sender').val(window.auth.username)
             if (params.get('broadcast') === '1' || params.get('broadcast') === 'true') {
                 $('#signer-broadcast-checkbox').prop('checked',true)
                 $('#signer-signbtn').text('Sign and Broadcast')
@@ -158,7 +160,7 @@ export default class extends view {
             htmlFields += '</div>'
         }
         htmlFields += `
-            <div class="form-group"><label for="signer-sender">sender (accountName)</label><input class="form-control" id="signer-sender"></div>
+            <div class="form-group"><label for="signer-sender">sender (accountName)</label><input class="form-control" id="signer-sender" ${window.auth && window.auth.username ? 'value="'+window.auth.username+'"' : ''}></div>
             <div class="form-group" style="display: none;" id="signer-ts-fg"><label for="signer-ts">timestamp (integer)</label><input class="form-control" id="signer-ts"></div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="signer-ts-checkbox" checked>
@@ -167,7 +169,12 @@ export default class extends view {
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="signer-broadcast-checkbox">
                 <label class="form-check-label" for="signer-broadcast-checkbox">Broadcast Transaction</label>
-            </div><br>
+            </div>
+            ${window.auth && window.auth.username ? `
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="signer-uselogin-checkbox">
+                    <label class="form-check-label" for="signer-uselogin-checkbox">Use Current Login</label>
+                </div>` : ''}<br>
             <button class="btn btn-success" id="signer-signbtn">Sign</button><br><br>
             <div id="signer-result-area" style="display: none;">
                 <h5>Signature result</h5>
@@ -197,6 +204,8 @@ export default class extends view {
                 $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Transaction timestamp is required.',5000))
                 return $('#signer-alert').toast('show')
             }
+            if (window.auth && window.auth.username && $('#signer-uselogin-checkbox').prop('checked'))
+                return this.signTx(window.auth)
             $('#signer-modal-bw-estimation').text('Estimated size: ' + thousandSeperator(estimateBw(this.jsonFields)) + ' bytes')
             $('#signer-method').val('-1')
             $('#signer-method-fields').html('')
@@ -232,41 +241,20 @@ export default class extends view {
         $('#signer-modal-proceed').off('click')
         $('#signer-modal-proceed').on('click',(evt) => {
             evt.preventDefault()
-            let tx = constructRawTx(this.jsonFields)
-            let stringified = JSON.stringify(tx)
+            let authinfo = {}
             switch ($('#signer-method').val()) {
                 case '0':
-                    // hive keychain
-                    // error if not installed
-                    if (!window.hive_keychain) {
-                        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Hive Keychain is not installed',5000))
-                        return $('#signer-alert').toast('show')
-                    }
-                    tx.hash = cg.sha256(stringified).toString('hex')
-                    hive_keychain.requestSignBuffer($('#signer-hk-sa').val(),stringified,$('#signer-hk-role').val(),(result) => {
-                        console.log('keychain signature result',result)
-                        if (result.error) {
-                            $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error',result.message,5000))
-                            return $('#signer-alert').toast('show')
-                        }
-                        let sig = cg.Signature.fromString(result.result).toAvalonSignature()
-                        tx.signature = [sig]
-                        if ($('#signer-broadcast-checkbox').prop('checked'))
-                            broadcastTransaction(tx)
-                        else
-                            displayResult(tx)
+                    this.signTx({
+                        method: 'keychain',
+                        signer: $('#signer-hk-sa').val(),
+                        role: $('#signer-hk-role').val()
                     })
                     break
                 case '1':
-                    // plaintext key
-                    let hash = cg.sha256(stringified)
-                    tx.hash = hash.toString('hex')
-                    let sig = cg.Signature.avalonCreate(hash,$('#signer-pk').val()).toAvalonSignature()
-                    tx.signature = [sig]
-                    if ($('#signer-broadcast-checkbox').prop('checked'))
-                        broadcastTransaction(tx)
-                    else
-                        displayResult(tx)
+                    this.signTx({
+                        method: 'plaintext',
+                        key: $('#signer-pk').val()
+                    })
                     break
                 default:
                     break
@@ -286,6 +274,52 @@ export default class extends view {
         for (let f in assetFields) {
             $('#signer-field-'+assetFields[f]+'-asset-DTUBE').on('click',() => $('#signer-field-'+assetFields[f]+'-asset').html('DTUBE'))
             $('#signer-field-'+assetFields[f]+'-asset-centiDTUBE').on('click',() => $('#signer-field-'+assetFields[f]+'-asset').html('centiDTUBE'))
+        }
+
+        // Use current login if possible
+        if (window.auth && window.auth.username)
+            $('#signer-uselogin-checkbox').prop('checked',true)
+    }
+
+    signTx (authinfo) {
+        let tx = constructRawTx(this.jsonFields)
+        let stringified = JSON.stringify(tx)
+        switch (authinfo.method) {
+            case 'keychain':
+                // hive keychain
+                // error if not installed
+                if (!window.hive_keychain) {
+                    $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Hive Keychain is not installed',5000))
+                    return $('#signer-alert').toast('show')
+                }
+                tx.hash = cg.sha256(stringified).toString('hex')
+                hive_keychain.requestSignBuffer(authinfo.signer,stringified,authinfo.role,(result) => {
+                    console.log('keychain signature result',result)
+                    if (result.error) {
+                        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error',result.message,5000))
+                        return $('#signer-alert').toast('show')
+                    }
+                    let sig = cg.Signature.fromString(result.result).toAvalonSignature()
+                    tx.signature = [sig]
+                    if ($('#signer-broadcast-checkbox').prop('checked'))
+                        broadcastTransaction(tx)
+                    else
+                        displayResult(tx)
+                })
+                break
+            case 'plaintext':
+                // plaintext key
+                let hash = cg.sha256(stringified)
+                tx.hash = hash.toString('hex')
+                let sig = cg.Signature.avalonCreate(hash,authinfo.key).toAvalonSignature()
+                tx.signature = [sig]
+                if ($('#signer-broadcast-checkbox').prop('checked'))
+                    broadcastTransaction(tx)
+                else
+                    displayResult(tx)
+                break
+            default:
+                break
         }
     }
 }
