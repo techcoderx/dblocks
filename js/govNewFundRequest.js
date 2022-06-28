@@ -18,11 +18,11 @@ export default class extends view {
                     <h4><span class="badge badge-pill badge-success">2</span> Voting Period</h4>
                     <p>All proposals undergo a 7-day voting period for initial review by Avalon leaders and stakeholders. Proposals that are voted in successfully must have approvals greater than the DAO voting threshold and disapprovals. The voting period and threshold may be changed through a chain update proposal or a hardfork.</p>
                     <h4><span class="badge badge-pill badge-success">3</span> Funding Period</h4>
-                    <p>The community proceeds to fund proposals that have passed the initial review, up to the requested amount specified by the proposal creator in step 1. This period lasts up to 7 days or until full funding has been received, whichever is sooner. Contributors will be refunded if the full funding is not received at the end of the funding period.</p>
+                    <p>The community proceeds to fund proposals that have passed the initial review, up to the requested amount specified by the proposal creator in step 1. This period lasts up to 14 days or until full funding has been received, whichever is sooner. Contributors will be refunded if the full funding is not received at the end of the funding period.</p>
                     <h4><span class="badge badge-pill badge-success">4</span> Complete Work</h4>
                     <p>Once the proposal has received full funding successfully, the proposal creator completes the work required and submits them to the Avalon DAO for review. All fund requests have a standard deadline of 1 year to complete, which can be extended by follow-up reviewers and may be changed through a chain update proposal or a hardfork.</p>
                     <h4><span class="badge badge-pill badge-success">5</span> Review</h4>
-                    <p>Avalon leaders review any work being submitted to the DAO. Responses may include full approval upon satisfactory work completion or a disapproval requiring revision to the work being submitted. Successful review requires >2/3 approvals from Avalon leaders in the snapshot. This period lasts for 3 days. In the event where insufficient reviews are received, the work submitted will be considered as satisfactory and the proposal will proceed to payout.</p>
+                    <p>Avalon leaders review any work being submitted to the DAO. Responses may include full approval upon satisfactory work completion or a disapproval requiring revision to the work being submitted. Successful review requires >2/3 approvals from Avalon leaders in the snapshot. This period lasts for 30 days. In the event where insufficient reviews are received, the work submitted will be considered as satisfactory and the proposal will proceed to payout.</p>
                     <h4><span class="badge badge-pill badge-success">6</span> Receive Payout</h4>
                     <p class="mb-1">If everything goes well, the funds will be released to the proposal beneficiary's account including any fees paid during proposal creation.</p>
                 </div>
@@ -99,11 +99,11 @@ export default class extends view {
     }
 
     creationFee (requestedFund = 1) {
-        let baseFee = 10000
+        let baseFee = 30000
         let subseqAmounts = requestedFund-100000
         if (subseqAmounts <= 0)
             return baseFee
-        let subseqFee = Math.ceil((subseqAmounts*1)/100)
+        let subseqFee = Math.ceil((subseqAmounts*1)/1000)
         return baseFee+subseqFee
     }
 }

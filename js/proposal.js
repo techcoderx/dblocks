@@ -6,7 +6,7 @@ export default class extends view {
         this.id = parseInt(window.location.hash.slice(11))
         this.setTitle('Proposal #'+this.id)
         this.minVotingBarAmount = 100000000
-        this.votingThreshold = 50000000
+        this.votingThreshold = 70000000
     }
 
     getHtml() {
