@@ -205,7 +205,7 @@ export default class extends view {
                 return $('#signer-alert').toast('show')
             }
             if (window.auth && window.auth.username && $('#signer-uselogin-checkbox').prop('checked'))
-                return this.signTx(window.auth)
+                return signTx(this.jsonFields,window.auth)
             $('#signer-modal-bw-estimation').text('Estimated size: ' + thousandSeperator(estimateBw(this.jsonFields)) + ' bytes')
             $('#signer-method').val('-1')
             $('#signer-method-fields').html('')
@@ -244,14 +244,14 @@ export default class extends view {
             let authinfo = {}
             switch ($('#signer-method').val()) {
                 case '0':
-                    this.signTx({
+                    signTx(this.jsonFields,{
                         method: 'keychain',
                         signer: $('#signer-hk-sa').val(),
                         role: $('#signer-hk-role').val()
                     })
                     break
                 case '1':
-                    this.signTx({
+                    signTx(this.jsonFields,{
                         method: 'plaintext',
                         key: $('#signer-pk').val()
                     })
@@ -280,47 +280,47 @@ export default class extends view {
         if (window.auth && window.auth.username)
             $('#signer-uselogin-checkbox').prop('checked',true)
     }
+}
 
-    signTx (authinfo) {
-        let tx = constructRawTx(this.jsonFields)
-        let stringified = JSON.stringify(tx)
-        switch (authinfo.method) {
-            case 'keychain':
-                // hive keychain
-                // error if not installed
-                if (!window.hive_keychain) {
-                    $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Hive Keychain is not installed',5000))
+function signTx(jsonFields,authinfo) {
+    let tx = constructRawTx(jsonFields)
+    let stringified = JSON.stringify(tx)
+    switch (authinfo.method) {
+        case 'keychain':
+            // hive keychain
+            // error if not installed
+            if (!window.hive_keychain) {
+                $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error','Hive Keychain is not installed',5000))
+                return $('#signer-alert').toast('show')
+            }
+            tx.hash = cg.sha256(stringified).toString('hex')
+            hive_keychain.requestSignBuffer(authinfo.signer,stringified,authinfo.role,(result) => {
+                console.log('keychain signature result',result)
+                if (result.error) {
+                    $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error',result.message,5000))
                     return $('#signer-alert').toast('show')
                 }
-                tx.hash = cg.sha256(stringified).toString('hex')
-                hive_keychain.requestSignBuffer(authinfo.signer,stringified,authinfo.role,(result) => {
-                    console.log('keychain signature result',result)
-                    if (result.error) {
-                        $('#signer-toast-area').html(toast('signer-alert','dblocks-toaster-error','Error',result.message,5000))
-                        return $('#signer-alert').toast('show')
-                    }
-                    let sig = cg.Signature.fromString(result.result).toAvalonSignature()
-                    tx.signature = [sig]
-                    if ($('#signer-broadcast-checkbox').prop('checked'))
-                        broadcastTransaction(tx)
-                    else
-                        displayResult(tx)
-                })
-                break
-            case 'plaintext':
-                // plaintext key
-                let hash = cg.sha256(stringified)
-                tx.hash = hash.toString('hex')
-                let sig = cg.Signature.avalonCreate(hash,authinfo.key).toAvalonSignature()
+                let sig = cg.Signature.fromString(result.result).toAvalonSignature()
                 tx.signature = [sig]
                 if ($('#signer-broadcast-checkbox').prop('checked'))
                     broadcastTransaction(tx)
                 else
                     displayResult(tx)
-                break
-            default:
-                break
-        }
+            })
+            break
+        case 'plaintext':
+            // plaintext key
+            let hash = cg.sha256(stringified)
+            tx.hash = hash.toString('hex')
+            let sig = cg.Signature.avalonCreate(hash,authinfo.key).toAvalonSignature()
+            tx.signature = [sig]
+            if ($('#signer-broadcast-checkbox').prop('checked'))
+                broadcastTransaction(tx)
+            else
+                displayResult(tx)
+            break
+        default:
+            break
     }
 }
 
