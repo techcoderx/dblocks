@@ -56,7 +56,7 @@ export default class extends view {
                     </div>
                 </div>
             </div>
-            <p id="newgov-fee">Fee: 100 DTUBE (refunded upon successful proposal completion)</p>
+            <p id="newgov-fee">Fee: 300 DTUBE (refunded upon successful proposal completion)</p>
             <button class="btn btn-success" id="newgov-proceed">Proceed to Signer</button><br><br>
             ${toastArea('newgov-toast-area')}
         `
