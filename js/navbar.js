@@ -37,7 +37,7 @@ function jsonToTableRecursive(json,isInner) {
         else if (typeof val != 'string')
             val = val.toString()
         else
-            val = JSON.stringify(val)
+            val = JSON.stringify(val).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
         val = DOMPurify.sanitize(val)
         result += '<tr><th scope="row">' + cleanField + '</th><td>' + val + '</td></tr>'
     }
