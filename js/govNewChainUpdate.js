@@ -26,7 +26,7 @@ export default class extends view {
                     ${Object.keys(ChainParamsGroups).length > 0 ? `
                         <div id="newgov-paramgroup-notice"><hr>
                             <h4>Note:</h4>
-                            <p>The following paramters are part of a group and hence all of them that are in the group must be specified in order to update any of them:</p>
+                            <p>The following parameters are part of a group and hence all of them that are in the group must be specified in order to update any of them:</p>
                             <div id="newgov-paramgroup-notice-groups">
                                 ${(() => {
                                     let result = ''
