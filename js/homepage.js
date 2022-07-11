@@ -8,7 +8,7 @@ export default class extends view {
         this.circulatingSupply = 0
         this.priceBTC = 0
         this.priceUSD = 0
-        this.blockTime = 3.2
+        this.blockTime = 3
     }
 
     getHtml() {
