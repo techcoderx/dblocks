@@ -29,6 +29,7 @@ export default class extends view {
                 </table><br>
                 <h5>Operation Payload Data</h5>
                 <div id="mdop-det-data"></div>
+                <a class="btn btn-success d-none" id="mdop-signop">Sign Operation</a>
             </div><br>
         `
     }
@@ -75,6 +76,11 @@ export default class extends view {
             let status = this.getStatus(op.data)
             $('#mdop-det-status').addClass(status.class)
             $('#mdop-det-status').text(status.text)
+
+            if (status.text === 'QUEUED') {
+                $('#mdop-signop').removeClass('d-none')
+                $('#mdop-signop').attr('href','#/signer/?type=39&id='+this.id+'&broadcast=1')
+            }
 
             $('#mdop-loading').hide()
             $('.spinner-border').hide()
