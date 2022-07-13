@@ -112,7 +112,7 @@ export default class extends view {
         axios.get(config.api+'/proposal/'+this.id).then(async (prop) => {
             $('#prop-title').text(prop.data.title)
             $('#prop-by').html(DOMPurify.sanitize('by '+aUser(prop.data.creator)+(prop.data.receiver?' with beneficiary '+aUser(prop.data.receiver):'')+' • '+new Date(prop.data.ts).toLocaleString()))
-            $('#prop-desc').text(prop.data.description)
+            $('#prop-desc').html(DOMPurify.sanitize(marked.parse(prop.data.description)))
             $('#prop-url').text(prop.data.url)
             $('#prop-url').attr('href',prop.data.url)
             $('#prop-type').text(ProposalTypes[prop.data.type].name)
