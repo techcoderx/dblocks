@@ -3,7 +3,7 @@
 }
 
 /* Show hand when hovered on tab links */
-.nav-link, a.dropdown-item {
+.nav-link, a.dropdown-item, #propvote-yes, #propvote-no, .propvote-avail {
     cursor: pointer;
 }
 
