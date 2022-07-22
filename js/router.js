@@ -59,7 +59,7 @@ window.router = () => {
     ]
 
     let requested = window.location.hash
-    if (!requested && (IsIpfs.path(window.location.pathname) || window.isValidSkynetPath(window.location.pathname)))
+    if (!requested && window.isValidSkynetPath(window.location.pathname))
         window.location.hash = '#/'
     else if (!requested)
         window.location.hash = '#' + window.location.pathname
