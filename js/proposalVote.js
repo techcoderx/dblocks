@@ -18,6 +18,7 @@ export default class extends view {
                     <ol>
                         <li>Proposal voting is weighted by stake.</li>
                         <li>DTUBE used for voting will be locked to your account and will be unspendable until the voting period ends.</li>
+                        <li>DTUBE used for voting will be unlocked at the end of the voting period of the proposals regardless of the outcome.</li>
                         <li>DTUBE used for voting will continue to generate resources such as VP and bandwidth.</li>
                         <li>The same coins may be used to vote for as many proposals as possible.</li>
                     </ol>
