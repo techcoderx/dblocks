@@ -7,6 +7,13 @@ export default class extends view {
         this.rankLoaded = false
         this.distLoaded = false
         this.errored = false
+        this.dist = []
+        this.excluded = {}
+        this.excludedCounts = {}
+        this.excludedAccs = [
+            'dtube.swap',
+            'ionomy'
+        ]
     }
 
     getHtml() {
@@ -15,7 +22,11 @@ export default class extends view {
             ${this.errorHtml('richlist','richlist')}
             <div id="richlist-container">
                 <h2>Richlist</h2>
-                <p>Wealth distribution of accounts with non-zero balance</p>
+                <p class="mb-2">Wealth distribution of accounts with non-zero balance</p>
+                <div class="custom-control custom-switch mb-2">
+                    <input type="checkbox" class="custom-control-input" id="distribution-excl">
+                    <label class="custom-control-label" for="distribution-excl">Exclude exchange and bridge accounts</label>
+                </div>
                 <table class="table table-sm table-striped" id="distribution-table">
                     <thead><tr>
                         <th scope="col">Range (DTUBE)</th>
@@ -70,26 +81,29 @@ export default class extends view {
         })
 
         axios.get(config.api + '/distribution').then((dist) => {
-            let totalBalance = 0
-            let totalAccounts = 0
-
-            // first loop to tally up total balance and accounts
-            for (let i = 0; i < dist.data.length; i++) if (dist.data[i]) {
-                totalBalance += dist.data[i].sum
-                totalAccounts += dist.data[i].count
-            }
-
-            // second loop to display them
-            for (let i = 0; i < dist.data.length; i++)
-                if (dist.data[i])
-                    $('#distribution-'+i).append('<td>'+thousandSeperator(dist.data[i].count)+'</td><td>'+roundDec(dist.data[i].count/totalAccounts*100,2)+'%</td><td>'+thousandSeperator(dist.data[i].sum/100)+' DTUBE</td><td>'+roundDec(dist.data[i].sum/totalBalance*100,2)+'%</td>')
-                else
-                    $('#distribution-'+i).append('<td>0</td><td>0%</td><td>0 DTUBE</td><td>0%</td>')
-            $('#distribution-total').append('<td><strong>'+thousandSeperator(totalAccounts)+'</strong></td><td><strong>100%</strong></td><td><strong>'+thousandSeperator(totalBalance/100)+' DTUBE</strong></td><td><strong>100%</strong></td>')
-
+            this.dist = dist.data
+            this.loadDistTable()
             this.distLoaded = true
             this.display()
         })
+
+        for (let i = 0; i < 9; i++) {
+            this.excluded[i] = 0
+            this.excludedCounts[i] = 0
+        }
+
+        for (let e in this.excludedAccs) {
+            let excl = this.excludedAccs[e]
+            axios.get(config.api+'/account/'+excl).then((exclacc) => {
+                if (exclacc.data.balance) {
+                    let range = Math.floor(Math.log10(exclacc.data.balance))
+                    this.excluded[range] += exclacc.data.balance
+                    this.excludedCounts[range]++
+                }
+            })
+        }
+
+        $('#distribution-excl').on('change',() => this.filterAccounts())
     }
 
     display() {
@@ -102,5 +116,38 @@ export default class extends view {
             $('.spinner-border').hide()
             $('#richlist-error').show()
         }
+    }
+
+    loadDistTable(excludeAccounts = false) {
+        let totalBalance = 0
+        let totalAccounts = 0
+
+        // first loop to tally up total balance and accounts
+        for (let i = 0; i < this.dist.length; i++) if (this.dist[i]) {
+            totalBalance += this.dist[i].sum
+            totalAccounts += this.dist[i].count
+
+            if (excludeAccounts) {
+                totalBalance -= this.excluded[i]
+                totalAccounts -= this.excludedCounts[i]
+            }
+        }
+
+        // second loop to display them
+        for (let i = 0; i < this.dist.length; i++)
+            if (this.dist[i])
+                $('#distribution-'+i).append('<td>'+thousandSeperator(this.dist[i].count - (excludeAccounts?this.excludedCounts[i]:0))+'</td><td>'+roundDec((this.dist[i].count - (excludeAccounts?this.excludedCounts[i]:0))/totalAccounts*100,2)+'%</td><td>'+thousandSeperator((this.dist[i].sum - (excludeAccounts?this.excluded[i]:0))/100)+' DTUBE</td><td>'+roundDec((this.dist[i].sum - (excludeAccounts?this.excluded[i]:0))/totalBalance*100,2)+'%</td>')
+            else
+                $('#distribution-'+i).append('<td>0</td><td>0%</td><td>0 DTUBE</td><td>0%</td>')
+        $('#distribution-total').append('<td><strong>'+thousandSeperator(totalAccounts)+'</strong></td><td><strong>100%</strong></td><td><strong>'+thousandSeperator(totalBalance/100)+' DTUBE</strong></td><td><strong>100%</strong></td>')
+    }
+
+    filterAccounts() {
+        for (let i = 0; i < this.dist.length; i++)
+            for (let j = 0; j < 4; j++)
+                $('#distribution-'+i).children().last().remove()
+        for (let j = 0; j < 4; j++)
+            $('#distribution-total').children().last().remove()
+        this.loadDistTable($('#distribution-excl').prop('checked'))
     }
 }
