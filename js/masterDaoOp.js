@@ -24,8 +24,8 @@ export default class extends view {
                     <tr class="d-none" id="mdop-row-exec"><th scope="row">executed</th><td id="mdop-det-exec"></td></tr>
                     <tr class="d-none" id="mdop-row-adj"><th scope="row">adjustments</th><td id="mdop-det-exec"></td></tr>
                     <tr class="d-none" id="mdop-row-error"><th scope="row">error</th><td id="mdop-det-error"></td></tr>
-                    <tr><th scope="row">snapshot</th><td id="mdop-det-snapshot"></td></tr>
-                    <tr><th scope="row">signers</th><td id="mdop-det-signers"></td></tr>
+                    <tr><th scope="row" id="mdop-th-snapshot">snapshot</th><td id="mdop-det-snapshot"></td></tr>
+                    <tr><th scope="row" id="mdop-th-signers">signers</th><td id="mdop-det-signers"></td></tr>
                 </table><br>
                 <h5>Operation Payload Data</h5>
                 <div id="mdop-det-data"></div>
@@ -72,6 +72,8 @@ export default class extends view {
             $('#mdop-det-data').html(jsonToTableRecursive(op.data.data))
             $('#mdop-det-snapshot').text(listWords(op.data.snapshot))
             $('#mdop-det-signers').text(listWords(op.data.signers))
+            $('#mdop-th-snapshot').text($('#mdop-th-snapshot').text()+' ('+op.data.snapshot.length+')')
+            $('#mdop-th-signers').text($('#mdop-th-signers').text()+' ('+op.data.signers.length+')')
             
             let status = this.getStatus(op.data)
             $('#mdop-det-status').addClass(status.class)
