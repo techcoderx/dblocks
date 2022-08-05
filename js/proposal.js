@@ -150,7 +150,7 @@ export default class extends view {
                             $('#prop-action').removeClass('d-none')
                             $('#prop-action').click(() => window.navigateTo('#/signer/?type=33&id='+this.id))
                             break
-                        case 4:
+                        case 5:
                             $('#prop-action').text('Review Work')
                             $('#prop-action').removeClass('d-none')
                             $('#prop-action').click(() => window.navigateTo('#/signer/?type=34&id='+this.id))
