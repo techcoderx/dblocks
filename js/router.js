@@ -28,7 +28,7 @@ window.intervals = []
 // Store current route to prevent double loading and streaming bug
 window.currentRoute = ''
 
-window.router = () => {
+window.router = async () => {
     const routes = [
         { path: '/', view: homepage },
         { path: '/b/:block', view: block, params: 1 },
@@ -37,12 +37,25 @@ window.router = () => {
         { path: '/@:account/:page', view: account, params: 2 },
         { path: '/content/:author/:link', view: content, params: 2 },
         { path: '/playlist/:author/:link', view: playlist, params: 2 },
-        { path: '/proposal/:id', view: proposal, params: 1 },
+        {
+            path: '/proposal/:id',
+            view: proposal,
+            params: 1,
+            scripts: {
+                marked: 'lib/marked.min.js'
+            }
+        },
         { path: '/proposal/vote/:id', view: proposalVote, params: 1 },
         { path: '/leaders', view: leaders },
         { path: '/accountprice', view: accountprice },
         { path: '/richlist', view: richlist },
-        { path: '/livesubcount', view: livesubcount },
+        {
+            path: '/livesubcount',
+            view: livesubcount,
+            scripts: {
+                Odometer: 'lib/odometer.min.js'
+            }
+        },
         { path: '/livesubcount/:account', view: livesubcount, params: 1 },
         { path: '/governance', view: governance },
         { path: '/governance/new', view: govnew },
@@ -50,9 +63,30 @@ window.router = () => {
         { path: '/governance/new/2', view: govnewchainupdate },
         { path: '/masterdao', view: masterdao },
         { path: '/masterop/:id', view: masterop, params: 1 },
-        { path: '/keys', view: keys },
-        { path: '/signer', view: signer },
-        { path: '/signer/:q', view: signer, params: 1 },
+        {
+            path: '/keys',
+            view: keys,
+            scripts: {
+                saveAs: 'lib/FileSaver.min.js'
+            }
+        },
+        {
+            path: '/signer',
+            view: signer,
+            scripts: {
+                JSONEditor: 'lib/jsoneditor/jsoneditor-minimalist.js',
+                ace: 'lib/jsoneditor/ace/ace.js'
+            }
+        },
+        {
+            path: '/signer/:q',
+            view: signer,
+            params: 1,
+            scripts: {
+                JSONEditor: 'lib/jsoneditor/jsoneditor-minimalist.js',
+                ace: 'lib/jsoneditor/ace/ace.js'
+            }
+        },
         { path: '/memo', view: memo },
         { path: '/rewards', view: rewards },
         { path: '/404', view: notfound }
@@ -90,10 +124,24 @@ window.router = () => {
 
         let currentView = new matchingRoute.view()
         currentRoute = requested
+        if (matchingRoute.scripts)
+            for (let s in matchingRoute.scripts)
+                if (!window[s]) {
+                    $('.container').html(`
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading dependency ${s}</span>
+                        </div>
+                    </div>
+                    `)
+                    await window.loadScriptAsync(matchingRoute.scripts[s])
+                }
         $('.container').html(currentView.getHtml())
         currentView.init()
     }
 }
+
+window.loadScriptAsync = (src) => new Promise((rs) => $.getScript(src,rs))
 
 window.navigateTo = (url) => {
     if (url !== location.hash) {
