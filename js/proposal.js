@@ -35,10 +35,12 @@ export default class extends view {
                         <div class="nav nav-pills mb-3 d-none" id="prop-tab" role="tablist">
                             <a class="nav-link active" id="prop-tab-desc" data-toggle="pill" data-target="#prop-desc" type="button" role="tab" aria-controls="prop-desc" aria-selected="true">Description</a>
                             <a class="nav-link" id="prop-tab-workjson" data-toggle="pill" data-target="#prop-work-json" type="button" role="tab" aria-controls="prop-work-json" aria-selected="false">Submitted Work</a>
+                            <a class="nav-link" id="prop-tab-workreviews" data-toggle="pill" data-target="#prop-work-reviews" type="button" role="tab" aria-controls="prop-work-reviews" aria-selected="false">Reviews</a>
                         </div>
                         <div class="tab-content">
                             <p class="tab-pane fade show active" id="prop-desc" role="tabpanel" aria-labelledby="prop-tab-desc"></p>
                             <div class="tab-pane fade" id="prop-work-json" role="tabpanel" aria-labelledby="prop-tab-workjson"></div>
+                            <div class="tab-pane fade" id="prop-work-reviews" role="tabpanel" aria-labelledby="prop-tab-workreviews"></div>
                         </div>
                         
                     </div>
@@ -169,6 +171,10 @@ export default class extends view {
                         $('#prop-work-json').removeClass('d-none')
                         $('#prop-work-json').append(jsonToTableRecursive(prop.data.work))
                     }
+                    if (Array.isArray(prop.data.reviews) && prop.data.reviews.length > 0)
+                        $('#prop-work-reviews').append(jsonToTableRecursive(prop.data.reviews))
+                    else
+                        $('#prop-work-reviews').append('<i>There are no work reviews so far.</i>')
                     break
                 case 2:
                     $('#prop-chain-update').removeClass('d-none')
