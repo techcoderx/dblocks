@@ -32,7 +32,15 @@ export default class extends view {
                             </div><br>
                             <p class="prop-timetext" id="prop-timetext"></p>
                         </div></div><hr>
-                        <p id="prop-desc"></p>
+                        <div class="nav nav-pills mb-3 d-none" id="prop-tab" role="tablist">
+                            <a class="nav-link active" id="prop-tab-desc" data-toggle="pill" data-target="#prop-desc" type="button" role="tab" aria-controls="prop-desc" aria-selected="true">Description</a>
+                            <a class="nav-link" id="prop-tab-workjson" data-toggle="pill" data-target="#prop-work-json" type="button" role="tab" aria-controls="prop-work-json" aria-selected="false">Submitted Work</a>
+                        </div>
+                        <div class="tab-content">
+                            <p class="tab-pane fade show active" id="prop-desc" role="tabpanel" aria-labelledby="prop-tab-desc"></p>
+                            <div class="tab-pane fade" id="prop-work-json" role="tabpanel" aria-labelledby="prop-tab-workjson"></div>
+                        </div>
+                        
                     </div>
                     <div class="col-12 col-lg-3">
                         <table class="table table-sm">
@@ -155,6 +163,11 @@ export default class extends view {
                             $('#prop-action').removeClass('d-none')
                             $('#prop-action').click(() => window.navigateTo('#/signer/?type=34&id='+this.id))
                             break
+                    }
+                    if (typeof prop.data.work === 'object' && Object.keys(prop.data.work).length > 0) {
+                        $('#prop-tab').removeClass('d-none')
+                        $('#prop-work-json').removeClass('d-none')
+                        $('#prop-work-json').append(jsonToTableRecursive(prop.data.work))
                     }
                     break
                 case 2:
