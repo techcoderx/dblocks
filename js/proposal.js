@@ -171,9 +171,10 @@ export default class extends view {
                         $('#prop-work-json').removeClass('d-none')
                         $('#prop-work-json').append(jsonToTableRecursive(prop.data.work))
                     }
-                    if (Array.isArray(prop.data.reviews) && prop.data.reviews.length > 0)
+                    if (Array.isArray(prop.data.reviews) && prop.data.reviews.length > 0) {
+                        $('#prop-tab').removeClass('d-none')
                         $('#prop-work-reviews').append(jsonToTableRecursive(prop.data.reviews))
-                    else
+                    } else
                         $('#prop-work-reviews').append('<i>There are no work reviews so far.</i>')
                     break
                 case 2:
