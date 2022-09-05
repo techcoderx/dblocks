@@ -49,6 +49,7 @@ export default class extends view {
         
         // Render appropriate fields
         $('#signer-txtype').on('change',this.renderFields)
+        ace.config.set('basePath', '/lib/jsoneditor/ace')
 
         // Handle parameters if any
         let routeSplit = window.location.hash.split('/')
