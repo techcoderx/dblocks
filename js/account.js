@@ -151,11 +151,8 @@ export default class extends view {
                 $('#acc-meta-claimable').text(thousandSeperator(Math.floor(claimable.data.total) / 100) + ' DTUBE'))
             .catch(()=>
                 $('#acc-meta-claimable').text('Error'))
-    
-            axios.get(config.api + '/rewards/claimed/' + this.account).then((claimed) =>
-                $('#acc-meta-claimed').text(thousandSeperator(Math.floor(claimed.data.total) / 100) + ' DTUBE'))
-            .catch(()=>
-                $('#acc-meta-claimed').text('Error'))
+
+            $('#acc-meta-claimed').text(thousandSeperator(Math.floor(acc.data.claimedReward) / 100) + ' DTUBE')
 
             this.loadCurationApr('acc-meta-curation-apr-30d')
             this.updateAccount(acc.data)
