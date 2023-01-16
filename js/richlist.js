@@ -12,6 +12,7 @@ export default class extends view {
         this.excludedCounts = {}
         this.excludedAccs = [
             'dtube.swap',
+            'dtube.cold',
             'ionomy'
         ]
     }
