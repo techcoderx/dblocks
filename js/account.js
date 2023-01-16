@@ -152,7 +152,7 @@ export default class extends view {
             .catch(()=>
                 $('#acc-meta-claimable').text('Error'))
 
-            $('#acc-meta-claimed').text(thousandSeperator(Math.floor(acc.data.claimedReward) / 100) + ' DTUBE')
+            $('#acc-meta-claimed').text(thousandSeperator(Math.floor(acc.data.claimedReward || 0) / 100) + ' DTUBE')
 
             this.loadCurationApr('acc-meta-curation-apr-30d')
             this.updateAccount(acc.data)
