@@ -136,7 +136,12 @@ window.router = async () => {
                     `)
                     await window.loadScriptAsync(matchingRoute.scripts[s])
                 }
-        $('.container').html(currentView.getHtml())
+        let resultHtml = currentView.getHtml()
+        if (window.blockAge) {
+            resultHtml = `<div class="alert alert-warning" role="alert">Last block: ${agoShort(window.blockAge)}</div>`+resultHtml
+            window.lastBlockShown = true
+        }
+        $('.container').html(resultHtml)
         currentView.init()
     }
 }
@@ -197,4 +202,10 @@ $(() => {
     initAuth()
     router()
     loadDisplayMode()
+    fetchLastBlockAge(() => {
+        if (window.blockAge && !window.lastBlockShown) {
+            $('.container').html(`<div class="alert alert-warning" role="alert">Last block: ${agoShort(window.blockAge)}</div>`+$('.container').html())
+            window.lastBlockShown = true
+        }
+    })
 })

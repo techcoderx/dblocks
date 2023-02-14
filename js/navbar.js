@@ -99,6 +99,22 @@ function sinceDays(ts = 0) {
     return (new Date().getTime() - ts) / 86400000
 }
 
+function agoShort(ts = 0) {
+    ts = ts / 1000
+    let d = Math.floor(ts / 86400)
+    let h = Math.floor((ts / 3600) - (d * 24))
+    let m = Math.floor((ts / 60) - (d * 1440) - (h * 60))
+    let s = Math.floor(ts - (d * 86400) - (h * 3600) - (m * 60))
+    if (d > 0)
+        return d+' days ago'
+    else if (h > 0)
+        return h+' hours ago'
+    else if (m > 0)
+        return m+' minutes ago'
+    else if (s > 0)
+        return s+' seconds ago'
+}
+
 function listWords(arr = []) {
     if (arr.length === 0)
         return ''
@@ -110,6 +126,19 @@ function listWords(arr = []) {
 function testnetBadge() {
     if (window.config.isTestnet)
         $('#testnet-heading-badge').show()
+}
+
+function fetchLastBlockAge(cb) {
+    axios.get(config.api+'/count').then(r => {
+        axios.get(config.api+'/block/'+(r.data.count-1)).then(rb => {
+            const fiveMin = 5*60*1000
+            const blockAge = new Date().getTime() - rb.data.timestamp
+            if (blockAge > fiveMin)
+                window.blockAge = blockAge
+            if (typeof cb === 'function')
+                cb()
+        })
+    })
 }
 
 function toast(id,type,title,body,duration) {
