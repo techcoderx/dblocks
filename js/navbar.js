@@ -285,6 +285,18 @@ function initAuth() {
     })
 }
 
+function initNodeUrl() {
+    let storedAPINode = localStorage.getItem('api-node')
+    if (storedAPINode)
+        config.api = storedAPINode
+    $('#api-node-url').val(config.api)
+    $('#api-switcher-save').on('click',(evt) => {
+        evt.preventDefault()
+        localStorage.setItem('api-node',$('#api-node-url').val())
+        $('#api-switcher-modal').modal('toggle')
+    })
+}
+
 function loadLogin(auth) {
     window.auth = auth
     $('#login-form').hide()

@@ -1,5 +1,5 @@
 window.config = {
-    api: 'https://api.avalonblocks.com',
+    api: 'https://avalon.luminade.fun',
     isTestnet: false,
     masterDao: 'dtube',
     // nextHf: {

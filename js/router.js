@@ -199,6 +199,7 @@ window.isValidSkynetPath = (skypath) => {
 $(() => {
     addAnchorClickListener()
     testnetBadge()
+    initNodeUrl()
     initAuth()
     router()
     loadDisplayMode()

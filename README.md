@@ -1,3 +1,5 @@
+**Status: Deprecated.**
+
 # Avalon Blocks
 
 Avalon block explorer, written using Bootstrap library.
@@ -13,6 +15,6 @@ npm i -g http-server
 http-server
 ```
 
-## Using your own Avalon API
+## Configuring default API node
 
-To use your own Avalon API node instead of the default `api.avalonblocks.com`, replace the API node in [config.js](https://github.com/techcoderx/dblocks/blob/main/js/config.js). Indicate if the API node points to a testnet in `config.isTestnet`.
+To configure the default API node, replace the API node URL in [config.js](https://github.com/techcoderx/dblocks/blob/main/js/config.js). Indicate if the API node points to a testnet in `config.isTestnet`.
